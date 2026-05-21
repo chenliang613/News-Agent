@@ -1,16 +1,5 @@
-# 新闻关注主题（News Agent 用此文件做相关性判断 + 板块分类）
 
-> 编辑指南：每条按"主题 + 关注角度 + 关键词"的格式写，越具体越好。
-> Claude 会读这份文件做两件事：(1) 给每条新闻打 0-10 分相关性；(2) 把相关新闻归入下面三个板块之一或多个。
->
-> **板块标签（scorer 必须用这三个英文 key 之一或多个返回）**：
-> - `governance` → AI 治理
-> - `data` → AI 数据
-> - `industry` → AI 行业落地
->
-> 允许一条新闻同时属于多个板块（如"美国扩大对华芯片出口管制" 同时属于 `governance` 和 `data`）。
-
-## 一、AI 治理（governance）
+## 一、AI 治理（governance）   --  每周一获得AI治理相关新闻和动态
 
 **主题**：AI 监管法规、安全对齐、企业治理、地缘政治、治理标准的演进与落地。
 
@@ -23,7 +12,7 @@
 
 **关键词**：AI Act、AI 监管、AI governance、AI safety、AI alignment、red team、responsible scaling、AI 出口管制、export control、芯片管制、AI 标准、SC42、JTC21、TC260、NIST AI RMF、ISO 42001、生成式人工智能管理办法、AI 伦理
 
-## 二、AI 数据（data）
+## 二、AI 数据（data）  -- 每周二获得AI数据的相关新闻和动态
 
 **主题**：AI 的"燃料"和"载体"——训练数据、算力基础设施、数据要素市场、检索/记忆栈。
 
@@ -36,7 +25,7 @@
 
 **关键词**：AI capex、AI infra、data center、算力中心、芯片采购、训练数据、training data、synthetic data、数据版权、数据合规、数据要素、数据交易、数据资产入表、vector database、RAG、knowledge base、Pinecone、Milvus、Weaviate、Agent memory、context engineering
 
-## 三、AI 行业落地（industry）
+## 三、AI 行业落地（industry） -- 每周三获得AI行业的相关新闻和动态
 
 **主题**：AI 在各行业的真实部署、产业格局、Agent 与编程智能的产业化。
 

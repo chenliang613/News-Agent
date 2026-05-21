@@ -1,8 +1,13 @@
-"""News Agent 编排入口：拉源 -> 去重 -> Claude 打分 -> top N 摘要 -> PushPlus -> 保存状态。
+"""News Agent 编排入口：按周排期 → 拉源 → 去重 → Claude 打分 → top N 摘要 → PushPlus。
+
+每天只跑一个板块(周一治理 / 周二数据 / 周三行业落地),周四到周日跳过。
+排期表写在 config.yaml 的 schedule.weekday_category。
 
 用法:
-    python -m news_agent.main           # 正常运行
-    python -m news_agent.main --dry-run # 不实际推送,只打印输出
+    python -m news_agent.main                       # 按今天的 weekday 跑
+    python -m news_agent.main --dry-run             # 不实际推送,只打印输出
+    python -m news_agent.main --category governance # 手动指定板块(忽略 weekday)
+    python -m news_agent.main --weekday 0           # 模拟周一(0=周一..6=周日)
 """
 from __future__ import annotations
 
@@ -25,6 +30,14 @@ ROOT = Path(__file__).resolve().parent.parent
 KEYWORDS_PATH = ROOT / "keywords.md"
 CONFIG_PATH = ROOT / "config.yaml"
 STATE_PATH = ROOT / "state" / "sent.json"
+OUTPUT_DIR = ROOT / "output"
+
+# 落盘文件名用的中文板块名(按用户要求:industry → "AI产业",不是 "AI 行业落地")
+FILE_CATEGORY_NAMES = {
+    "governance": "AI治理",
+    "data": "AI数据",
+    "industry": "AI产业",
+}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -37,97 +50,82 @@ def load_config() -> dict:
     return yaml.safe_load(CONFIG_PATH.read_text("utf-8"))
 
 
-# 板块展示顺序与标题
-CATEGORY_ORDER: list[tuple[str, str]] = [
-    ("governance", "AI 治理"),
-    ("data", "AI 数据"),
-    ("industry", "AI 行业落地"),
-]
-CATEGORY_LABELS = dict(CATEGORY_ORDER)
+def resolve_category(config: dict, weekday: int) -> str | None:
+    """根据 weekday(0=Mon..6=Sun) 从 config.schedule.weekday_category 取板块 key。
+
+    YAML 里的 key 可能是 int 也可能是 str,两种都兼容。
+    """
+    table = (config.get("schedule") or {}).get("weekday_category") or {}
+    if weekday in table:
+        return table[weekday]
+    if str(weekday) in table:
+        return table[str(weekday)]
+    return None
 
 
-def render_push_content(items: list[filter_mod.ScoredArticle]) -> str:
-    """按三板块分组渲染 markdown。跨板块文章在每个所属板块各出现一次。"""
-    # 分组(只保留有 categories 的)
-    grouped: dict[str, list[filter_mod.ScoredArticle]] = {k: [] for k, _ in CATEGORY_ORDER}
-    uncategorized: list[filter_mod.ScoredArticle] = []
-    for item in items:
-        if not item.categories:
-            uncategorized.append(item)
-            continue
-        for c in item.categories:
-            if c in grouped:
-                grouped[c].append(item)
-
-    # 每个板块内按分数倒序
-    for bucket in grouped.values():
-        bucket.sort(key=lambda s: s.score, reverse=True)
+def render_push_content(
+    items: list[filter_mod.ScoredArticle],
+    category: str,
+    category_label: str,
+) -> str:
+    """单板块渲染。items 按分数倒序排列。"""
+    items_sorted = sorted(items, key=lambda s: s.score, reverse=True)
 
     lines: list[str] = []
-    total = len(items)
-    section_summary = "、".join(
-        f"{label} {len(grouped[key])} 条"
-        for key, label in CATEGORY_ORDER
-        if grouped[key]
-    )
-    lines.append(f"# 今日共 {total} 条（{section_summary}）")
+    lines.append(f"# 今日 {category_label}：共 {len(items_sorted)} 条")
     lines.append("")
 
-    seq = 0  # 全局连续编号,便于阅读
-    for key, label in CATEGORY_ORDER:
-        bucket = grouped[key]
-        if not bucket:
-            continue
-        lines.append(f"## 【{label}】")
+    for idx, item in enumerate(items_sorted, start=1):
+        a = item.article
+        lines.append(f"### {idx}. {a.title}")
         lines.append("")
-        for item in bucket:
-            seq += 1
-            a = item.article
-            other_cats = [
-                CATEGORY_LABELS[c] for c in item.categories
-                if c != key and c in CATEGORY_LABELS
-            ]
-            cross = f"  ｜ 同属：{', '.join(other_cats)}" if other_cats else ""
-            lines.append(f"### {seq}. {a.title}")
+        lines.append(f"**来源**: {a.source}  |  **相关度**: {item.score:.1f}/10")
+        if item.summary:
             lines.append("")
-            lines.append(f"**来源**: {a.source}  |  **相关度**: {item.score:.1f}/10{cross}")
-            if item.summary:
-                lines.append("")
-                lines.append(item.summary)
-            elif a.summary:
-                lines.append("")
-                lines.append(a.summary[:200] + ("…" if len(a.summary) > 200 else ""))
+            lines.append(item.summary)
+        elif a.summary:
             lines.append("")
-            lines.append(f"[阅读原文]({a.url})")
-            lines.append("")
-            lines.append("---")
-            lines.append("")
-
-    if uncategorized:
-        # 罕见情况:scorer 没标 category 但分数过线。降级附在末尾,方便发现问题
-        lines.append("## 【未分类】")
+            lines.append(a.summary[:200] + ("…" if len(a.summary) > 200 else ""))
         lines.append("")
-        for item in uncategorized:
-            seq += 1
-            a = item.article
-            lines.append(f"### {seq}. {a.title}")
-            lines.append("")
-            lines.append(f"**来源**: {a.source}  |  **相关度**: {item.score:.1f}/10")
-            if item.summary:
-                lines.append("")
-                lines.append(item.summary)
-            lines.append("")
-            lines.append(f"[阅读原文]({a.url})")
-            lines.append("")
-            lines.append("---")
-            lines.append("")
+        lines.append(f"[阅读原文]({a.url})")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
 
     return "\n".join(lines)
 
 
-def run(dry_run: bool = False) -> int:
+def run(
+    dry_run: bool = False,
+    override_category: str | None = None,
+    override_weekday: int | None = None,
+) -> int:
     config = load_config()
     keywords_md = KEYWORDS_PATH.read_text("utf-8")
+
+    # 1. 决定今天跑哪个板块
+    if override_category:
+        category = override_category
+        log.info("category overridden via CLI: %s", category)
+    else:
+        weekday = override_weekday if override_weekday is not None else datetime.now().weekday()
+        category = resolve_category(config, weekday)
+        if not category:
+            log.info("weekday=%d not in schedule.weekday_category; skip today", weekday)
+            return 0
+        log.info("weekday=%d → category=%s", weekday, category)
+
+    if category not in filter_mod.VALID_CATEGORIES:
+        log.error("invalid category %r (must be one of %s)", category, sorted(filter_mod.VALID_CATEGORIES))
+        return 1
+
+    category_labels = config.get("category_labels") or {}
+    category_label = category_labels.get(category, category)
+
+    queries_by_cat = config.get("google_news_queries") or {}
+    today_queries = queries_by_cat.get(category) or []
+    if not today_queries:
+        log.warning("no google_news_queries for category=%s; only RSS will be used", category)
 
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if not anthropic_key:
@@ -144,24 +142,24 @@ def run(dry_run: bool = False) -> int:
     if pruned:
         log.info("pruned %d expired state entries", pruned)
 
-    # 1. 采集
-    log.info("=== 1. fetching sources ===")
+    # 2. 采集(只抓当日板块的 Google News queries;RSS 维持全量,由 scorer 判定)
+    log.info("=== 1. fetching sources for category=%s ===", category)
     raw: list[sources.Article] = []
     raw.extend(sources.fetch_rss_sources(config["rss_feeds"]))
-    raw.extend(sources.fetch_google_news(config["google_news_queries"]))
+    raw.extend(sources.fetch_google_news(today_queries))
     raw.extend(sources.fetch_rsshub(
         config["rsshub"]["instance"],
         config["rsshub"].get("routes", []),
     ))
     log.info("fetched %d raw articles", len(raw))
 
-    # 2. 时间窗口过滤(扔掉 OpenAI/HF/DeepMind 等不分页 feed 的历史回潮)
+    # 3. 时间窗口过滤
     max_age = config.get("sources", {}).get("max_age_hours")
     fresh_in_window = sources.filter_by_age(raw, max_age)
     if max_age:
         log.info("after age filter (<=%dh): %d articles", max_age, len(fresh_in_window))
 
-    # 3. 去重(源内 + 跨源 + 历史)
+    # 4. 去重(源内 + 跨源 + 历史)
     deduped = sources.dedupe(fresh_in_window)
     fresh = [a for a in deduped if not state.contains(a.uid)]
     log.info("after dedup: %d unique, %d new (vs sent history)", len(deduped), len(fresh))
@@ -170,34 +168,29 @@ def run(dry_run: bool = False) -> int:
         log.info("no new articles; exiting")
         return 0
 
-    # 3. Claude 打分
-    log.info("=== 2. scoring with %s ===", config["claude"]["scorer_model"])
+    # 5. Claude 打分(聚焦当日板块,其他板块的稿子直接被压到 0-3 分)
+    log.info("=== 2. scoring with %s (focus=%s) ===", config["claude"]["scorer_model"], category)
     scored = filter_mod.score_articles(
         client=client,
         articles=fresh,
         keywords_md=keywords_md,
         model=config["claude"]["scorer_model"],
         batch_size=config["claude"]["scorer_batch_size"],
+        active_category=category,
     )
 
-    # 4. 按阈值过滤 + top N
+    # 6. 按阈值过滤 + top N(还要求文章命中当日板块,scorer 已经做了限制,这里再兜底)
     min_score = float(config["push"]["min_score"])
     max_n = int(config["push"]["max_articles"])
-    qualified = [s for s in scored if s.score >= min_score]
+    qualified = [
+        s for s in scored
+        if s.score >= min_score and category in s.categories
+    ]
     qualified.sort(key=lambda s: s.score, reverse=True)
     top = qualified[:max_n]
-    # 按板块分布看一下,便于调阈值
-    cat_counts = {"governance": 0, "data": 0, "industry": 0, "_none": 0}
-    for s in top:
-        if not s.categories:
-            cat_counts["_none"] += 1
-        for c in s.categories:
-            if c in cat_counts:
-                cat_counts[c] += 1
     log.info(
-        "scored: %d total, %d >= %.1f, top %d selected (governance=%d, data=%d, industry=%d, uncategorized=%d)",
-        len(scored), len(qualified), min_score, len(top),
-        cat_counts["governance"], cat_counts["data"], cat_counts["industry"], cat_counts["_none"],
+        "scored: %d total, %d >= %.1f & in [%s], top %d selected",
+        len(scored), len(qualified), min_score, category, len(top),
     )
 
     if not top:
@@ -209,7 +202,7 @@ def run(dry_run: bool = False) -> int:
             state.save()
         return 0
 
-    # 5. Sonnet 写摘要
+    # 7. Sonnet 写摘要
     log.info("=== 3. summarizing top %d with %s ===", len(top), config["claude"]["summarizer_model"])
     top = filter_mod.summarize_top(
         client=client,
@@ -218,12 +211,25 @@ def run(dry_run: bool = False) -> int:
         model=config["claude"]["summarizer_model"],
     )
 
-    # 6. 推送
-    title = config["push"]["title_template"].format(date=datetime.now().strftime("%Y-%m-%d"))
-    content = render_push_content(top)
+    # 8. 渲染 + 落盘 + 推送
+    now = datetime.now()
+    title = config["push"]["title_template"].format(
+        date=now.strftime("%Y-%m-%d"),
+        category_label=category_label,
+        category=category,
+    )
+    content = render_push_content(top, category, category_label)
+
+    # 无条件落盘:dry-run 也写,没有 PUSHPLUS_TOKEN 也写,推送失败也写
+    file_name = FILE_CATEGORY_NAMES.get(category, category)
+    timestamp = now.strftime("%Y-%m-%d_%H%M%S")
+    out_path = OUTPUT_DIR / f"{file_name}+{timestamp}.md"
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(f"# {title}\n\n{content}", encoding="utf-8")
+    log.info("wrote markdown file: %s", out_path.relative_to(ROOT))
 
     if dry_run:
-        log.info("=== DRY RUN: would push ===")
+        log.info("=== DRY RUN: skip push ===")
         print(f"\nTITLE: {title}\n")
         print(content)
     else:
@@ -233,7 +239,7 @@ def run(dry_run: bool = False) -> int:
             log.error("push failed; not marking state so we can retry next run")
             return 2
 
-    # 7. 标记所有"打过分的"为已处理(不止 top,避免下次反复打同样低分)
+    # 9. 标记所有"打过分的"为已处理(不止 top,避免下次反复打同样低分)
     for s in scored:
         state.mark(s.article.uid)
     if not dry_run:
@@ -245,8 +251,23 @@ def run(dry_run: bool = False) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser(description="News Agent runner")
     parser.add_argument("--dry-run", action="store_true", help="不实际推送,只打印结果")
+    parser.add_argument(
+        "--category",
+        choices=sorted(filter_mod.VALID_CATEGORIES),
+        help="手动指定板块(忽略 weekday 排期)",
+    )
+    parser.add_argument(
+        "--weekday",
+        type=int,
+        choices=range(7),
+        help="模拟某个 weekday(0=周一..6=周日),用于测试",
+    )
     args = parser.parse_args()
-    sys.exit(run(dry_run=args.dry_run))
+    sys.exit(run(
+        dry_run=args.dry_run,
+        override_category=args.category,
+        override_weekday=args.weekday,
+    ))
 
 
 if __name__ == "__main__":

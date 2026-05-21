@@ -1,15 +1,32 @@
 # News Agent 配置文件
 # 编辑后无需重启，每次跑都会重新读
 
+# ---------- 每周排期 ----------
+# 按 weekday 把每天绑到一个板块,只抓该板块的关键词、只让 scorer 关心该板块
+# weekday: 0=周一, 1=周二, 2=周三, 3=周四, 4=周五, 5=周六, 6=周日
+# 不在表里的日子直接退出(GitHub Actions 当日跑空就行)
+schedule:
+  weekday_category:
+    0: governance   # 周一: AI 治理
+    1: data         # 周二: AI 数据
+    2: industry     # 周三: AI 行业落地
+    # 周四到周日不在表里 → 直接退出,不抓不推
+
 # ---------- 推送配置 ----------
 push:
   # 单次推送的文章数上限（Claude 摘要的 token 成本主要来自这里）
-  # 三板块共用此配额：按分数倒序取 top N,文章跨板块时在每个板块各出现一次
   max_articles: 12
   # 单条新闻的相关性分数阈值（0-10），低于此分不推送
   min_score: 6.0
-  # PushPlus 推送主题模板（{date} 会被替换为日期）
-  title_template: "📰 AI 日报（治理 · 数据 · 落地）{date}"
+  # PushPlus 推送主题模板（{date}、{category_label} 会被替换）
+  title_template: "📰 AI 日报 · {category_label} · {date}"
+
+# ---------- 板块展示名 ----------
+# 用于推送标题、正文标题、日志
+category_labels:
+  governance: "AI 治理"
+  data: "AI 数据"
+  industry: "AI 行业落地"
 
 # ---------- Claude API 配置 ----------
 claude:
@@ -21,42 +38,41 @@ claude:
   scorer_batch_size: 20
 
 # ---------- Google News 关键词搜索 ----------
-# 这些关键词会被翻译成 Google News RSS URL 直接抓
-# 搜索窗口固定 24h，避免推荐过期内容
-# 按三个板块分组（仅注释,实际抓取不区分板块,板块由 scorer 判断）
+# 按板块分组,当日只抓当日板块对应的 queries
+# 搜索窗口固定 24h,避免推荐过期内容
 google_news_queries:
-  # ---- AI 治理 ----
-  - "EU AI Act"
-  - "AI regulation"
-  - "AI safety institute"
-  - "AI alignment"
-  - "AI export control"
-  - "AI 监管"
-  - "生成式人工智能管理办法"
-  - "AI 治理标准"
-  - "NIST AI RMF"
-  - "ISO 42001"
+  governance:
+    - "EU AI Act"
+    - "AI regulation"
+    - "AI safety institute"
+    - "AI alignment"
+    - "AI export control"
+    - "AI 监管"
+    - "生成式人工智能管理办法"
+    - "AI 治理标准"
+    - "NIST AI RMF"
+    - "ISO 42001"
 
-  # ---- AI 数据 ----
-  - "AI capex"
-  - "AI data center"
-  - "AI training data"
-  - "AI 算力"
-  - "数据要素市场"
-  - "数据资产入表"
-  - "synthetic training data"
-  - "vector database RAG"
+  data:
+    - "AI capex"
+    - "AI data center"
+    - "AI training data"
+    - "AI 算力"
+    - "数据要素市场"
+    - "数据资产入表"
+    - "synthetic training data"
+    - "vector database RAG"
 
-  # ---- AI 行业落地 ----
-  - "行业大模型"
-  - "AI 落地 企业"
-  - "AI Agent 企业级"
-  - "industrial AI"
-  - "vertical AI agent"
-  - "enterprise AI deployment"
+  industry:
+    - "行业大模型"
+    - "AI 落地 企业"
+    - "AI Agent 企业级"
+    - "industrial AI"
+    - "vertical AI agent"
+    - "enterprise AI deployment"
 
 # ---------- 直接订阅的 RSS 源 ----------
-# 推荐：行业媒体的 RSS（中英文混合，按需增删）
+# 这里全是综合型 AI 媒体,每天都抓;由 scorer 判断与当日板块是否相关
 rss_feeds:
   # 中文科技/AI 媒体
   - name: "36氪 AI"
@@ -87,13 +103,8 @@ rss_feeds:
     url: "https://huggingface.co/blog/feed.xml"
 
 # ---------- RSSHub 路由（用于 X / 微信公众号）----------
-# RSSHub 公共实例可能不稳定，如果想用 X 或公众号，建议自部署 RSSHub
-# 留空数组表示不启用
-# 示例路由：
-#   X 用户: /twitter/user/elonmusk
-#   公众号: /wechat/ce/{biz}  （需要 biz 参数，参考 docs.rsshub.app）
 rsshub:
-  instance: "https://rsshub.app"  # 也可以填自部署的 URL
+  instance: "https://rsshub.app"
   routes: []
   # - name: "Sam Altman X"
   #   path: "/twitter/user/sama"

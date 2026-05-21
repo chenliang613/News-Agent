@@ -20,6 +20,12 @@ log = logging.getLogger(__name__)
 
 VALID_CATEGORIES = {"governance", "data", "industry"}
 
+CATEGORY_FOCUS_LABELS = {
+    "governance": "AI 治理(监管/安全对齐/企业治理/出口管制/治理标准)",
+    "data": "AI 数据(训练数据合规/数据中心/算力/数据要素/RAG/Agent 数据)",
+    "industry": "AI 行业落地(行业大模型/垂直 Agent/产业格局/编程 Agent)",
+}
+
 
 @dataclass
 class ScoredArticle:
@@ -125,10 +131,27 @@ def score_articles(
     keywords_md: str,
     model: str,
     batch_size: int = 20,
+    active_category: str | None = None,
 ) -> list[ScoredArticle]:
-    """批量打分。keywords.md 用 prompt caching,跨批次复用。"""
+    """批量打分。keywords.md 用 prompt caching,跨批次复用。
+
+    active_category 指定时,scorer 只关心该板块:
+      - 不属于该板块的文章压到 0-3 分
+      - 输出 categories 只保留该板块 key
+    """
     if not articles:
         return []
+
+    focus_directive = ""
+    if active_category in VALID_CATEGORIES:
+        focus_label = CATEGORY_FOCUS_LABELS[active_category]
+        focus_directive = (
+            f"\n\n【今日聚焦】今天只关心 **{active_category}** 板块 ({focus_label})。"
+            f"严格要求:\n"
+            f"- 不属于该板块的新闻一律 0-3 分,无论它本身多么相关。\n"
+            f'- categories 字段只允许出现 ["{active_category}"] 或空数组 [],不要写其他板块。\n'
+            f"- 跨板块的新闻只要主要价值不在 {active_category},也按上面规则给 0-3 分。"
+        )
 
     scored: list[ScoredArticle] = []
 
@@ -149,7 +172,7 @@ def score_articles(
                 system=[
                     {
                         "type": "text",
-                        "text": SCORER_SYSTEM,
+                        "text": SCORER_SYSTEM + focus_directive,
                     },
                     {
                         "type": "text",
@@ -209,6 +232,9 @@ def score_articles(
                 if isinstance(c, str) and c in VALID_CATEGORIES and c not in seen:
                     seen.add(c)
                     cats.append(c)
+            # 当日聚焦模式下,categories 只允许当日板块
+            if active_category in VALID_CATEGORIES:
+                cats = [c for c in cats if c == active_category]
             scored.append(ScoredArticle(
                 article=a,
                 score=max(0.0, min(10.0, score)),
