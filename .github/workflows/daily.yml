@@ -2,9 +2,24 @@ name: Daily News Push
 
 on:
   schedule:
-    # 北京时间每天 08:00 = UTC 00:00。GitHub cron 可能有 5-15 分钟延迟
-    - cron: '0 0 * * *'
+    # 只在周一/三/五/日运行。北京时间 08:00 = UTC 00:00
+    # cron weekday: 0=Sun, 1=Mon, 3=Wed, 5=Fri
+    - cron: '0 0 * * 0,1,3,5'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
+    inputs:
+      test_push:
+        description: '只测试推送(不抓新闻)'
+        type: boolean
+        default: false
+      category:
+        description: '手动指定板块(忽略 weekday 排期)'
+        type: choice
+        options:
+          - ''
+          - governance
+          - data
+          - industry
+          - agent
 
 permissions:
   contents: write  # 需要写权限,跑完要 commit state/sent.json 回去
@@ -17,6 +32,9 @@ jobs:
   push:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
+    env:
+      TZ: Asia/Shanghai
 
     steps:
       - name: Checkout
@@ -35,7 +53,14 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-        run: python -m news_agent.main
+        run: |
+          ARGS=""
+          if [[ "${{ github.event.inputs.test_push }}" == "true" ]]; then
+            ARGS="--test-push"
+          elif [[ -n "${{ github.event.inputs.category }}" ]]; then
+            ARGS="--category ${{ github.event.inputs.category }}"
+          fi
+          python -m news_agent.main $ARGS
 
       - name: Commit updated state and output
         run: |

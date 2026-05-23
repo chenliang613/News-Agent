@@ -8,9 +8,9 @@
 schedule:
   weekday_category:
     0: governance   # 周一: AI 治理
-    1: data         # 周二: AI 数据
-    2: industry     # 周三: AI 行业落地
-    # 周四到周日不在表里 → 直接退出,不抓不推
+    2: data         # 周三: AI 数据
+    4: industry     # 周五: AI 行业落地
+    6: agent        # 周日: AI Agent 动态
 
 # ---------- 推送配置 ----------
 push:
@@ -27,6 +27,7 @@ category_labels:
   governance: "AI 治理"
   data: "AI 数据"
   industry: "AI 行业落地"
+  agent: "AI Agent 动态"
 
 # ---------- Claude API 配置 ----------
 claude:
@@ -70,6 +71,20 @@ google_news_queries:
     - "industrial AI"
     - "vertical AI agent"
     - "enterprise AI deployment"
+
+  agent:
+    - "AI Agent"
+    - "agentic AI"
+    - "multi-agent"
+    - "coding agent"
+    - "Claude Code"
+    - "Cursor AI"
+    - "Devin AI"
+    - "OpenAI Codex"
+    - "MCP protocol"
+    - "computer use AI"
+    - "AI Agent 产品"
+    - "Agent 框架"
 
 # ---------- 直接订阅的 RSS 源 ----------
 # 这里全是综合型 AI 媒体,每天都抓;由 scorer 判断与当日板块是否相关

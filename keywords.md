@@ -12,7 +12,7 @@
 
 **关键词**：AI Act、AI 监管、AI governance、AI safety、AI alignment、red team、responsible scaling、AI 出口管制、export control、芯片管制、AI 标准、SC42、JTC21、TC260、NIST AI RMF、ISO 42001、生成式人工智能管理办法、AI 伦理
 
-## 二、AI 数据（data）  -- 每周二获得AI数据的相关新闻和动态
+## 二、AI 数据（data）  -- 每周三获得AI数据的相关新闻和动态
 
 **主题**：AI 的"燃料"和"载体"——训练数据、算力基础设施、数据要素市场、检索/记忆栈。
 
@@ -25,7 +25,7 @@
 
 **关键词**：AI capex、AI infra、data center、算力中心、芯片采购、训练数据、training data、synthetic data、数据版权、数据合规、数据要素、数据交易、数据资产入表、vector database、RAG、knowledge base、Pinecone、Milvus、Weaviate、Agent memory、context engineering
 
-## 三、AI 行业落地（industry） -- 每周三获得AI行业的相关新闻和动态
+## 三、AI 行业落地（industry） -- 每周五获得AI行业的相关新闻和动态
 
 **主题**：AI 在各行业的真实部署、产业格局、Agent 与编程智能的产业化。
 
@@ -38,7 +38,13 @@
 
 **关键词**：行业大模型、行业智能化、AI 落地、产业 AI、企业 AI、AI 转型、智能制造、AI+医疗、AI+金融、vertical AI、enterprise AI、AI Agent、coding agent、agentic AI、multi-agent、MCP、computer use、AI ARR、AI valuation、AI capex（如果聚焦在投资回报/产业格局而非数据中心本身）
 
-## 四、过滤规则（请勿推送，scorer 给 0-3 分）
+
+## 四、AI Agent动态分析 -- 每周日获取AI Agent的动态
+- 科技公司发布的最新的Agent产品
+- 最新的有Agent技术突破
+- Agent新标准和范式的变化
+
+## 五、过滤规则（请勿推送，scorer 给 0-3 分）
 
 - 纯模型跑分、benchmark 对比，除非有产业意义
 - 公司内部八卦、人事变动，除非是关键人物（CEO / CTO / 首席科学家 / 监管负责人）
@@ -48,14 +54,14 @@
 - 已经超过 48 小时的旧闻
 - 通用财经/宏观新闻里 AI 只是被一笔带过的内容
 
-## 五、scorer 输出格式约定
+## 六、scorer 输出格式约定
 
 对每条新闻必须返回：
 ```json
 {
   "id": <输入序号>,
   "score": <0-10 数字,可一位小数>,
-  "categories": ["governance" | "data" | "industry", ...],
+  "categories": ["governance" | "data" | "industry" | "agent", ...],
   "reason": "<不超过30字的中文打分理由>"
 }
 ```

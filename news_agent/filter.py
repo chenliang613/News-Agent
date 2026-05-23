@@ -18,12 +18,13 @@ from .sources import Article
 
 log = logging.getLogger(__name__)
 
-VALID_CATEGORIES = {"governance", "data", "industry"}
+VALID_CATEGORIES = {"governance", "data", "industry", "agent"}
 
 CATEGORY_FOCUS_LABELS = {
     "governance": "AI 治理(监管/安全对齐/企业治理/出口管制/治理标准)",
     "data": "AI 数据(训练数据合规/数据中心/算力/数据要素/RAG/Agent 数据)",
     "industry": "AI 行业落地(行业大模型/垂直 Agent/产业格局/编程 Agent)",
+    "agent": "AI Agent 动态(Agent 产品发布/技术突破/新标准与范式)",
 }
 
 
@@ -40,18 +41,19 @@ class ScoredArticle:
 
 SCORER_SYSTEM = """你是一个新闻相关性评分 + 板块分类助手。你将收到一份用户的关注主题说明(keywords.md),然后是一批待评分的新闻。
 
-主题说明里定义了三个板块,scorer 必须用这三个英文 key:
+主题说明里定义了四个板块,scorer 必须用这四个英文 key:
 - governance → AI 治理(监管/安全对齐/企业治理/出口管制/治理标准)
 - data       → AI 数据(训练数据合规/数据中心/数据要素/RAG/Agent数据)
 - industry   → AI 行业落地(行业大模型/垂直 Agent/产业格局/编程 Agent)
+- agent      → AI Agent 动态(Agent 产品发布/技术突破/新标准与范式)
 
 任务:
 1. 按 keywords.md 描述的关注角度和过滤规则,给每条新闻打 0-10 分相关性:
    - 0-3: 完全无关或属于过滤规则要排除的内容
    - 4-5: 沾边但价值不高(如标题党、轻量产品发布、纯翻译稿)
    - 6-7: 相关且有信息量(如行业落地案例、监管细则、有数据支撑的产业分析)
-   - 8-10: 高度相关、信息密度高、对用户研究目标(三板块之一)有直接价值
-2. 给每条新闻标记 categories(0~3 个板块 key 组成的数组):
+   - 8-10: 高度相关、信息密度高、对用户研究目标(四板块之一)有直接价值
+2. 给每条新闻标记 categories(0~4 个板块 key 组成的数组):
    - score >= 4 必须至少标一个板块
    - 跨板块新闻给多个(如"美国扩大对华芯片出口管制" → ["governance", "data"])
    - score < 4 可以给空数组 []
@@ -59,7 +61,7 @@ SCORER_SYSTEM = """你是一个新闻相关性评分 + 板块分类助手。你�
 严格按用户的过滤规则执行——属于排除项的一律给 0-3 分。
 
 返回 JSON 数组,每条对应一篇新闻,顺序与输入一致。每条格式:
-{"id": <输入序号>, "score": <0-10 数字,可带一位小数>, "categories": ["governance"|"data"|"industry", ...], "reason": "<不超过30字的中文打分理由>"}
+{"id": <输入序号>, "score": <0-10 数字,可带一位小数>, "categories": ["governance"|"data"|"industry"|"agent", ...], "reason": "<不超过30字的中文打分理由>"}
 
 只返回 JSON,不要 markdown 包装,不要任何其他文字。"""
 

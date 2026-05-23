@@ -37,6 +37,7 @@ FILE_CATEGORY_NAMES = {
     "governance": "AI治理",
     "data": "AI数据",
     "industry": "AI产业",
+    "agent": "AIAgent",
 }
 
 logging.basicConfig(
@@ -248,9 +249,39 @@ def run(
     return 0
 
 
+def test_push() -> int:
+    """绕过抓取/打分,直接发一条测试消息到 PushPlus,验证微信端是否能收到。"""
+    token = os.environ.get("PUSHPLUS_TOKEN")
+    if not token:
+        log.error("PUSHPLUS_TOKEN not set")
+        return 1
+    now = datetime.now()
+    title = f"🧪 News Agent 测试 · {now.strftime('%H:%M:%S')}"
+    content = (
+        "# News Agent 推送测试\n\n"
+        "如果你在微信上看到了这条消息,说明 PushPlus token 和公众号关注都正常。\n\n"
+        f"- 时间: {now.strftime('%Y-%m-%d %H:%M:%S')}\n"
+        f"- Token 末 4 位: ...{token[-4:]}\n"
+        f"- 模板: markdown\n"
+    )
+    log.info("sending test push: %s", title)
+    ok = push_mod.push(token, title, content)
+    if ok:
+        log.info("PushPlus API 返回成功。请检查微信公众号「推送加」是否收到消息。")
+        log.info("如果 API 成功但微信没收到,通常是:1) 没关注「推送加」公众号 2) token 属于别人")
+        return 0
+    log.error("PushPlus API 调用失败,看上面日志")
+    return 2
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="News Agent runner")
     parser.add_argument("--dry-run", action="store_true", help="不实际推送,只打印结果")
+    parser.add_argument(
+        "--test-push",
+        action="store_true",
+        help="只发一条测试消息到 PushPlus(不抓新闻、不调 Claude),验证微信能否收到",
+    )
     parser.add_argument(
         "--category",
         choices=sorted(filter_mod.VALID_CATEGORIES),
@@ -263,6 +294,8 @@ def main() -> None:
         help="模拟某个 weekday(0=周一..6=周日),用于测试",
     )
     args = parser.parse_args()
+    if args.test_push:
+        sys.exit(test_push())
     sys.exit(run(
         dry_run=args.dry_run,
         override_category=args.category,
