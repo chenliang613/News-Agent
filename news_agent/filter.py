@@ -1,9 +1,6 @@
-"""Claude API 过滤层：用 keywords.md 做相关性打分,top N 写中文摘要。
+"""DeepSeek API 过滤层：用 keywords.md 做相关性打分,top N 写中文摘要。
 
-设计要点：
-- keywords.md 走 prompt caching(ephemeral),整个 run 内反复读但只付一次缓存写费用
-- Haiku 批量打分(每批 N 条),Sonnet 单条精修摘要,平衡成本和质量
-- prompt 把候选文章作为 JSON 数组放在最后(变化部分),keywords.md 在前(稳定部分)
+使用 DeepSeek API（OpenAI 兼容格式），价格极低。
 """
 from __future__ import annotations
 
@@ -12,7 +9,7 @@ import logging
 import re
 from dataclasses import dataclass, field
 
-import anthropic
+import openai
 
 from .sources import Article
 
@@ -31,13 +28,11 @@ CATEGORY_FOCUS_LABELS = {
 @dataclass
 class ScoredArticle:
     article: Article
-    score: float                              # 0-10 相关性
-    reason: str                               # 简要打分理由
-    categories: list[str] = field(default_factory=list)  # 命中的板块 keys
-    summary: str = ""                         # Sonnet 生成的中文摘要(只有 top N 有)
+    score: float
+    reason: str
+    categories: list[str] = field(default_factory=list)
+    summary: str = ""
 
-
-# ---------- Prompt 模板 ----------
 
 SCORER_SYSTEM = """你是一个新闻相关性评分 + 板块分类助手。你将收到一份用户的关注主题说明(keywords.md),然后是一批待评分的新闻。
 
@@ -65,18 +60,6 @@ SCORER_SYSTEM = """你是一个新闻相关性评分 + 板块分类助手。你�
 
 只返回 JSON,不要 markdown 包装,不要任何其他文字。"""
 
-SCORER_USER_TEMPLATE = """以下是用户的关注主题说明:
-
-<keywords>
-{keywords}
-</keywords>
-
-以下是待评分的 {n} 条新闻(JSON 数组):
-
-{articles_json}
-
-请输出 JSON 数组评分结果。"""
-
 
 SUMMARIZER_SYSTEM = """你是一个中文新闻摘要助手。你将收到一份用户关注主题说明,然后是若干已经被判定为高相关的新闻。
 
@@ -90,20 +73,6 @@ SUMMARIZER_SYSTEM = """你是一个中文新闻摘要助手。你将收到一份
 
 只返回 JSON,不要 markdown 包装。"""
 
-SUMMARIZER_USER_TEMPLATE = """用户关注主题:
-
-<keywords>
-{keywords}
-</keywords>
-
-待摘要的 {n} 条新闻:
-
-{articles_json}
-
-请输出 JSON 摘要结果。"""
-
-
-# ---------- 辅助 ----------
 
 def _article_to_dict(idx: int, a: Article) -> dict:
     return {
@@ -116,31 +85,21 @@ def _article_to_dict(idx: int, a: Article) -> dict:
 
 
 def _extract_json_array(text: str) -> list:
-    """Claude 偶尔会包 markdown 代码块,这里兜底剥一层。"""
     text = text.strip()
     if text.startswith("```"):
-        # 去掉 ```json ... ``` 或 ``` ... ```
         text = re.sub(r"^```(?:json)?\s*", "", text)
         text = re.sub(r"\s*```$", "", text)
     return json.loads(text)
 
 
-# ---------- 公共接口 ----------
-
 def score_articles(
-    client: anthropic.Anthropic,
+    client: openai.OpenAI,
     articles: list[Article],
     keywords_md: str,
     model: str,
     batch_size: int = 20,
     active_category: str | None = None,
 ) -> list[ScoredArticle]:
-    """批量打分。keywords.md 用 prompt caching,跨批次复用。
-
-    active_category 指定时,scorer 只关心该板块:
-      - 不属于该板块的文章压到 0-3 分
-      - 输出 categories 只保留该板块 key
-    """
     if not articles:
         return []
 
@@ -155,6 +114,11 @@ def score_articles(
             f"- 跨板块的新闻只要主要价值不在 {active_category},也按上面规则给 0-3 分。"
         )
 
+    system_msg = (
+        SCORER_SYSTEM + focus_directive
+        + f"\n\n以下是用户的关注主题说明:\n\n<keywords>\n{keywords_md}\n</keywords>"
+    )
+
     scored: list[ScoredArticle] = []
 
     for batch_start in range(0, len(articles), batch_size):
@@ -165,49 +129,33 @@ def score_articles(
             indent=2,
         )
 
-        # 关键:keywords 放在 system 里并打 cache_control,
-        # 这样跨批次的多次调用能复用缓存(prefix 不变)
+        user_msg = f"以下是本批 {len(batch)} 条新闻(JSON 数组):\n\n{articles_json}\n\n请输出 JSON 数组评分结果。"
+
         try:
-            response = client.messages.create(
+            response = client.chat.completions.create(
                 model=model,
-                max_tokens=4000,
-                system=[
-                    {
-                        "type": "text",
-                        "text": SCORER_SYSTEM + focus_directive,
-                    },
-                    {
-                        "type": "text",
-                        "text": f"以下是用户的关注主题说明,后续每批新闻都按它打分:\n\n<keywords>\n{keywords_md}\n</keywords>",
-                        "cache_control": {"type": "ephemeral"},
-                    },
-                ],
                 messages=[
-                    {
-                        "role": "user",
-                        "content": f"以下是本批 {len(batch)} 条新闻(JSON 数组):\n\n{articles_json}\n\n请输出 JSON 数组评分结果。",
-                    }
+                    {"role": "system", "content": system_msg},
+                    {"role": "user", "content": user_msg},
                 ],
+                max_tokens=4000,
+                temperature=0.1,
             )
-        except anthropic.APIError as e:
+            text = response.choices[0].message.content or ""
+        except Exception as e:
             log.error("scorer API error on batch starting %d: %s", batch_start, e)
-            # 失败的批次直接给中性分,保证流程继续
             for a in batch:
                 scored.append(ScoredArticle(article=a, score=5.0, reason="评分失败"))
             continue
 
-        # 记录缓存命中(诊断用)
         usage = response.usage
         log.info(
-            "scorer batch %d: cache_read=%d cache_create=%d input=%d output=%d",
+            "scorer batch %d: input=%d output=%d",
             batch_start // batch_size,
-            getattr(usage, "cache_read_input_tokens", 0),
-            getattr(usage, "cache_creation_input_tokens", 0),
-            usage.input_tokens,
-            usage.output_tokens,
+            usage.prompt_tokens if usage else 0,
+            usage.completion_tokens if usage else 0,
         )
 
-        text = next((b.text for b in response.content if b.type == "text"), "")
         try:
             result = _extract_json_array(text)
         except (json.JSONDecodeError, ValueError) as e:
@@ -216,7 +164,6 @@ def score_articles(
                 scored.append(ScoredArticle(article=a, score=5.0, reason="解析失败"))
             continue
 
-        # 按 id 对回原文
         by_id = {item.get("id"): item for item in result if isinstance(item, dict)}
         for idx, a in enumerate(batch):
             item = by_id.get(idx, {})
@@ -227,14 +174,12 @@ def score_articles(
             raw_cats = item.get("categories") or []
             if not isinstance(raw_cats, list):
                 raw_cats = []
-            # 只保留合法 key,去重保序
             seen: set[str] = set()
             cats: list[str] = []
             for c in raw_cats:
                 if isinstance(c, str) and c in VALID_CATEGORIES and c not in seen:
                     seen.add(c)
                     cats.append(c)
-            # 当日聚焦模式下,categories 只允许当日板块
             if active_category in VALID_CATEGORIES:
                 cats = [c for c in cats if c == active_category]
             scored.append(ScoredArticle(
@@ -248,12 +193,11 @@ def score_articles(
 
 
 def summarize_top(
-    client: anthropic.Anthropic,
+    client: openai.OpenAI,
     scored: list[ScoredArticle],
     keywords_md: str,
     model: str,
 ) -> list[ScoredArticle]:
-    """给已经按分数选出的 top N 写中文摘要。in-place 填 .summary 并返回。"""
     if not scored:
         return scored
 
@@ -263,39 +207,34 @@ def summarize_top(
         indent=2,
     )
 
+    system_msg = (
+        SUMMARIZER_SYSTEM
+        + f"\n\n用户关注主题:\n\n<keywords>\n{keywords_md}\n</keywords>"
+    )
+    user_msg = f"待摘要的 {len(scored)} 条新闻:\n\n{articles_json}\n\n请输出 JSON 摘要结果。"
+
     try:
-        response = client.messages.create(
+        response = client.chat.completions.create(
             model=model,
-            max_tokens=8000,
-            system=[
-                {"type": "text", "text": SUMMARIZER_SYSTEM},
-                {
-                    "type": "text",
-                    "text": f"用户关注主题:\n\n<keywords>\n{keywords_md}\n</keywords>",
-                    "cache_control": {"type": "ephemeral"},
-                },
-            ],
             messages=[
-                {
-                    "role": "user",
-                    "content": f"待摘要的 {len(scored)} 条新闻:\n\n{articles_json}\n\n请输出 JSON 摘要结果。",
-                }
+                {"role": "system", "content": system_msg},
+                {"role": "user", "content": user_msg},
             ],
+            max_tokens=8000,
+            temperature=0.2,
         )
-    except anthropic.APIError as e:
+        text = response.choices[0].message.content or ""
+    except Exception as e:
         log.error("summarizer API error: %s", e)
         return scored
 
     usage = response.usage
     log.info(
-        "summarizer: cache_read=%d cache_create=%d input=%d output=%d",
-        getattr(usage, "cache_read_input_tokens", 0),
-        getattr(usage, "cache_creation_input_tokens", 0),
-        usage.input_tokens,
-        usage.output_tokens,
+        "summarizer: input=%d output=%d",
+        usage.prompt_tokens if usage else 0,
+        usage.completion_tokens if usage else 0,
     )
 
-    text = next((b.text for b in response.content if b.type == "text"), "")
     try:
         result = _extract_json_array(text)
     except (json.JSONDecodeError, ValueError) as e:

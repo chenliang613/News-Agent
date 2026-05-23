@@ -29,13 +29,10 @@ category_labels:
   industry: "AI行业"
   agent: "AI Agent"
 
-# ---------- Claude API 配置 ----------
-claude:
-  # 批量打分用的快速模型（便宜，适合 triage）
-  scorer_model: "claude-haiku-4-5"
-  # 写中文摘要用的高质量模型
-  summarizer_model: "claude-sonnet-4-6"
-  # 每批送给 scorer 的文章数（控制单次请求 token 量）
+# ---------- DeepSeek API 配置 ----------
+deepseek:
+  scorer_model: "deepseek-chat"
+  summarizer_model: "deepseek-chat"
   scorer_batch_size: 20
 
 # ---------- Google News 关键词搜索 ----------
@@ -129,7 +126,8 @@ sources:
   # 文章发布时间窗口（小时）。早于此窗口的丢弃。
   # OpenAI / HuggingFace / DeepMind 等 RSS 不分页,会返回全量历史,必须靠这个收口。
   # 缺 published_at 的文章会保留(避免误杀)。
-  max_age_hours: 48
+  # 每周推送一次,所以窗口设为 7 天
+  max_age_hours: 168
 
 # ---------- 去重配置 ----------
 state:

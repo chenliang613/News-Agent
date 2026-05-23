@@ -18,7 +18,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-import anthropic
+import openai
 import yaml
 
 from . import filter as filter_mod
@@ -128,16 +128,16 @@ def run(
     if not today_queries:
         log.warning("no google_news_queries for category=%s; only RSS will be used", category)
 
-    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not anthropic_key:
-        log.error("ANTHROPIC_API_KEY not set")
+    deepseek_key = os.environ.get("DEEPSEEK_API_KEY")
+    if not deepseek_key:
+        log.error("DEEPSEEK_API_KEY not set")
         return 1
     pushplus_token = os.environ.get("PUSHPLUS_TOKEN")
     if not pushplus_token and not dry_run:
         log.error("PUSHPLUS_TOKEN not set (use --dry-run to skip push)")
         return 1
 
-    client = anthropic.Anthropic(api_key=anthropic_key)
+    client = openai.OpenAI(api_key=deepseek_key, base_url="https://api.deepseek.com")
     state = SentState(STATE_PATH, retention_days=config["state"]["retention_days"])
     pruned = state.prune()
     if pruned:
@@ -169,14 +169,14 @@ def run(
         log.info("no new articles; exiting")
         return 0
 
-    # 5. Claude 打分(聚焦当日板块,其他板块的稿子直接被压到 0-3 分)
-    log.info("=== 2. scoring with %s (focus=%s) ===", config["claude"]["scorer_model"], category)
+    # 5. Gemini 打分(聚焦当日板块,其他板块的稿子直接被压到 0-3 分)
+    log.info("=== 2. scoring with %s (focus=%s) ===", config["deepseek"]["scorer_model"], category)
     scored = filter_mod.score_articles(
         client=client,
         articles=fresh,
         keywords_md=keywords_md,
-        model=config["claude"]["scorer_model"],
-        batch_size=config["claude"]["scorer_batch_size"],
+        model=config["deepseek"]["scorer_model"],
+        batch_size=config["deepseek"]["scorer_batch_size"],
         active_category=category,
     )
 
@@ -203,13 +203,13 @@ def run(
             state.save()
         return 0
 
-    # 7. Sonnet 写摘要
-    log.info("=== 3. summarizing top %d with %s ===", len(top), config["claude"]["summarizer_model"])
+    # 7. Gemini 写摘要
+    log.info("=== 3. summarizing top %d with %s ===", len(top), config["deepseek"]["summarizer_model"])
     top = filter_mod.summarize_top(
         client=client,
         scored=top,
         keywords_md=keywords_md,
-        model=config["claude"]["summarizer_model"],
+        model=config["deepseek"]["summarizer_model"],
     )
 
     # 8. 渲染 + 落盘 + 推送
