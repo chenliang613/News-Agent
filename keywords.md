@@ -39,7 +39,7 @@
 **关键词**：行业大模型、行业智能化、AI 落地、产业 AI、企业 AI、AI 转型、智能制造、AI+医疗、AI+金融、vertical AI、enterprise AI、AI Agent、coding agent、agentic AI、multi-agent、MCP、computer use、AI ARR、AI valuation、AI capex（如果聚焦在投资回报/产业格局而非数据中心本身）
 
 
-## 四、AI Agent动态分析 -- 每周日获取AI Agent的动态
+## 四、AI Agent动态分析 -- 每周日获取AI Agent相关的新闻和动态
 - 科技公司发布的最新的Agent产品
 - 最新的有Agent技术突破
 - Agent新标准和范式的变化
@@ -61,7 +61,7 @@
 {
   "id": <输入序号>,
   "score": <0-10 数字,可一位小数>,
-  "categories": ["governance" | "data" | "industry" | "agent", ...],
+  "categories": ["governance" | "data" | "industry", ...],
   "reason": "<不超过30字的中文打分理由>"
 }
 ```
