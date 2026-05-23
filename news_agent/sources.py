@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import Iterable
@@ -11,6 +12,7 @@ from urllib.parse import quote_plus
 
 import feedparser
 from dateutil import parser as date_parser
+from googlenewsdecoder import new_decoderv1
 
 log = logging.getLogger(__name__)
 
@@ -53,6 +55,19 @@ def _clean_summary(raw: str, limit: int = 600) -> str:
     text = re.sub(r"<[^>]+>", "", raw)
     text = re.sub(r"\s+", " ", text).strip()
     return text[:limit]
+
+
+def _resolve_google_news_url(gnews_url: str) -> str:
+    """将 Google News 中转链接解析为原始文章 URL，失败时返回原链接。"""
+    if "news.google.com" not in gnews_url:
+        return gnews_url
+    try:
+        result = new_decoderv1(gnews_url, interval=0)
+        if result.get("status") and result.get("decoded_url"):
+            return result["decoded_url"]
+    except Exception as e:
+        log.debug("gnews decode failed for %s: %s", gnews_url[:80], e)
+    return gnews_url
 
 
 def _fetch_feed(url: str, source_name: str) -> list[Article]:
@@ -99,17 +114,36 @@ def fetch_google_news(queries: list[str]) -> list[Article]:
     """Google News RSS 搜索（免费、稳定、不需 key）。
 
     URL 模板：https://news.google.com/rss/search?q=KEYWORD&hl=zh-CN&gl=CN&ceid=CN:zh
-    when:1d 限制 24 小时窗口。
+    when:7d 限制 7 天窗口（配合一周推送一次的节奏）。
     """
     all_articles: list[Article] = []
     for query in queries:
-        encoded = quote_plus(f"{query} when:1d")
-        # hl/gl/ceid 控制语言区域;中英混合用 zh-CN 也能返回英文结果
+        encoded = quote_plus(f"{query} when:7d")
         url = f"https://news.google.com/rss/search?q={encoded}&hl=zh-CN&gl=CN&ceid=CN:zh"
         articles = _fetch_feed(url, f"Google News: {query}")
         log.info("Google News [%s] -> %d articles", query, len(articles))
         all_articles.extend(articles)
         time.sleep(0.5)
+
+    # 并发解析所有 Google News 中转链接
+    gnews_articles = [a for a in all_articles if "news.google.com" in a.url]
+    if gnews_articles:
+        log.info("resolving %d Google News URLs (concurrent)...", len(gnews_articles))
+        resolved = 0
+        with ThreadPoolExecutor(max_workers=20) as pool:
+            future_to_article = {
+                pool.submit(_resolve_google_news_url, a.url): a
+                for a in gnews_articles
+            }
+            for future in as_completed(future_to_article):
+                article = future_to_article[future]
+                new_url = future.result()
+                if new_url != article.url:
+                    article.url = new_url
+                    article.uid = hashlib.sha1(new_url.encode("utf-8")).hexdigest()[:16]
+                    resolved += 1
+        log.info("resolved %d / %d Google News URLs", resolved, len(gnews_articles))
+
     return all_articles
 
 

@@ -1,5 +1,6 @@
 openai>=1.0.0
 feedparser>=6.0.11
+googlenewsdecoder>=0.1.0
 httpx>=0.27.0
 PyYAML>=6.0.2
 python-dateutil>=2.9.0
