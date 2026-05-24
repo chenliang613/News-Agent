@@ -15,7 +15,7 @@ schedule:
 # ---------- 推送配置 ----------
 push:
   # 单次推送的文章数上限（Claude 摘要的 token 成本主要来自这里）
-  max_articles: 12
+  max_articles: 20
   # 单条新闻的相关性分数阈值（0-10），低于此分不推送
   min_score: 6.0
   # PushPlus 推送主题模板（{category_label} 会被替换）
@@ -44,12 +44,11 @@ google_news_queries:
     - "AI regulation"
     - "AI safety institute"
     - "AI alignment"
-    - "AI export control"
     - "AI 监管"
     - "生成式人工智能管理办法"
     - "AI 治理标准"
-    - "NIST AI RMF"
     - "ISO 42001"
+    - "NIST AI RMF"
 
   data:
     - "AI capex"
@@ -62,12 +61,15 @@ google_news_queries:
     - "vector database RAG"
 
   industry:
+    - "AI 行业落地"
     - "行业大模型"
-    - "AI 落地 企业"
-    - "AI Agent 企业级"
-    - "industrial AI"
-    - "vertical AI agent"
+    - "AI 数字员工"
+    - "AI 智能客服"
+    - "AIGC 企业应用"
+    - "智慧办公 AI"
+    - "行业智能化"
     - "enterprise AI deployment"
+    - "AI digital worker"
 
   agent:
     - "AI Agent"

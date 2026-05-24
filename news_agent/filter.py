@@ -20,7 +20,7 @@ VALID_CATEGORIES = {"governance", "data", "industry", "agent"}
 CATEGORY_FOCUS_LABELS = {
     "governance": "AI 治理(监管/安全对齐/企业治理/出口管制/治理标准)",
     "data": "AI 数据(训练数据合规/数据中心/算力/数据要素/RAG/Agent 数据)",
-    "industry": "AI 行业落地(行业大模型/垂直 Agent/产业格局/编程 Agent)",
+    "industry": "AI 行业落地(行业智能化/数字员工/AIGC应用/智能客服/智慧办公/行业大模型)",
     "agent": "AI Agent 动态(Agent 产品发布/技术突破/新标准与范式)",
 }
 
