@@ -160,8 +160,9 @@ def run(
     if max_age:
         log.info("after age filter (<=%dh): %d articles", max_age, len(fresh_in_window))
 
-    # 4. 去重(源内 + 跨源 + 历史)
+    # 4. 去重(URL 去重 + 标题相似度跨源去重 + 历史已推送去重)
     deduped = sources.dedupe(fresh_in_window)
+    deduped = sources.dedupe_by_content(deduped)
     fresh = [a for a in deduped if not state.contains(a.uid)]
     log.info("after dedup: %d unique, %d new (vs sent history)", len(deduped), len(fresh))
 

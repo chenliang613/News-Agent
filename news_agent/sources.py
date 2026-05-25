@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import Iterable
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlparse, urlunparse
 
 import feedparser
 from dateutil import parser as date_parser
@@ -17,6 +17,12 @@ from googlenewsdecoder import new_decoderv1
 log = logging.getLogger(__name__)
 
 USER_AGENT = "Mozilla/5.0 (compatible; NewsAgent/1.0)"
+
+
+def _url_for_dedup(url: str) -> str:
+    """去掉 query 参数和 fragment，只用 scheme+host+path 做去重。"""
+    p = urlparse(url)
+    return urlunparse((p.scheme, p.netloc, p.path.rstrip("/"), "", "", ""))
 
 
 @dataclass
@@ -29,7 +35,7 @@ class Article:
     uid: str = field(init=False)
 
     def __post_init__(self) -> None:
-        self.uid = hashlib.sha1(self.url.encode("utf-8")).hexdigest()[:16]
+        self.uid = hashlib.sha1(_url_for_dedup(self.url).encode("utf-8")).hexdigest()[:16]
 
 
 def _parse_date(entry) -> datetime | None:
@@ -140,7 +146,7 @@ def fetch_google_news(queries: list[str]) -> list[Article]:
                 new_url = future.result()
                 if new_url != article.url:
                     article.url = new_url
-                    article.uid = hashlib.sha1(new_url.encode("utf-8")).hexdigest()[:16]
+                    article.uid = hashlib.sha1(_url_for_dedup(new_url).encode("utf-8")).hexdigest()[:16]
                     resolved += 1
         log.info("resolved %d / %d Google News URLs", resolved, len(gnews_articles))
 
@@ -193,3 +199,72 @@ def dedupe(articles: Iterable[Article]) -> list[Article]:
         seen.add(a.uid)
         out.append(a)
     return out
+
+
+def _normalize_title(title: str) -> str:
+    import re
+    t = re.sub(r"[\s　]+", "", title)
+    return t.lower()
+
+
+def _extract_key_terms(raw_title: str) -> set[str]:
+    """从原始标题中提取关键术语（产品名+版本号、英文单词），用于跨语言去重。
+
+    在中英文字符边界处插入空格后提取带连字符/点号的完整标识符，
+    这样"GPT-4o" → {"gpt-4o"}, "Claude 4.5" → {"claude", "4.5"}。
+    """
+    import re
+    s = re.sub(r"([一-鿿])([a-zA-Z\d])", r"\1 \2", raw_title)
+    s = re.sub(r"([a-zA-Z\d])([一-鿿])", r"\1 \2", s)
+    s = s.lower()
+    return {t for t in re.findall(r"[a-z\d]+(?:[.\-][a-z\d]+)*", s) if len(t) >= 2}
+
+
+def _is_similar(norm_a: str, norm_b: str, raw_a: str, raw_b: str, threshold: float) -> bool:
+    from difflib import SequenceMatcher
+
+    if SequenceMatcher(None, norm_a, norm_b).ratio() >= threshold:
+        return True
+
+    # 关键术语重叠（处理中英混排标题，如"谷歌发布Gemini 3.0" vs "Google releases Gemini 3.0"）
+    terms_a = _extract_key_terms(raw_a)
+    terms_b = _extract_key_terms(raw_b)
+    if len(terms_a) >= 2 and len(terms_b) >= 2:
+        overlap = terms_a & terms_b
+        smaller = min(len(terms_a), len(terms_b))
+        if len(overlap) / smaller >= 0.7:
+            return True
+
+    return False
+
+
+def dedupe_by_content(articles: list[Article], threshold: float = 0.65) -> list[Article]:
+    """按标题相似度去重跨源重复报道。同一事件保留摘要最长的一条。"""
+    if not articles:
+        return []
+
+    kept: list[Article] = []
+    normed: list[str] = []
+
+    for a in articles:
+        na = _normalize_title(a.title)
+        dup_idx: int | None = None
+        for i, nk in enumerate(normed):
+            if _is_similar(na, nk, a.title, kept[i].title, threshold):
+                dup_idx = i
+                break
+        if dup_idx is not None:
+            if len(a.summary) > len(kept[dup_idx].summary):
+                log.debug("content dedup: replace [%s] with [%s]", kept[dup_idx].title, a.title)
+                kept[dup_idx] = a
+                normed[dup_idx] = na
+            else:
+                log.debug("content dedup: drop [%s] (dup of [%s])", a.title, kept[dup_idx].title)
+        else:
+            kept.append(a)
+            normed.append(na)
+
+    dropped = len(articles) - len(kept)
+    if dropped:
+        log.info("dedupe_by_content: removed %d cross-source duplicates", dropped)
+    return kept
