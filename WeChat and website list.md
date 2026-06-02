@@ -34,7 +34,6 @@
 - DeepTech深科技 | https://www.mittrchina.com
 - 虎嗅APP | https://rss.huxiu.com/
 - 51CTO | https://www.51cto.com/
-- CSDN | https://www.csdn.net/
 
 ## 官网
 
