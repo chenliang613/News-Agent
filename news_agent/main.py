@@ -212,8 +212,6 @@ def run(
         fresh_in_window = sources.filter_by_age(raw, max_age)
         if max_age:
             log.info("after age filter (<=%dh): %d articles", max_age, len(fresh_in_window))
-    if max_age:
-        log.info("after age filter (<=%dh): %d articles", max_age, len(fresh_in_window))
 
     # 4. 去重(URL 去重 + 标题相似度跨源去重 + 历史已推送去重)
     deduped = sources.dedupe(fresh_in_window)
