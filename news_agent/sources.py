@@ -2,15 +2,19 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
+import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Iterable
 from urllib.parse import quote_plus, urlparse, urlunparse
 
 import feedparser
+import httpx
 from dateutil import parser as date_parser
 from googlenewsdecoder import new_decoderv1
 
@@ -168,11 +172,215 @@ def fetch_rsshub(instance: str, routes: list[dict]) -> list[Article]:
     return all_articles
 
 
-def filter_by_age(articles: Iterable[Article], max_age_hours: int | None) -> list[Article]:
-    """丢弃发布时间早于 max_age_hours 的文章。无 published_at 的保留(避免误杀)。
+def _norm_name(s: str) -> str:
+    """公众号名归一化:去掉所有空白(含全角)再小写,用于跨大小写/空格匹配。"""
+    return re.sub(r"\s+", "", s).lower()
 
-    None 或 <=0 时不过滤。OpenAI/HF/DeepMind 等 feed 不分页会返回全量历史,
-    必须用这个把窗口收住。
+
+def parse_account_list(path) -> list[dict]:
+    """解析 "WeChat and website list.md":含「微信公众号」和「官网」两类小节。
+
+    按二级标题判断每条属于哪类(决定时间窗口):
+      标题含「公众号」          → kind="wechat" (默认 48h)
+      标题含「官网/网站/website」 → kind="website"(默认 24h)
+    每行 `- 名称` 或 `- 名称 | 地址`(地址 / 开头=RSSHub 路由,http 开头=feed/网页)。
+    H1 标题与「怎么填」等说明小节自动忽略。返回 [{"name","inline","kind"}, ...]。
+    """
+    path = Path(path)
+    if not path.exists():
+        log.warning("account list not found: %s", path)
+        return []
+
+    entries: list[dict] = []
+    seen: set[str] = set()
+    kind: str | None = None
+    for line in path.read_text("utf-8").splitlines():
+        s = line.strip()
+        if s.startswith("#"):
+            if s.startswith("##"):
+                h = s.lstrip("#").strip().lower()
+                if "公众号" in h:
+                    kind = "wechat"
+                elif "官网" in h or "网站" in h or "website" in h:
+                    kind = "website"
+                else:
+                    kind = None
+            else:
+                kind = None  # H1 标题,重置
+            continue
+        if kind is None or not (s.startswith("- ") or s.startswith("* ")):
+            continue
+        item = s[2:].strip()
+        inline: str | None = None
+        if "|" in item:
+            name, rest = item.split("|", 1)
+            name, rest = name.strip(), rest.strip()
+            if rest.startswith("/") or rest.startswith("http"):
+                inline = rest
+        else:
+            name = item
+        name = name.strip().strip("`").strip()
+        key = _norm_name(name)
+        if not name or key in seen:
+            continue
+        seen.add(key)
+        entries.append({"name": name, "inline": inline, "kind": kind})
+    return entries
+
+
+def _load_opml_map(opml_urls: list[str]) -> dict[str, str]:
+    """下载 OPML 源,构建 {归一化公众号名: RSS 地址}。先出现的优先。"""
+    mapping: dict[str, str] = {}
+    for url in opml_urls or []:
+        try:
+            r = httpx.get(url, headers={"User-Agent": USER_AGENT}, timeout=20.0, follow_redirects=True)
+            r.raise_for_status()
+            text = r.text
+        except (httpx.HTTPError, ValueError) as e:
+            log.warning("failed to fetch OPML %s: %s", url, e)
+            continue
+        n = 0
+        for m in re.finditer(r'<outline\b[^>]*\btext="([^"]+)"[^>]*\bxmlUrl="([^"]+)"', text):
+            mapping.setdefault(_norm_name(m.group(1)), m.group(2))
+            n += 1
+        log.info("OPML %s -> %d feeds", url, n)
+    return mapping
+
+
+def resolve_wechat_feeds(
+    accounts: list[dict],
+    opml_urls: list[str],
+    rsshub_instance: str,
+    cache_path,
+) -> list[dict]:
+    """把公众号名解析成可抓取的 RSS 地址。
+
+    顺序:行内手填地址 > 缓存 > OPML 映射。OPML 仅在有未缓存名称时才下载(惰性)。
+    新解析到的写回 cache_path,跨次运行复用。返回 [{"name":.., "url":..}, ...]。
+    """
+    instance = (rsshub_instance or "").rstrip("/")
+    cache_path = Path(cache_path)
+    cache: dict[str, str] = {}
+    if cache_path.exists():
+        try:
+            cache = json.loads(cache_path.read_text("utf-8"))
+        except (json.JSONDecodeError, OSError):
+            cache = {}
+
+    opml_map: dict[str, str] | None = None  # 惰性加载
+    resolved: list[dict] = []
+    unresolved: list[str] = []
+    dirty = False
+
+    for acc in accounts:
+        name, inline = acc["name"], acc.get("inline")
+        kind = acc.get("kind", "wechat")
+        if inline:
+            url = inline if inline.startswith("http") else f"{instance}{inline}"
+            resolved.append({"name": name, "url": url, "kind": kind})
+            continue
+        key = _norm_name(name)
+        if key in cache:
+            resolved.append({"name": name, "url": cache[key], "kind": kind})
+            continue
+        if opml_map is None:
+            opml_map = _load_opml_map(opml_urls)
+        if key in opml_map:
+            cache[key] = opml_map[key]
+            dirty = True
+            resolved.append({"name": name, "url": opml_map[key], "kind": kind})
+        else:
+            unresolved.append(name)
+
+    if dirty:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=2), "utf-8")
+
+    if unresolved:
+        log.warning(
+            "无法自动解析 %d 个公众号(不在 OPML 源里): %s。"
+            "请自建 wechat2rss/werss 并把其 OPML 加到 config 的 wechat.resolver.opml_urls,"
+            "或在清单里用「名称 | 地址」手动指定。",
+            len(unresolved), "、".join(unresolved),
+        )
+    return resolved
+
+
+def _meta(html: str, key: str) -> str:
+    """从 HTML 里取 <meta property/name=key content=...> 的 content(容忍属性顺序)。"""
+    for m in re.finditer(r"<meta\b[^>]*>", html, re.I):
+        tag = m.group(0)
+        if re.search(rf'(?:property|name)=["\']{re.escape(key)}["\']', tag, re.I):
+            cm = re.search(r'content=["\']([^"\']*)["\']', tag, re.I)
+            if cm:
+                return cm.group(1).strip()
+    return ""
+
+
+def _fetch_page_as_article(url: str, source_name: str) -> Article | None:
+    """把一个普通网页(官网首页 / 公众号文章链接)抓成单篇 Article,用 og 标签提取标题/摘要。"""
+    try:
+        r = httpx.get(url, headers={"User-Agent": USER_AGENT}, timeout=15.0, follow_redirects=True)
+        r.raise_for_status()
+        html = r.text
+    except (httpx.HTTPError, ValueError) as e:
+        log.warning("fetch page %s failed: %s", source_name, e)
+        return None
+
+    title = _meta(html, "og:title") or _meta(html, "twitter:title")
+    if not title:
+        tm = re.search(r"<title[^>]*>([^<]+)</title>", html, re.I)
+        title = tm.group(1).strip() if tm else source_name
+    desc = _meta(html, "og:description") or _meta(html, "description")
+
+    published = None
+    pub_raw = _meta(html, "article:published_time")
+    if pub_raw:
+        try:
+            published = date_parser.parse(pub_raw)
+            if published.tzinfo is None:
+                published = published.replace(tzinfo=timezone.utc)
+        except (ValueError, TypeError):
+            published = None
+
+    return Article(
+        title=title.strip() or source_name,
+        url=url,
+        summary=_clean_summary(desc),
+        source=source_name,
+        published_at=published,
+    )
+
+
+def fetch_wechat_articles(resolved: list[dict]) -> list[Article]:
+    """抓取已解析出 url 的公众号。
+
+    地址是 RSS feed → 抓多篇;不是有效 feed(官网首页 / 公众号文章链接)→ 当成单篇文章抓。
+    """
+    all_articles: list[Article] = []
+    for acc in resolved:
+        articles = _fetch_feed(acc["url"], acc["name"])
+        if not articles:
+            single = _fetch_page_as_article(acc["url"], acc["name"])
+            if single:
+                articles = [single]
+                log.info("WeChat [%s] -> 非 feed,按单页文章抓取", acc["name"])
+        log.info("WeChat [%s] -> %d articles", acc["name"], len(articles))
+        all_articles.extend(articles)
+        time.sleep(0.5)
+    return all_articles
+
+
+def filter_by_age(
+    articles: Iterable[Article],
+    max_age_hours: int | None,
+    drop_undated: bool = False,
+) -> list[Article]:
+    """丢弃发布时间早于 max_age_hours 的文章。
+
+    默认保留无 published_at 的文章(避免误杀普通 RSS)。drop_undated=True 时连无日期的
+    一并丢弃——用于"只要近 N 小时内发布"的严格场景(如微信公众号流程)。
+    None 或 <=0 时不过滤。
     """
     if not max_age_hours or max_age_hours <= 0:
         return list(articles)
@@ -180,7 +388,9 @@ def filter_by_age(articles: Iterable[Article], max_age_hours: int | None) -> lis
     kept: list[Article] = []
     dropped_by_source: dict[str, int] = {}
     for a in articles:
-        if a.published_at is not None and a.published_at < cutoff:
+        too_old = a.published_at is not None and a.published_at < cutoff
+        undated = a.published_at is None and drop_undated
+        if too_old or undated:
             dropped_by_source[a.source] = dropped_by_source.get(a.source, 0) + 1
             continue
         kept.append(a)

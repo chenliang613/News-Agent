@@ -2,9 +2,10 @@ name: Daily News Push
 
 on:
   schedule:
-    # 只在周一/三/五/日运行。北京时间 08:00 = UTC 00:00
-    # cron weekday: 0=Sun, 1=Mon, 3=Wed, 5=Fri
-    - cron: '0 0 * * 0,1,3,5'
+    # 周一~六运行(周六不在排期表会自动跳过)。北京时间 08:00 = UTC 00:00
+    # cron weekday: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri
+    # 周二/四=微信公众号,周一/三/五/日=AI 四板块
+    - cron: '0 0 * * 0,1,2,3,4,5'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
     inputs:
       test_push:
@@ -20,6 +21,7 @@ on:
           - data
           - industry
           - agent
+          - wechat-and-website
 
 permissions:
   contents: write  # 需要写权限,跑完要 commit state/sent.json 回去
@@ -55,10 +57,15 @@ jobs:
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
         run: |
           ARGS=""
+          CATEGORY="${{ github.event.inputs.category }}"
+          # 下拉里的 "wechat-and-website" 对应脚本的 wechat 板块(同时抓公众号+官网)
+          if [[ "$CATEGORY" == "wechat-and-website" ]]; then
+            CATEGORY="wechat"
+          fi
           if [[ "${{ github.event.inputs.test_push }}" == "true" ]]; then
             ARGS="--test-push"
-          elif [[ -n "${{ github.event.inputs.category }}" ]]; then
-            ARGS="--category ${{ github.event.inputs.category }}"
+          elif [[ -n "$CATEGORY" ]]; then
+            ARGS="--category $CATEGORY"
           fi
           python -m news_agent.main $ARGS
 
@@ -67,7 +74,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [[ -n "$(git status --porcelain state/ output/)" ]]; then
-            git add state/sent.json
+            git add state/
             [[ -d output ]] && git add output/
             git commit -m "chore: news output $(date -u +%Y-%m-%d)"
             git push

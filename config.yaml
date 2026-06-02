@@ -8,7 +8,9 @@
 schedule:
   weekday_category:
     0: governance   # 周一: AI 治理
+    1: wechat       # 周二: 微信公众号精选
     2: data         # 周三: AI 数据
+    3: wechat       # 周四: 微信公众号精选
     4: industry     # 周五: AI 行业落地
     6: agent        # 周日: AI Agent 动态
 
@@ -28,6 +30,28 @@ category_labels:
   data: "AI数据"
   industry: "AI行业"
   agent: "AI Agent"
+  wechat: "微信公众号"
+
+# ---------- 微信公众号 + 官网(每周二/四) ----------
+# 订阅清单维护在根目录 "WeChat and website list.md",分「微信公众号」「官网」两个小节。
+# 周二/周四抓取(公众号经 OPML/feed 解析,官网直连),不做相关性打分,直接摘要推送。
+wechat:
+  # 单次推送的文章数上限(两类合并后按发布时间取最新)
+  max_articles: 20
+  # 微信公众号时间窗口(小时):只取执行前这段时间内发布的文章。默认 48h。
+  max_age_hours: 48
+  # 官网链接时间窗口(小时):默认 24h。
+  website_max_age_hours: 24
+  # 严格只要"有明确发布时间且在窗口内"的文章。
+  # true=丢弃无发布时间的条目(官网首页/微信链接等单页抓取的噪声);false=保留无日期条目。
+  require_published: true
+  resolver:
+    # 「公众号名称 → RSS 地址」的映射来源(OPML 文件)。程序下载这些 OPML 自动匹配名称。
+    # 默认是 wechat2rss 公共合集(仅含约 326 个安全类公众号)。
+    # 想用其它公众号(如 AI 媒体),自建 wechat2rss / werss 后把你自己的 OPML 地址加到这里,
+    # 即可"只填名称自动解析";个别号也可在清单里用「名称 | 地址」手动指定。
+    opml_urls:
+      - "https://wechat2rss.xlab.app/opml/sec.opml"
 
 # ---------- DeepSeek API 配置 ----------
 deepseek:
@@ -37,89 +61,96 @@ deepseek:
 
 # ---------- Google News 关键词搜索 ----------
 # 按板块分组,当日只抓当日板块对应的 queries
-# 搜索窗口固定 24h,避免推荐过期内容
+# 搜索窗口 7d(配合一周推送一次的节奏)
 google_news_queries:
   governance:
     - "EU AI Act"
-    - "AI regulation"
-    - "AI safety institute"
-    - "AI alignment"
+    - "AI regulation policy"
+    - "AI safety alignment"
     - "AI 监管"
-    - "生成式人工智能管理办法"
-    - "AI 治理标准"
-    - "ISO 42001"
-    - "NIST AI RMF"
+    - "AI 治理"
+    - "Stanford HAI"
+    - "NIST AI framework"
 
   data:
-    - "AI capex"
-    - "AI data center"
+    - "AI data center infrastructure"
     - "AI training data"
     - "AI 算力"
-    - "数据要素市场"
-    - "数据资产入表"
-    - "synthetic training data"
-    - "vector database RAG"
+    - "数据要素"
+    - "synthetic data AI"
 
   industry:
-    - "AI 行业落地"
-    - "行业大模型"
-    - "AI 数字员工"
-    - "AI 智能客服"
-    - "AIGC 企业应用"
-    - "智慧办公 AI"
-    - "行业智能化"
     - "enterprise AI deployment"
+    - "行业大模型"
+    - "AI 行业落地"
+    - "AIGC 企业应用"
     - "AI digital worker"
 
   agent:
     - "AI Agent"
     - "agentic AI"
-    - "multi-agent"
     - "coding agent"
     - "Claude Code"
     - "Cursor AI"
-    - "Devin AI"
     - "OpenAI Codex"
     - "MCP protocol"
     - "computer use AI"
-    - "AI Agent 产品"
-    - "Agent 框架"
 
 # ---------- 直接订阅的 RSS 源 ----------
-# 这里全是综合型 AI 媒体,每天都抓;由 scorer 判断与当日板块是否相关
+# 全部源每次都抓,由 scorer 判断与当日板块是否相关
 rss_feeds:
-  # 中文科技/AI 媒体
-  - name: "36氪 AI"
-    url: "https://36kr.com/feed-newsflash"
-  # 机器之心 RSS 已下线(302→不合法XML),靠 Google News query "机器之心" 兜底
-  # - name: "机器之心"
-  #   url: "https://www.jiqizhixin.com/rss"
-  - name: "量子位"
-    url: "https://www.qbitai.com/feed"
 
-  # 英文 AI/产业媒体
+  # ── 公司一手源(第一时间获取官方发布) ──
+  - name: "OpenAI Blog"
+    url: "https://openai.com/news/rss.xml"
+  - name: "Google DeepMind"
+    url: "https://deepmind.google/blog/rss.xml"
+  - name: "Google AI Blog"
+    url: "https://blog.google/technology/ai/rss/"
+  - name: "Hugging Face Blog"
+    url: "https://huggingface.co/blog/feed.xml"
+  - name: "Apple ML Research"
+    url: "https://machinelearning.apple.com/rss.xml"
+  - name: "AWS AI Blog"
+    url: "https://aws.amazon.com/blogs/ai/feed/"
+
+  # ── 国际一线科技媒体 ──
+  - name: "TechCrunch AI"
+    url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+  - name: "Wired AI"
+    url: "https://www.wired.com/feed/tag/ai/latest/rss"
   - name: "The Verge AI"
     url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
   - name: "MIT Tech Review AI"
     url: "https://www.technologyreview.com/topic/artificial-intelligence/feed"
+  - name: "Ars Technica"
+    url: "https://feeds.arstechnica.com/arstechnica/features"
   - name: "VentureBeat AI"
     url: "https://venturebeat.com/category/ai/feed/"
 
-  # 模型/治理一手源
-  # Anthropic News RSS 路径已变(原 /news/rss.xml 是 404),靠 Google News 兜底
-  # - name: "Anthropic News"
-  #   url: "https://www.anthropic.com/news/rss.xml"
-  - name: "OpenAI Blog"
-    url: "https://openai.com/news/rss.xml"
-  - name: "Google DeepMind Blog"
-    url: "https://deepmind.google/blog/rss.xml"
-  - name: "Hugging Face Blog"
-    url: "https://huggingface.co/blog/feed.xml"
+  # ── 学术/智库/工程(深度分析、政策研究) ──
+  - name: "IEEE Spectrum"
+    url: "https://spectrum.ieee.org/rss"
+  - name: "CSET Georgetown"
+    url: "https://cset.georgetown.edu/feed/"
+  - name: "The Gradient"
+    url: "https://thegradient.pub/rss/"
+
+  # ── 中文科技媒体 ──
+  - name: "36氪"
+    url: "https://36kr.com/feed"
+  - name: "量子位"
+    url: "https://www.qbitai.com/feed"
+  - name: "钛媒体"
+    url: "https://www.tmtpost.com/feed"
+  - name: "爱范儿"
+    url: "https://www.ifanr.com/feed"
 
 # ---------- RSSHub 路由（用于 X / 微信公众号）----------
 rsshub:
   instance: "https://rsshub.app"
   routes: []
+  # RSSHub 公共实例不稳定,重度使用建议自部署
   # - name: "Sam Altman X"
   #   path: "/twitter/user/sama"
 

@@ -21,11 +21,17 @@ webhook.py  → PushPlus 微信回调，用户发关键词触发对应板块推�
 | 星期 | 板块 | 说明 |
 |------|------|------|
 | 周一 | governance | AI 治理 |
+| 周二 | wechat | 微信公众号精选 |
 | 周三 | data | AI 数据 |
+| 周四 | wechat | 微信公众号精选 |
 | 周五 | industry | AI 行业落地 |
 | 周日 | agent | AI Agent 动态 |
 
 排期表在 `config.yaml` 的 `schedule.weekday_category` 中配置。
+
+> 周二/周四走的是**微信公众号 + 官网**流程：抓 `WeChat and website list.md` 里维护的来源——
+> 微信公众号取近 **48 小时**、官网链接取近 **24 小时**内发布的文章，**不做相关性打分**，
+> 直接用 DeepSeek 写摘要后推送。详见下方「微信公众号 + 官网订阅」。
 
 ## 本地试跑（建议先在本地通一遍再部署）
 
@@ -65,7 +71,7 @@ python -m news_agent.webhook --port 9000  # 自定义端口
 
 在 PushPlus 后台 → 功能设置 → 消息回调，填入 `http://你的服务器IP:8088/`。
 
-支持的关键词：`AI治理`、`AI数据`、`AI行业`、`AI Agent`、`帮助`。
+支持的关键词：`AI治理`、`AI数据`、`AI行业`、`AI Agent`、`微信公众号`、`帮助`。
 
 ## 部署到 GitHub Actions（每周自动跑）
 
@@ -85,9 +91,29 @@ python -m news_agent.webhook --port 9000  # 自定义端口
 关注主题描述。DeepSeek 读这份做打分。**这是你最常编辑的文件**。
 建议写得详细一点，多举例子，越具体打分越准。
 
+### `WeChat and website list.md`
+周二/周四要自动阅读的来源，分两个小节，**各用不同时间窗口**：
+- 「## 微信公众号」→ 取近 **48h**（`wechat.max_age_hours`）
+- 「## 官网」→ 取近 **24h**（`wechat.website_max_age_hours`）
+
+每行 `名称` 或 `名称 | 地址`：`http` 开头是 RSS feed（抓多篇，最推荐）或普通网页（当单页文章抓）；
+`/` 开头是 RSSHub 路由；只写名称则经 OPML 自动解析。改某条窗口，把它在两个小节间移动即可。
+默认严格模式 `wechat.require_published: true`：**丢弃无发布时间的条目**（官网首页/微信链接等单页抓取），
+确保推送的都是"窗口内确有发布时间"的文章。
+
+> 微信公众号没有官方 API，名称→地址要靠 OPML 这类映射中转。默认 OPML 是 wechat2rss 公共合集，
+> **只含约 326 个安全类公众号**，量子位/机器之心等 AI 媒体不在其中。要订阅任意公众号：
+> 自建 [wechat2rss](https://wechat2rss.xlab.app/) / werss / wewe-rss，把你的 OPML 加到 `wechat.resolver.opml_urls`，
+> 或对个别号在清单里写 `名称 | RSS地址` 手动兜底。微信自家链接（mp.weixin.qq.com）抓不到（返回验证页）。
+
 ### `config.yaml`
 - `schedule.weekday_category`：每周排期（哪天跑哪个板块）
 - `push.max_articles` / `push.min_score`：每次最多推几条 / 相关度阈值
+- `wechat.max_articles`：微信公众号+官网板块每次最多推几条（按发布时间取最新，不打分）
+- `wechat.max_age_hours`：微信公众号时间窗口（默认 48 小时）
+- `wechat.website_max_age_hours`：官网链接时间窗口（默认 24 小时）
+- `wechat.require_published`：严格模式，丢弃无发布时间的条目（默认 true）
+- `wechat.resolver.opml_urls`：名称→RSS 地址的 OPML 映射源（自建服务后填自己的 OPML）
 - `deepseek.scorer_model` / `summarizer_model`：换模型在这里改
 - `google_news_queries`：Google News 搜索关键词（按板块分组）
 - `rss_feeds`：直接订阅的 RSS 源（新增源加这里）
