@@ -448,8 +448,43 @@ def _is_similar(norm_a: str, norm_b: str, raw_a: str, raw_b: str, threshold: flo
     return False
 
 
-def dedupe_by_content(articles: list[Article], threshold: float = 0.65) -> list[Article]:
-    """按标题相似度去重跨源重复报道。同一事件保留摘要最长的一条。"""
+def _normalize_body(text: str) -> str:
+    """正文归一化：去 HTML 标签、去空白与标点、转小写，便于做字符指纹比较。"""
+    import re
+    if not text:
+        return ""
+    t = re.sub(r"<[^>]+>", "", text)          # 去掉 RSS 摘要里常见的 HTML 标签
+    t = re.sub(r"[^\w一-鿿]+", "", t)          # 只保留字母数字下划线 + 中文
+    return t.lower()
+
+
+def _shingles(text: str, n: int = 4) -> set[str]:
+    """字符 n-gram 指纹。中英文通用，无需分词。"""
+    if len(text) < n:
+        return {text} if text else set()
+    return {text[i : i + n] for i in range(len(text) - n + 1)}
+
+
+def _body_similar(body_a: str, body_b: str, threshold: float) -> bool:
+    """正文相似度：字符 4-gram 的 Jaccard 重叠。用于标题不同但内容雷同的跨源重复。"""
+    na, nb = _normalize_body(body_a), _normalize_body(body_b)
+    # 正文太短（如官网首页/纯链接条目）不参与正文判重，避免误杀
+    if len(na) < 60 or len(nb) < 60:
+        return False
+    sa, sb = _shingles(na), _shingles(nb)
+    if not sa or not sb:
+        return False
+    inter = len(sa & sb)
+    union = len(sa | sb)
+    return union > 0 and inter / union >= threshold
+
+
+def dedupe_by_content(
+    articles: list[Article],
+    threshold: float = 0.65,
+    body_threshold: float = 0.5,
+) -> list[Article]:
+    """跨源去重重复报道：先比标题相似度，再比正文指纹。同一事件保留摘要最长的一条。"""
     if not articles:
         return []
 
@@ -460,7 +495,9 @@ def dedupe_by_content(articles: list[Article], threshold: float = 0.65) -> list[
         na = _normalize_title(a.title)
         dup_idx: int | None = None
         for i, nk in enumerate(normed):
-            if _is_similar(na, nk, a.title, kept[i].title, threshold):
+            if _is_similar(na, nk, a.title, kept[i].title, threshold) or _body_similar(
+                a.summary, kept[i].summary, body_threshold
+            ):
                 dup_idx = i
                 break
         if dup_idx is not None:

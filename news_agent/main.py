@@ -282,6 +282,17 @@ def run(
                 state.save()
             return 0
 
+        # 5b-2. 语义去重:Google News 等只有标题没正文,靠模型把"同一事件"的合并。
+        #       不补位——去掉重复后名额不再用其他文章填补。
+        before = len(top)
+        top = filter_mod.dedupe_semantic(
+            client=client,
+            scored=top,
+            model=config["deepseek"]["scorer_model"],
+        )
+        if len(top) < before:
+            log.info("semantic dedup: %d → %d (no backfill)", before, len(top))
+
         # 5c. DeepSeek 写摘要
         log.info("=== 3. summarizing top %d with %s ===", len(top), config["deepseek"]["summarizer_model"])
         top = filter_mod.summarize_top(

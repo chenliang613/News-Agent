@@ -61,6 +61,21 @@ SCORER_SYSTEM = """你是一个新闻相关性评分 + 板块分类助手。你�
 只返回 JSON,不要 markdown 包装,不要任何其他文字。"""
 
 
+DEDUP_SYSTEM = """你是新闻去重助手。你会收到一批已筛选的新闻,每条含 id、标题、来源、摘要片段。
+
+任务:把【报道同一件事/同一事件】的新闻归为一组。判断依据是**事件本身**(同一项政策/法案、同一场会议、同一份报告发布、同一家公司的同一动作、同一起事件),而不是话题相近。
+
+严格要求:
+- 只有确实是"同一件事"才合并。话题相关但不是同一事件的(如都谈 AI 治理但讲不同政策),**不要**合并。
+- 同一事件即使标题措辞、语言、来源不同,也要合并(如"北京新增6款备案 AI 服务" 与 "北京生成式人工智能服务登记公告" 是同一事件)。
+
+返回 JSON:{"groups": [[id, id, ...], ...]}
+- 每个子数组是一组报道同一事件的 id(至少 2 个)。
+- 独立新闻不要列出;没有任何重复时返回 {"groups": []}。
+
+只返回 JSON,不要 markdown 包装,不要任何其他文字。"""
+
+
 SUMMARIZER_SYSTEM = """你是一个中文新闻摘要助手。你将收到一份用户关注主题说明,然后是若干已经被判定为高相关的新闻。
 
 请为每条新闻写一段 80-150 字的中文摘要,要求:
@@ -190,6 +205,76 @@ def score_articles(
             ))
 
     return scored
+
+
+def dedupe_semantic(
+    client: openai.OpenAI,
+    scored: list[ScoredArticle],
+    model: str,
+) -> list[ScoredArticle]:
+    """语义去重:让模型把"报道同一事件"的文章归组,每组只保留得分最高的一条。
+
+    用于 Google News 这类来源——其 RSS 只给标题没有正文,标题相似度/正文指纹都抓不到
+    "同一事件、不同标题"的重复。不补位:去掉的名额不再用其他文章填补。
+    失败时(API/解析错误)原样返回,绝不误删。
+    """
+    if len(scored) < 2:
+        return scored
+
+    articles_json = json.dumps(
+        [_article_to_dict(i, s.article) for i, s in enumerate(scored)],
+        ensure_ascii=False,
+        indent=2,
+    )
+    user_msg = f"以下是本批 {len(scored)} 条新闻(JSON 数组):\n\n{articles_json}\n\n请输出去重分组 JSON。"
+
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": DEDUP_SYSTEM},
+                {"role": "user", "content": user_msg},
+            ],
+            max_tokens=1000,
+            temperature=0.0,
+        )
+        text = response.choices[0].message.content or ""
+    except Exception as e:
+        log.error("dedup API error: %s", e)
+        return scored
+
+    try:
+        parsed = _extract_json_array(text) if text.strip().startswith("[") else json.loads(
+            re.sub(r"\s*```$", "", re.sub(r"^```(?:json)?\s*", "", text.strip()))
+        )
+    except (json.JSONDecodeError, ValueError) as e:
+        log.error("dedup returned non-JSON, raw=%r, err=%s", text[:200], e)
+        return scored
+
+    groups = parsed.get("groups") if isinstance(parsed, dict) else parsed
+    if not isinstance(groups, list):
+        return scored
+
+    drop: set[int] = set()
+    for group in groups:
+        if not isinstance(group, list):
+            continue
+        ids = [i for i in group if isinstance(i, int) and 0 <= i < len(scored) and i not in drop]
+        if len(ids) < 2:
+            continue
+        # 保留得分最高的一条(并列时保留摘要片段更长的)
+        keep = max(ids, key=lambda i: (scored[i].score, len(scored[i].article.summary)))
+        for i in ids:
+            if i != keep:
+                drop.add(i)
+                log.info(
+                    "semantic dedup: drop [%s] (same event as [%s])",
+                    scored[i].article.title, scored[keep].article.title,
+                )
+
+    if drop:
+        log.info("dedupe_semantic: removed %d same-event duplicates", len(drop))
+    return [s for i, s in enumerate(scored) if i not in drop]
 
 
 def summarize_top(

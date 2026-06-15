@@ -2,10 +2,10 @@ name: Daily News Push
 
 on:
   schedule:
-    # 周一~六运行(周六不在排期表会自动跳过)。北京时间 08:00 = UTC 00:00
+    # 【已暂停其他板块】当前只保留周一的 AI 治理推送。北京时间 08:00 = UTC 00:00
     # cron weekday: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri
-    # 周二/四=微信公众号,周一/三/五/日=AI 四板块
-    - cron: '0 0 * * 0,1,2,3,4,5'
+    # 恢复全周排期时改回: '0 0 * * 0,1,2,3,4,5'
+    - cron: '0 0 * * 1'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
     inputs:
       test_push:
