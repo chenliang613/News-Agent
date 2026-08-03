@@ -5,7 +5,6 @@ on:
     # 【已暂停其他板块】当前只保留周一的 AI 治理推送。北京时间 08:00 = UTC 00:00
     # cron weekday: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri
     # 恢复全周排期时改回: '0 0 * * 0,1,2,3,4,5'
-    - cron: '0 0 * * 1'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
     inputs:
       test_push:
