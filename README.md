@@ -1,146 +1,137 @@
 # News Agent
 
-个人新闻 Agent：按 `keywords.md` 里描述的主题，每周从 RSS / Google News / RSSHub 拉新闻，
-用 DeepSeek 做相关性打分和中文摘要，通过 PushPlus 推送到微信。
+面向 AI 治理、AI 数据和 AI 行业落地的个人情报 Agent。它从 RSS、Google News 与 RSSHub 发现候选新闻，抓取正文后完成研究价值终评、正文去重和事件聚合，再通过 PushPlus 推送到微信。
 
-## 架构
+## 工作流
 
+```text
+RSS / Google News / RSSHub
+  → 时间过滤、URL/标题初步去重、历史去重
+  → DeepSeek 标题与摘要粗筛
+  → 候选文章正文抓取（失败重试）+ 正文指纹去重
+  → DeepSeek 研究价值终评 + event_key 事件聚合
+  → 中文摘要 + 本周观察/持续跟踪
+  → Markdown 落盘 + PushPlus 推送 + 已处理状态记录
 ```
-sources.py  → 拉 RSS / Google News / RSSHub，统一成 Article
-state.py    → 用 state/sent.json 去重已推过的 URL hash
-filter.py   → DeepSeek 批量打分 + 写 top N 中文摘要
-push.py     → PushPlus markdown 推送
-main.py     → 编排 + 命令行入口
-webhook.py  → PushPlus 微信回调，用户发关键词触发对应板块推送
-```
 
-## 每周排期
+终评按以下权重计算：相关性 35%、新颖性 30%、证据强度 25%、可行动性 10%。正文高度相似的转载即使标题不同也只保留一篇。
 
-每周固定日期推送对应板块，非排期日不运行：
+## 自动排期
 
-| 星期 | 板块 | 说明 |
-|------|------|------|
-| 周一 | governance | AI 治理 |
-| 周二 | wechat | 微信公众号精选 |
-| 周三 | data | AI 数据 |
-| 周四 | wechat | 微信公众号精选 |
-| 周五 | industry | AI 行业落地 |
-| 周日 | agent | AI Agent 动态 |
+| 北京时间 | 板块 | 配置 key |
+|---|---|---|
+| 周一 08:00 | AI 治理 | `governance` |
+| 周三 08:00 | AI 数据 | `data` |
+| 周五 08:00 | AI 行业落地 | `industry` |
 
-排期表在 `config.yaml` 的 `schedule.weekday_category` 中配置。
+Python weekday 使用 `0=周一` 至 `6=周日`；GitHub Actions 使用 UTC，当前 cron 为 `0 0 * * 1,3,5`，即上表的北京时间 08:00。
 
-> 周二/周四走的是**微信公众号 + 官网**流程：抓 `WeChat and website list.md` 里维护的来源——
-> 微信公众号取近 **48 小时**、官网链接取近 **24 小时**内发布的文章，**不做相关性打分**，
-> 直接用 DeepSeek 写摘要后推送。详见下方「微信公众号 + 官网订阅」。
+`wechat`、`agent` 仍可通过 `--category` 或 webhook 手动触发，但不在当前自动排期中。
 
-## 本地试跑（建议先在本地通一遍再部署）
+## 本地运行
 
 ```bash
-# 1. 装依赖
 pip install -r requirements.txt
 
-# 2. 配两个环境变量（密钥）
 export DEEPSEEK_API_KEY=sk-...
-export PUSHPLUS_TOKEN=...  # https://www.pushplus.plus 扫码登录后拿
+export PUSHPLUS_TOKEN=...
 
-# 3. 干跑（不实际推送，只打印 markdown 到控制台）
-python -m news_agent.main --dry-run
-
-# 4. 正式跑一次（会真的推到你的微信）
+# 按当天排期运行；非排期日自动退出
 python -m news_agent.main
 
-# 5. 手动指定板块（忽略 weekday 排期）
-python -m news_agent.main --category governance
+# 干跑：仍会调用 DeepSeek，但不推送、不更新 sent 状态
+python -m news_agent.main --dry-run --category governance
 
-# 6. 模拟某个 weekday（0=周一..6=周日）
-python -m news_agent.main --weekday 0
+# 模拟某一天（0=周一..6=周日）
+python -m news_agent.main --weekday 0 --dry-run
 
-# 7. 只测试推送是否畅通（不抓新闻、不调 DeepSeek）
+# 只测试 PushPlus
 python -m news_agent.main --test-push
 ```
 
-## 微信关键词触发（webhook）
+正常推送包含事件卡片、研究价值维度、同事件参考来源、本周观察、持续跟踪和本次运行摘要。若没有新文章、没有候选通过粗筛或没有内容达到终评阈值，正常运行会发送一条状态通知。
 
-除了定时推送，还支持在微信「推送加」公众号里发关键词触发：
+## GitHub Actions
 
-```bash
-# 启动 webhook 服务
-python -m news_agent.webhook              # 默认监听 0.0.0.0:8088
-python -m news_agent.webhook --port 9000  # 自定义端口
-```
+在仓库 Settings → Secrets and variables → Actions 中设置：
 
-在 PushPlus 后台 → 功能设置 → 消息回调，填入 `http://你的服务器IP:8088/`。
+- `DEEPSEEK_API_KEY`
+- `PUSHPLUS_TOKEN`
 
-支持的关键词：`AI治理`、`AI数据`、`AI行业`、`AI Agent`、`微信公众号`、`帮助`。
+工作流会在每次运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
 
-## 部署到 GitHub Actions（每周自动跑）
-
-1. 把仓库推到 GitHub（public 或 private 都行，Actions 都免费够用）
-2. 在 GitHub 仓库 → Settings → Secrets and variables → Actions → New repository secret，加两个：
-   - `DEEPSEEK_API_KEY`
-   - `PUSHPLUS_TOKEN`
-3. 默认每周一/三/五/日 UTC 00:00（北京时间 08:00）自动运行，触发延迟 5-15 分钟正常
-4. 想改时间编辑 `.github/workflows/daily.yml` 里的 `cron`
-5. 手动触发：仓库 → Actions → Daily News Push → Run workflow（可选指定板块或测试推送）
-
-跑完 workflow 会自动 commit `state/sent.json` 和 `output/` 回仓库，保证下次跑能去重。
-
-## 配置文件
+## 配置指南
 
 ### `keywords.md`
-关注主题描述。DeepSeek 读这份做打分。**这是你最常编辑的文件**。
-建议写得详细一点，多举例子，越具体打分越准。
 
-### `WeChat and website list.md`
-周二/周四要自动阅读的来源，分两个小节，**各用不同时间窗口**：
-- 「## 微信公众号」→ 取近 **48h**（`wechat.max_age_hours`）
-- 「## 官网」→ 取近 **24h**（`wechat.website_max_age_hours`）
-
-每行 `名称` 或 `名称 | 地址`：`http` 开头是 RSS feed（抓多篇，最推荐）或普通网页（当单页文章抓）；
-`/` 开头是 RSSHub 路由；只写名称则经 OPML 自动解析。改某条窗口，把它在两个小节间移动即可。
-默认严格模式 `wechat.require_published: true`：**丢弃无发布时间的条目**（官网首页/微信链接等单页抓取），
-确保推送的都是"窗口内确有发布时间"的文章。
-
-> 微信公众号没有官方 API，名称→地址要靠 OPML 这类映射中转。默认 OPML 是 wechat2rss 公共合集，
-> **只含约 326 个安全类公众号**，量子位/机器之心等 AI 媒体不在其中。要订阅任意公众号：
-> 自建 [wechat2rss](https://wechat2rss.xlab.app/) / werss / wewe-rss，把你的 OPML 加到 `wechat.resolver.opml_urls`，
-> 或对个别号在清单里写 `名称 | RSS地址` 手动兜底。微信自家链接（mp.weixin.qq.com）抓不到（返回验证页）。
+定义“什么值得推送”。每个板块建议包含研究目标、高优先级事件、重点机构/标准/场景、降权或排除项，以及高价值判断标准。它影响模型筛选，不直接决定 Google News 搜索范围。
 
 ### `config.yaml`
-- `schedule.weekday_category`：每周排期（哪天跑哪个板块）
-- `push.max_articles` / `push.min_score`：每次最多推几条 / 相关度阈值
-- `wechat.max_articles`：微信公众号+官网板块每次最多推几条（按发布时间取最新，不打分）
-- `wechat.max_age_hours`：微信公众号时间窗口（默认 48 小时）
-- `wechat.website_max_age_hours`：官网链接时间窗口（默认 24 小时）
-- `wechat.require_published`：严格模式，丢弃无发布时间的条目（默认 true）
-- `wechat.resolver.opml_urls`：名称→RSS 地址的 OPML 映射源（自建服务后填自己的 OPML）
-- `deepseek.scorer_model` / `summarizer_model`：换模型在这里改
-- `google_news_queries`：Google News 搜索关键词（按板块分组）
-- `rss_feeds`：直接订阅的 RSS 源（新增源加这里）
-- `rsshub.routes`：X 推主、微信公众号通过 RSSHub 包装的路由
-- `sources.max_age_hours`：文章时间窗口（默认 168h = 7 天）
 
-### `state/sent.json`
-自动维护的去重表，不用手动编辑。30 天前的记录会自动清理。
+- `schedule.weekday_category`：自动排期。
+- `google_news_queries`：每个板块的发现查询词；使用“主体 + 事件/动作”而非宽泛词。
+- `push.max_articles` / `push.min_score`：单次上限与终评阈值。
+- `research_filter`：粗筛阈值、正文候选上限、抓取并发、正文长度和正文去重阈值。
+- `insights.enabled`：是否生成本周观察与持续跟踪。
+- `sources.max_age_hours`：普通新闻时间窗口，默认 168 小时。
+- `state.retention_days`：历史去重记录保留时间。
 
-## 调优建议
-
-- **觉得推得太少 / 太多** → 调 `min_score`（5.5 宽松，7.0 严格）
-- **推的内容偏题** → 编辑 `keywords.md` 把"过滤规则"写得更清楚
-- **要加 X / 微信公众号** → 在 `rsshub.routes` 加路由，查 [RSSHub 文档](https://docs.rsshub.app)
-
-## 加新 RSS 源
-
-直接在 `config.yaml` 的 `rss_feeds` 加一项：
+RSS 源可声明来源等级：
 
 ```yaml
 rss_feeds:
-  - name: "你的源名称"
-    url: "https://example.com/feed"
+  - name: "官方机构"
+    url: "https://example.com/rss.xml"
+    tier: primary   # primary | trusted
 ```
 
-## 注意
+`primary` 用于官方机构、标准组织、公司原始发布；`trusted` 用于可信媒体和研究机构；Google News 与 RSSHub 自动标为 `discovery`。终评会结合来源等级判断证据强度，但一手来源也必须有正文事实支持。
 
-- Google News RSS 没有官方 API，遇到风控可能短暂返回空。脚本会自动跳过失败源。
-- RSSHub 公共实例 `rsshub.app` 不稳定。如果重度用 X / 公众号，建议自部署。
-- PushPlus 免费版每天 200 条配额，正常使用够。
+### `WeChat and website list.md`
+
+`wechat` 手动板块读取此文件：
+
+- 「微信公众号」：近 `wechat.max_age_hours` 小时，默认 48h；
+- 「官网」：近 `wechat.website_max_age_hours` 小时，默认 24h。
+
+每行使用 `名称` 或 `名称 | 地址`。`http` 地址可以是 RSS 或单个网页，`/` 开头是 RSSHub 路由；只写名称时通过 OPML 解析。默认 `wechat.require_published: true`，无发布时间的条目会被丢弃。
+
+## 微信 webhook 与反馈
+
+```bash
+python -m news_agent.webhook
+python -m news_agent.webhook --port 9000
+```
+
+在 PushPlus 后台配置回调地址后，可发送板块关键词触发手动推送。支持的展示名以 `category_labels` 为准。
+
+对已推送文章可回复：
+
+```text
+反馈 有价值 https://文章链接
+反馈 一般 https://文章链接
+反馈 无关 https://文章链接
+```
+
+反馈写入 `state/feedback.json`，用于定期调整关键词、来源和评分阈值。
+
+## 质量回归与调优
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+`tests/fixtures/quality_cases.json` 是人工标注的质量回归集。修改关键词、模型提示词、来源或阈值后，应补充相应样本并运行测试。
+
+常用调优方向：
+
+- 推送太少：适度降低 `push.min_score` 或 `research_filter.coarse_min_score`。
+- 推送偏题：在 `keywords.md` 增加明确的排除项和高价值样例。
+- 转载过多：提高 `research_filter.body_dedupe_threshold`（例如 `0.95`）。
+- 主题相近但不该合并：降低正文去重阈值的激进程度，即提高该值。
+
+## 注意事项
+
+- Google News 与 RSSHub 是发现渠道，可能受限或暂时失败；RSS 抓取会重试 3 次，单个来源失败不会中断本次运行。
+- 正文抓取受站点反爬、付费墙和页面结构影响；抓取失败时系统退回 RSS 摘要，并在终评中限制证据分。
+- PushPlus 免费版存在每日配额，请按实际套餐使用。

@@ -9,6 +9,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
+from html import unescape
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Iterable
 from urllib.parse import quote_plus, urlparse, urlunparse
@@ -21,6 +23,7 @@ from googlenewsdecoder import new_decoderv1
 log = logging.getLogger(__name__)
 
 USER_AGENT = "Mozilla/5.0 (compatible; NewsAgent/1.0)"
+MAX_HTTP_ATTEMPTS = 3
 
 
 def _url_for_dedup(url: str) -> str:
@@ -36,6 +39,9 @@ class Article:
     summary: str
     source: str
     published_at: datetime | None = None
+    source_tier: str = "trusted"
+    # RSS 通常只带摘要；二阶段筛选时再填充正文，避免一开始对所有链接发请求。
+    content: str = ""
     uid: str = field(init=False)
 
     def __post_init__(self) -> None:
@@ -67,6 +73,84 @@ def _clean_summary(raw: str, limit: int = 600) -> str:
     return text[:limit]
 
 
+class _ArticleTextExtractor(HTMLParser):
+    """轻量提取页面正文，不引入依赖且避免把脚本/导航送进模型。"""
+
+    TEXT_TAGS = {"p", "li", "h1", "h2", "h3", "blockquote"}
+    SKIP_TAGS = {"script", "style", "noscript", "svg", "nav", "footer", "header"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self._text_depth = 0
+        self._skip_depth = 0
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        tag = tag.lower()
+        if tag in self.SKIP_TAGS:
+            self._skip_depth += 1
+        if tag in self.TEXT_TAGS:
+            self._text_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        if tag in self.TEXT_TAGS and self._text_depth:
+            self._text_depth -= 1
+        if tag in self.SKIP_TAGS and self._skip_depth:
+            self._skip_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self._text_depth and not self._skip_depth:
+            text = re.sub(r"\s+", " ", unescape(data)).strip()
+            if text:
+                self.parts.append(text)
+
+
+def _extract_page_text(html: str, max_chars: int) -> str:
+    parser = _ArticleTextExtractor()
+    try:
+        parser.feed(html)
+        parser.close()
+    except Exception:
+        return ""
+    # 相邻标签偶有重复，保留首次出现，减少菜单/页脚带来的噪声。
+    unique = list(dict.fromkeys(parser.parts))
+    return "\n".join(unique)[:max_chars]
+
+
+def _fetch_article_text(article: Article, max_chars: int) -> tuple[Article, bool]:
+    try:
+        r = httpx.get(article.url, headers={"User-Agent": USER_AGENT}, timeout=15.0, follow_redirects=True)
+        r.raise_for_status()
+        content_type = r.headers.get("content-type", "")
+        if "html" not in content_type.lower():
+            return article, False
+        text = _extract_page_text(r.text, max_chars)
+        if len(text) < 200:
+            return article, False
+        article.content = text
+        return article, True
+    except (httpx.HTTPError, ValueError) as e:
+        log.debug("fetch article body failed for %s: %s", article.url[:100], e)
+        return article, False
+
+
+def fetch_article_bodies(
+    articles: list[Article], max_workers: int = 8, max_chars: int = 6000,
+) -> list[Article]:
+    """并发补齐候选文章正文；失败时保留 RSS 摘要继续后续流程。"""
+    if not articles:
+        return articles
+    fetched = 0
+    with ThreadPoolExecutor(max_workers=max(1, max_workers)) as pool:
+        futures = [pool.submit(_fetch_article_text, a, max_chars) for a in articles]
+        for future in as_completed(futures):
+            _, ok = future.result()
+            fetched += int(ok)
+    log.info("article body fetch: %d / %d candidates have extracted text", fetched, len(articles))
+    return articles
+
+
 def _resolve_google_news_url(gnews_url: str) -> str:
     """将 Google News 中转链接解析为原始文章 URL，失败时返回原链接。"""
     if "news.google.com" not in gnews_url:
@@ -82,11 +166,22 @@ def _resolve_google_news_url(gnews_url: str) -> str:
 
 def _fetch_feed(url: str, source_name: str) -> list[Article]:
     """拉一个 RSS feed,容错返回空列表。"""
-    try:
-        parsed = feedparser.parse(url, agent=USER_AGENT)
-    except Exception as e:
-        log.warning("fetch %s failed: %s", source_name, e)
-        return []
+    parsed = None
+    for attempt in range(1, MAX_HTTP_ATTEMPTS + 1):
+        try:
+            response = httpx.get(url, headers={"User-Agent": USER_AGENT}, timeout=20.0, follow_redirects=True)
+            response.raise_for_status()
+            parsed = feedparser.parse(response.content)
+            break
+        except (httpx.HTTPError, ValueError) as e:
+            if attempt == MAX_HTTP_ATTEMPTS:
+                log.warning("fetch %s failed after %d attempts: %s", source_name, attempt, e)
+                return []
+            delay = 0.5 * (2 ** (attempt - 1))
+            log.info("fetch %s failed (attempt %d/%d), retrying in %.1fs", source_name, attempt, MAX_HTTP_ATTEMPTS, delay)
+            time.sleep(delay)
+
+    assert parsed is not None
 
     if parsed.bozo and not parsed.entries:
         log.warning("bad feed %s: %s", source_name, getattr(parsed, "bozo_exception", ""))
@@ -114,6 +209,9 @@ def fetch_rss_sources(feeds: list[dict]) -> list[Article]:
     for feed in feeds:
         name = feed["name"]
         articles = _fetch_feed(feed["url"], name)
+        tier = feed.get("tier", "trusted")
+        for article in articles:
+            article.source_tier = tier
         log.info("RSS [%s] -> %d articles", name, len(articles))
         all_articles.extend(articles)
         time.sleep(0.3)  # 礼貌延时
@@ -131,6 +229,8 @@ def fetch_google_news(queries: list[str]) -> list[Article]:
         encoded = quote_plus(f"{query} when:7d")
         url = f"https://news.google.com/rss/search?q={encoded}&hl=zh-CN&gl=CN&ceid=CN:zh"
         articles = _fetch_feed(url, f"Google News: {query}")
+        for article in articles:
+            article.source_tier = "discovery"
         log.info("Google News [%s] -> %d articles", query, len(articles))
         all_articles.extend(articles)
         time.sleep(0.5)
@@ -166,6 +266,8 @@ def fetch_rsshub(instance: str, routes: list[dict]) -> list[Article]:
     for route in routes:
         url = f"{instance}{route['path']}"
         articles = _fetch_feed(url, f"RSSHub: {route['name']}")
+        for article in articles:
+            article.source_tier = "discovery"
         log.info("RSSHub [%s] -> %d articles", route["name"], len(articles))
         all_articles.extend(articles)
         time.sleep(0.5)
@@ -482,9 +584,9 @@ def _body_similar(body_a: str, body_b: str, threshold: float) -> bool:
 def dedupe_by_content(
     articles: list[Article],
     threshold: float = 0.65,
-    body_threshold: float = 0.5,
+    body_threshold: float = 0.85,
 ) -> list[Article]:
-    """跨源去重重复报道：先比标题相似度，再比正文指纹。同一事件保留摘要最长的一条。"""
+    """跨源去重：比标题和正文指纹；有正文时优先使用正文而不是 RSS 摘要。"""
     if not articles:
         return []
 
@@ -496,12 +598,14 @@ def dedupe_by_content(
         dup_idx: int | None = None
         for i, nk in enumerate(normed):
             if _is_similar(na, nk, a.title, kept[i].title, threshold) or _body_similar(
-                a.summary, kept[i].summary, body_threshold
+                a.content or a.summary, kept[i].content or kept[i].summary, body_threshold
             ):
                 dup_idx = i
                 break
         if dup_idx is not None:
-            if len(a.summary) > len(kept[dup_idx].summary):
+            a_text = a.content or a.summary
+            kept_text = kept[dup_idx].content or kept[dup_idx].summary
+            if len(a_text) > len(kept_text):
                 log.debug("content dedup: replace [%s] with [%s]", kept[dup_idx].title, a.title)
                 kept[dup_idx] = a
                 normed[dup_idx] = na

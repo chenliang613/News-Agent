@@ -32,6 +32,12 @@ class ScoredArticle:
     reason: str
     categories: list[str] = field(default_factory=list)
     summary: str = ""
+    relevance: float = 0.0
+    novelty: float = 0.0
+    evidence: float = 0.0
+    actionability: float = 0.0
+    event_key: str = ""
+    related_articles: list[Article] = field(default_factory=list)
 
 
 SCORER_SYSTEM = """你是一个新闻相关性评分 + 板块分类助手。你将收到一份用户的关注主题说明(keywords.md),然后是一批待评分的新闻。
@@ -88,15 +94,46 @@ SUMMARIZER_SYSTEM = """你是一个中文新闻摘要助手。你将收到一份
 
 只返回 JSON,不要 markdown 包装。"""
 
+TREND_SYSTEM = """你是面向企业 AI 研究的周度情报编辑。根据已去重的高价值事件卡片，输出 JSON：
+{"trends":["不超过45字的趋势判断",...],"watchlist":["不超过40字的后续观察点",...]}
+要求：trends 最多 3 条，watchlist 最多 2 条；只基于输入事实，不预测、不编造；若信息不足则返回空数组。"""
 
-def _article_to_dict(idx: int, a: Article) -> dict:
-    return {
+
+RESEARCH_VALUE_SYSTEM = """你是新闻研究价值终评助手。输入新闻已通过标题/摘要粗筛，现提供尽可能完整的正文。
+
+任务：只评估今天指定板块，并为每条新闻输出 0-10 分的四项指标：
+- relevance：与该板块的直接相关程度；
+- novelty：是否为新事件/新进展（转载、旧闻回顾、泛泛评论低分）；
+- evidence：是否包含可核验的原始出处、机构、时间、具体政策/产品/数据；
+- actionability：是否能支持研究、决策或跟踪行动。
+
+总 score 必须严格按下式计算并四舍五入到一位小数：
+0.35*relevance + 0.30*novelty + 0.25*evidence + 0.10*actionability。
+
+同时输出 event_key：使用小写英文、数字和连字符，稳定表示一个具体事件，不得使用泛泛主题。
+例如 eu-ai-act-code-of-practice-2026、openai-gpt-5-launch-2026；不同媒体报道同一事件必须给同一 key。
+若正文抓取失败，只能依据 preview，evidence 不得高于 5。
+来源等级含义：primary=官方机构、标准组织、公司原始发布；trusted=可信媒体或研究机构；discovery=聚合发现线索。primary 可提高证据判断，但不能替代正文事实；discovery 没有原始出处时 evidence 不得高于 5。
+
+返回 JSON 数组，顺序与输入一致：
+{"id": 0, "relevance": 0, "novelty": 0, "evidence": 0, "actionability": 0, "score": 0, "event_key": "...", "reason": "不超过30字中文理由"}
+只返回 JSON，不要 markdown 或解释。"""
+
+
+def _article_to_dict(
+    idx: int, a: Article, include_content: bool = False, content_limit: int = 6000,
+) -> dict:
+    result = {
         "id": idx,
         "title": a.title,
         "source": a.source,
+        "source_tier": a.source_tier,
         "url": a.url,
         "preview": a.summary[:400] if a.summary else "",
     }
+    if include_content:
+        result["content"] = a.content[:content_limit] if a.content else ""
+    return result
 
 
 def _extract_json_array(text: str) -> list:
@@ -207,6 +244,83 @@ def score_articles(
     return scored
 
 
+def assess_research_value(
+    client: openai.OpenAI,
+    scored: list[ScoredArticle],
+    keywords_md: str,
+    model: str,
+    active_category: str,
+    batch_size: int = 10,
+) -> list[ScoredArticle]:
+    """基于正文终评研究价值，并为后续事件级聚合生成稳定事件键。"""
+    if not scored:
+        return scored
+    focus = CATEGORY_FOCUS_LABELS[active_category]
+    system_msg = (
+        RESEARCH_VALUE_SYSTEM
+        + f"\n\n【今日板块】{active_category}: {focus}。不属于此板块的条目各项应低分。"
+        + f"\n\n用户关注主题：\n<keywords>\n{keywords_md}\n</keywords>"
+    )
+    for batch_start in range(0, len(scored), batch_size):
+        batch = scored[batch_start : batch_start + batch_size]
+        articles_json = json.dumps(
+            [_article_to_dict(i, s.article, include_content=True) for i, s in enumerate(batch)],
+            ensure_ascii=False,
+        )
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_msg},
+                    {"role": "user", "content": f"请终评以下 {len(batch)} 条新闻：\n{articles_json}"},
+                ],
+                max_tokens=4000,
+                temperature=0.0,
+            )
+            result = _extract_json_array(response.choices[0].message.content or "")
+        except Exception as e:
+            log.error("research-value API error on batch starting %d: %s", batch_start, e)
+            continue
+        by_id = {item.get("id"): item for item in result if isinstance(item, dict)}
+        for idx, item in enumerate(batch):
+            value = by_id.get(idx)
+            if not value:
+                continue
+            def metric(name: str) -> float:
+                try:
+                    return max(0.0, min(10.0, float(value.get(name, 0))))
+                except (TypeError, ValueError):
+                    return 0.0
+            item.relevance = metric("relevance")
+            item.novelty = metric("novelty")
+            item.evidence = metric("evidence")
+            item.actionability = metric("actionability")
+            # 总分在本地重算，避免模型给出的总分与权重不一致。
+            item.score = round(
+                0.35 * item.relevance + 0.30 * item.novelty
+                + 0.25 * item.evidence + 0.10 * item.actionability, 1,
+            )
+            event_key = str(value.get("event_key", "")).lower().strip()
+            item.event_key = re.sub(r"[^a-z0-9-]+", "-", event_key).strip("-")[:100]
+            item.reason = str(value.get("reason", item.reason))[:50]
+    return scored
+
+
+def group_by_event(scored: list[ScoredArticle]) -> list[ScoredArticle]:
+    """相同 event_key 合并成事件卡片，保留研究价值最高的主报道。"""
+    groups: dict[str, list[ScoredArticle]] = {}
+    for item in scored:
+        key = item.event_key or f"article-{item.article.uid}"
+        groups.setdefault(key, []).append(item)
+    grouped: list[ScoredArticle] = []
+    for key, items in groups.items():
+        primary = max(items, key=lambda s: (s.score, s.evidence, len(s.article.content)))
+        primary.event_key = key
+        primary.related_articles = [s.article for s in items if s is not primary]
+        grouped.append(primary)
+    return sorted(grouped, key=lambda s: s.score, reverse=True)
+
+
 def dedupe_semantic(
     client: openai.OpenAI,
     scored: list[ScoredArticle],
@@ -222,7 +336,7 @@ def dedupe_semantic(
         return scored
 
     articles_json = json.dumps(
-        [_article_to_dict(i, s.article) for i, s in enumerate(scored)],
+        [_article_to_dict(i, s.article, include_content=True, content_limit=3000) for i, s in enumerate(scored)],
         ensure_ascii=False,
         indent=2,
     )
@@ -267,6 +381,13 @@ def dedupe_semantic(
         for i in ids:
             if i != keep:
                 drop.add(i)
+                # event_key 未对齐时仍保留被合并报道，作为事件卡片的参考来源。
+                refs = [scored[i].article, *scored[i].related_articles]
+                existing = {a.uid for a in scored[keep].related_articles}
+                for ref in refs:
+                    if ref.uid != scored[keep].article.uid and ref.uid not in existing:
+                        scored[keep].related_articles.append(ref)
+                        existing.add(ref.uid)
                 log.info(
                     "semantic dedup: drop [%s] (same event as [%s])",
                     scored[i].article.title, scored[keep].article.title,
@@ -287,7 +408,7 @@ def summarize_top(
         return scored
 
     articles_json = json.dumps(
-        [_article_to_dict(i, s.article) for i, s in enumerate(scored)],
+        [_article_to_dict(i, s.article, include_content=True, content_limit=3000) for i, s in enumerate(scored)],
         ensure_ascii=False,
         indent=2,
     )
@@ -330,3 +451,35 @@ def summarize_top(
     for idx, s in enumerate(scored):
         s.summary = str(by_id.get(idx, ""))[:400]
     return scored
+
+
+def summarize_weekly_insights(
+    client: openai.OpenAI, scored: list[ScoredArticle], model: str,
+) -> tuple[list[str], list[str]]:
+    """从事件卡片中提炼本周趋势和待跟踪事项；失败时不影响新闻推送。"""
+    if not scored:
+        return [], []
+    payload = [
+        {
+            "title": s.article.title, "summary": s.summary or s.article.summary[:500],
+            "score": s.score, "evidence": s.evidence, "source_tier": s.article.source_tier,
+        }
+        for s in scored
+    ]
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": TREND_SYSTEM},
+                {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+            ],
+            max_tokens=800,
+            temperature=0.1,
+        )
+        data = json.loads(response.choices[0].message.content or "{}")
+        trends = [str(x)[:80] for x in data.get("trends", []) if isinstance(x, str)][:3]
+        watchlist = [str(x)[:80] for x in data.get("watchlist", []) if isinstance(x, str)][:2]
+        return trends, watchlist
+    except Exception as e:
+        log.warning("weekly insights unavailable: %s", e)
+        return [], []

@@ -8,11 +8,8 @@
 schedule:
   weekday_category:
     0: governance   # 周一: AI 治理
-    1: wechat       # 周二: 微信公众号精选
     2: data         # 周三: AI 数据
-    3: wechat       # 周四: 微信公众号精选
     4: industry     # 周五: AI 行业落地
-    6: agent        # 周日: AI Agent 动态
 
 # ---------- 推送配置 ----------
 push:
@@ -59,60 +56,87 @@ deepseek:
   summarizer_model: "deepseek-chat"
   scorer_batch_size: 20
 
+# ---------- 两阶段研究价值筛选 ----------
+# 先以标题/RSS 摘要粗筛，再仅为候选抓正文做终评，兼顾质量与 API/网络成本。
+research_filter:
+  # 粗筛分数低于此值不抓正文；4.0 可保留“相关但信息尚不完整”的线索。
+  coarse_min_score: 4.0
+  # 每个板块最多补抓正文的候选数，防止宽泛查询造成请求过多。
+  max_body_candidates: 60
+  body_fetch_workers: 8
+  # 送入终评模型的单篇正文最大字符数。
+  body_max_chars: 6000
+  # 正文指纹 Jaccard 相似度达到此值即视为转载/重复（标题不同也会去重）。
+  body_dedupe_threshold: 0.90
+  assessment_batch_size: 10
+
+# ---------- 周度情报观察 ----------
+insights:
+  enabled: true
+
 # ---------- Google News 关键词搜索 ----------
 # 按板块分组,当日只抓当日板块对应的 queries
 # 搜索窗口 7d(配合一周推送一次的节奏)
 google_news_queries:
   governance:
-    - "EU AI Act"
-    - "AI regulation policy"
-    - "AI safety alignment"
-    - "AI 监管"
-    - "AI 治理"
-    - "Stanford HAI"
-    - "NIST AI framework"
+    - '"EU AI Act" code of practice'
+    - '"EU AI Act" enforcement compliance'
+    - '"NIST AI RMF" update'
+    - '"AI Safety Institute" report'
+    - '"ISO/IEC JTC 1/SC 42" artificial intelligence'
+    - '中国 生成式人工智能 备案 标准 监管'
+    - 'TC260 人工智能 标准'
 
   data:
-    - "AI data center infrastructure"
-    - "AI training data"
-    - "AI 算力"
-    - "数据要素"
-    - "synthetic data AI"
+    - '"EU Data Act" implementation'
+    - '"National Data Administration" data infrastructure China'
+    - '国家数据局 数据基础设施 可信数据空间'
+    - 'AI training data copyright lawsuit'
+    - 'AI training data licensing privacy'
+    - '"synthetic data" enterprise deployment'
+    - '"ISO/IEC JTC 1/SC 42" data standard'
+    - '"企业数据本体"'
 
   industry:
-    - "enterprise AI deployment"
-    - "行业大模型"
-    - "AI 行业落地"
-    - "AIGC 企业应用"
-    - "AI digital worker"
+    - '"enterprise AI" deployment ROI'
+    - '"AI agent" customer case study'
+    - 'AI 智能客服 降本 增效 客户'
+    - '大模型 企业 部署 效率 客户'
+    - '制造业 AI 项目 上线'
+    - '金融 AI 应用 部署'
 
-  agent:
-    - "AI Agent"
-    - "agentic AI"
-    - "coding agent"
-    - "Claude Code"
-    - "Cursor AI"
-    - "OpenAI Codex"
-    - "MCP protocol"
-    - "computer use AI"
 
 # ---------- 直接订阅的 RSS 源 ----------
 # 全部源每次都抓,由 scorer 判断与当日板块是否相关
 rss_feeds:
 
+  # tier: primary=一手机构/标准组织/官方发布；trusted=可信媒体或研究机构。
+  - name: "NIST News"
+    url: "https://www.nist.gov/news-events/news/rss.xml"
+    tier: primary
+  - name: "European Commission Press Releases"
+    url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en"
+    tier: primary
+
   # ── 公司一手源(第一时间获取官方发布) ──
   - name: "OpenAI Blog"
     url: "https://openai.com/news/rss.xml"
+    tier: primary
   - name: "Google DeepMind"
     url: "https://deepmind.google/blog/rss.xml"
+    tier: primary
   - name: "Google AI Blog"
     url: "https://blog.google/technology/ai/rss/"
+    tier: primary
   - name: "Hugging Face Blog"
     url: "https://huggingface.co/blog/feed.xml"
+    tier: primary
   - name: "Apple ML Research"
     url: "https://machinelearning.apple.com/rss.xml"
+    tier: primary
   - name: "AWS AI Blog"
     url: "https://aws.amazon.com/blogs/ai/feed/"
+    tier: primary
 
   # ── 国际一线科技媒体 ──
   - name: "TechCrunch AI"

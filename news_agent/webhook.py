@@ -20,13 +20,16 @@ import json
 import logging
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from pathlib import Path
 
+from .feedback import VALID_RATINGS, record_feedback
 from .main import load_config, run
 
 log = logging.getLogger("news_agent.webhook")
 
 _running: set[str] = set()
 _lock = threading.Lock()
+FEEDBACK_PATH = Path(__file__).resolve().parent.parent / "state" / "feedback.json"
 
 
 def _normalize(text: str) -> str:
@@ -77,11 +80,20 @@ class WebhookHandler(BaseHTTPRequestHandler):
         content = (data.get("content") or "").strip()
         log.info("received webhook: %r", content)
 
+        # 在推送加公众号回复：反馈 有价值 https://文章链接
+        parts = content.split(maxsplit=2)
+        if len(parts) == 3 and parts[0] == "反馈" and parts[1] in VALID_RATINGS:
+            if record_feedback(FEEDBACK_PATH, parts[1], parts[2]):
+                self._reply(200, "ok", "反馈已记录，将用于优化后续筛选。")
+            else:
+                self._reply(400, "invalid feedback", "格式：反馈 有价值|一般|无关 https://文章链接")
+            return
+
         if _normalize(content) in ("帮助", "help", "?", "？"):
             config = load_config()
             labels = config.get("category_labels") or {}
             hint = "\n".join(f"  {label}" for label in labels.values())
-            self._reply(200, "ok", f"支持的关键词：\n{hint}")
+            self._reply(200, "ok", f"支持的关键词：\n{hint}\n\n反馈格式：反馈 有价值|一般|无关 https://文章链接")
             return
 
         keyword_map = _build_keyword_map()

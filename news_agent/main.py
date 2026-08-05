@@ -75,6 +75,9 @@ def render_push_content(
     category: str,
     category_label: str,
     show_score: bool = True,
+    trends: list[str] | None = None,
+    watchlist: list[str] | None = None,
+    run_stats: str = "",
 ) -> str:
     """单板块渲染。打分板块按分数倒序;公众号(show_score=False)保持传入顺序、不显示相关度。"""
     items_sorted = sorted(items, key=lambda s: s.score, reverse=True) if show_score else items
@@ -82,6 +85,14 @@ def render_push_content(
     lines: list[str] = []
     lines.append(f"# 今日 {category_label}：共 {len(items_sorted)} 条")
     lines.append("")
+    if trends:
+        lines.append("## 本周观察")
+        lines.extend(f"- {trend}" for trend in trends)
+        lines.append("")
+    if watchlist:
+        lines.append("## 持续跟踪")
+        lines.extend(f"- {item}" for item in watchlist)
+        lines.append("")
 
     for idx, item in enumerate(items_sorted, start=1):
         a = item.article
@@ -89,6 +100,10 @@ def render_push_content(
         lines.append("")
         if show_score:
             lines.append(f"**来源**: {a.source}  |  **相关度**: {item.score:.1f}/10")
+            lines.append(
+                f"**研究价值**: 相关 {item.relevance:.1f} · 新颖 {item.novelty:.1f} "
+                f"· 证据 {item.evidence:.1f} · 可行动 {item.actionability:.1f}"
+            )
         else:
             meta = f"**公众号**: {a.source}"
             if a.published_at:
@@ -102,11 +117,29 @@ def render_push_content(
             lines.append(a.summary[:200] + ("…" if len(a.summary) > 200 else ""))
         lines.append("")
         lines.append(f"[阅读原文]({a.url})")
+        if item.related_articles:
+            refs = "、".join(
+                f"[{related.source}]({related.url})" for related in item.related_articles[:3]
+            )
+            lines.append("")
+            lines.append(f"同一事件参考：{refs}")
         lines.append("")
         lines.append("---")
         lines.append("")
 
+    if run_stats:
+        lines.extend(["## 运行摘要", run_stats, ""])
     return "\n".join(lines)
+
+
+def notify_no_results(category_label: str, reason: str, token: str | None, dry_run: bool) -> None:
+    """没有可推送事件时给出明确状态，避免采集失败被误认为“没有新闻”。"""
+    title = f"{category_label}本次运行状态"
+    content = f"# {category_label}本次未生成新闻简报\n\n原因：{reason}\n\n可在 Actions 日志查看各源抓取与筛选统计。"
+    if dry_run:
+        log.info("DRY RUN no-result notice: %s", reason)
+    elif token:
+        push_mod.push(token, title, content)
 
 
 def run(
@@ -221,6 +254,7 @@ def run(
 
     if not fresh:
         log.info("no new articles; exiting")
+        notify_no_results(category_label, "采集结果均已在历史推送中处理", pushplus_token, dry_run)
         return 0
 
     # 5. 选出要推送的文章 + 写摘要
@@ -248,8 +282,8 @@ def run(
         # 公众号只标记真正推过的,溢出的(超过 max_n)下次还能再出
         to_mark = top
     else:
-        # 5a. DeepSeek 打分(聚焦当日板块,其他板块的稿子直接被压到 0-3 分)
-        log.info("=== 2. scoring with %s (focus=%s) ===", config["deepseek"]["scorer_model"], category)
+        # 5a. 第一阶段：仅用标题/RSS 摘要粗筛，控制后续正文抓取和终评成本。
+        log.info("=== 2. coarse scoring with %s (focus=%s) ===", config["deepseek"]["scorer_model"], category)
         scored = filter_mod.score_articles(
             client=client,
             articles=fresh,
@@ -259,18 +293,70 @@ def run(
             active_category=category,
         )
 
-        # 5b. 按阈值过滤 + top N(还要求文章命中当日板块,scorer 已经做了限制,这里再兜底)
+        research_conf = config.get("research_filter") or {}
+        coarse_min_score = float(research_conf.get("coarse_min_score", 4.0))
+        max_candidates = int(research_conf.get("max_body_candidates", 60))
+        candidates = [
+            s for s in scored
+            if s.score >= coarse_min_score and category in s.categories
+        ]
+        candidates.sort(key=lambda s: s.score, reverse=True)
+        candidates = candidates[:max_candidates]
+        log.info(
+            "coarse scored: %d total, %d candidates >= %.1f; fetching bodies for %d",
+            len(scored), len(candidates), coarse_min_score, len(candidates),
+        )
+        if not candidates:
+            log.info("nothing passed coarse filter; exiting without push")
+            for s in scored:
+                state.mark(s.article.uid)
+            if not dry_run:
+                state.save()
+            notify_no_results(category_label, "没有新闻通过标题与摘要粗筛", pushplus_token, dry_run)
+            return 0
+
+        sources.fetch_article_bodies(
+            [s.article for s in candidates],
+            max_workers=int(research_conf.get("body_fetch_workers", 8)),
+            max_chars=int(research_conf.get("body_max_chars", 6000)),
+        )
+
+        # 正文去重必须在补抓原文之后再做：不同标题的转载稿常有完全相同的正文。
+        # 这里关闭标题判重，仅按正文 4-gram 指纹比较，避免把“标题相近但内容不同”的新闻误删。
+        before_body_dedup = len(candidates)
+        body_unique = sources.dedupe_by_content(
+            [s.article for s in candidates],
+            threshold=1.1,
+            body_threshold=float(research_conf.get("body_dedupe_threshold", 0.90)),
+        )
+        by_uid = {s.article.uid: s for s in candidates}
+        candidates = [by_uid[a.uid] for a in body_unique]
+        if len(candidates) < before_body_dedup:
+            log.info("full-body dedup: %d → %d candidates", before_body_dedup, len(candidates))
+
+        # 5b. 第二阶段：结合正文，按研究价值四维终评并产生事件键。
+        log.info("=== 3. research-value assessment with %s ===", config["deepseek"]["scorer_model"])
+        assessed = filter_mod.assess_research_value(
+            client=client,
+            scored=candidates,
+            keywords_md=keywords_md,
+            model=config["deepseek"]["scorer_model"],
+            active_category=category,
+            batch_size=int(research_conf.get("assessment_batch_size", 10)),
+        )
+
+        # 5c. 按终评分过滤；相同事件合并成一张卡片，保留证据最强的主报道。
         min_score = float(config["push"]["min_score"])
         max_n = int(config["push"]["max_articles"])
         qualified = [
-            s for s in scored
-            if s.score >= min_score and category in s.categories
+            s for s in assessed
+            if s.score >= min_score
         ]
-        qualified.sort(key=lambda s: s.score, reverse=True)
-        top = qualified[:max_n]
+        event_cards = filter_mod.group_by_event(qualified)
+        top = event_cards[:max_n]
         log.info(
-            "scored: %d total, %d >= %.1f & in [%s], top %d selected",
-            len(scored), len(qualified), min_score, category, len(top),
+            "final assessed: %d candidates, %d >= %.1f, %d event cards, top %d selected",
+            len(assessed), len(qualified), min_score, len(event_cards), len(top),
         )
 
         if not top:
@@ -280,9 +366,10 @@ def run(
                 state.mark(s.article.uid)
             if not dry_run:
                 state.save()
+            notify_no_results(category_label, "候选新闻未达到研究价值阈值", pushplus_token, dry_run)
             return 0
 
-        # 5b-2. 语义去重:Google News 等只有标题没正文,靠模型把"同一事件"的合并。
+        # 5c-2. 语义去重：为 event_key 不一致的同一事件再做一层兜底。
         #       不补位——去掉重复后名额不再用其他文章填补。
         before = len(top)
         top = filter_mod.dedupe_semantic(
@@ -293,8 +380,8 @@ def run(
         if len(top) < before:
             log.info("semantic dedup: %d → %d (no backfill)", before, len(top))
 
-        # 5c. DeepSeek 写摘要
-        log.info("=== 3. summarizing top %d with %s ===", len(top), config["deepseek"]["summarizer_model"])
+        # 5d. DeepSeek 写摘要
+        log.info("=== 4. summarizing top %d with %s ===", len(top), config["deepseek"]["summarizer_model"])
         top = filter_mod.summarize_top(
             client=client,
             scored=top,
@@ -304,6 +391,20 @@ def run(
         # 标记所有打过分的,避免下次反复打同样低分
         to_mark = scored
 
+    # 6. 生成事件级周度观察；失败不会影响新闻推送。
+    trends: list[str] = []
+    watchlist: list[str] = []
+    if (config.get("insights") or {}).get("enabled", True):
+        trends, watchlist = filter_mod.summarize_weekly_insights(
+            client, top, config["deepseek"]["summarizer_model"],
+        )
+
+    run_stats = (
+        f"- 采集 {len(raw)} 篇；时间窗口内 {len(fresh_in_window)} 篇；"
+        f"URL/内容去重后 {len(deduped)} 篇；历史新增 {len(fresh)} 篇。\n"
+        f"- 最终推送 {len(top)} 个事件。"
+    )
+
     # 8. 渲染 + 落盘 + 推送
     now = datetime.now()
     title = config["push"]["title_template"].format(
@@ -311,7 +412,10 @@ def run(
         category_label=category_label,
         category=category,
     )
-    content = render_push_content(top, category, category_label, show_score=not is_wechat)
+    content = render_push_content(
+        top, category, category_label, show_score=not is_wechat,
+        trends=trends, watchlist=watchlist, run_stats=run_stats,
+    )
 
     # 无条件落盘:dry-run 也写,没有 PUSHPLUS_TOKEN 也写,推送失败也写
     file_name = FILE_CATEGORY_NAMES.get(category, category)

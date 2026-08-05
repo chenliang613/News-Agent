@@ -1,0 +1,20 @@
+[
+  {
+    "title": "欧盟委员会发布 AI Act 透明度实践守则",
+    "category": "governance",
+    "expected": "valuable",
+    "why": "官方规则及明确实施要求"
+  },
+  {
+    "title": "某公司展示全新 AI 绘画滤镜",
+    "category": "industry",
+    "expected": "irrelevant",
+    "why": "纯娱乐同质化产品"
+  },
+  {
+    "title": "国家数据局发布高质量数据集建设行动方案",
+    "category": "data",
+    "expected": "valuable",
+    "why": "一手数据基础设施政策"
+  }
+]
