@@ -26,12 +26,10 @@ category_labels:
   governance: "AI治理"
   data: "AI数据"
   industry: "AI行业"
-  agent: "AI Agent"
-  wechat: "微信公众号"
 
-# ---------- 微信公众号 + 官网(每周二/四) ----------
+# ---------- 公众号 + 官网（当前未纳入自动排期）----------
 # 订阅清单维护在根目录 "WeChat and website list.md",分「微信公众号」「官网」两个小节。
-# 周二/周四抓取(公众号经 OPML/feed 解析,官网直连),不做相关性打分,直接摘要推送。
+# 如未来重新启用 wechat 手动板块：公众号经 OPML/feed 解析、官网直连，不做相关性打分。
 wechat:
   # 单次推送的文章数上限(两类合并后按发布时间取最新)
   max_articles: 20

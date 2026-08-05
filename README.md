@@ -26,7 +26,7 @@ RSS / Google News / RSSHub
 
 Python weekday 使用 `0=周一` 至 `6=周日`；GitHub Actions 使用 UTC，当前 cron 为 `0 0 * * 1,3,5`，即上表的北京时间 08:00。
 
-`wechat`、`agent` 仍可通过 `--category` 或 webhook 手动触发，但不在当前自动排期中。
+当前默认配置、GitHub Actions 和 webhook 仅面向上述三个板块；历史的公众号/官网配置保留但未启用。
 
 ## 本地运行
 
@@ -89,12 +89,7 @@ rss_feeds:
 
 ### `WeChat and website list.md`
 
-`wechat` 手动板块读取此文件：
-
-- 「微信公众号」：近 `wechat.max_age_hours` 小时，默认 48h；
-- 「官网」：近 `wechat.website_max_age_hours` 小时，默认 24h。
-
-每行使用 `名称` 或 `名称 | 地址`。`http` 地址可以是 RSS 或单个网页，`/` 开头是 RSSHub 路由；只写名称时通过 OPML 解析。默认 `wechat.require_published: true`，无发布时间的条目会被丢弃。
+此文件及 `wechat` 配置保留为将来扩展用，当前不参与自动排期、GitHub Actions 手动选项或 webhook 关键词映射。
 
 ## 微信 webhook 与反馈
 

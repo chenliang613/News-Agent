@@ -11,7 +11,6 @@
     AI治理   → governance 板块
     AI数据   → data 板块
     AI行业   → industry 板块
-    AI Agent → agent 板块
     帮助     → 查看支持的关键词
 """
 from __future__ import annotations

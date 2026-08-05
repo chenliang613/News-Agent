@@ -1,6 +1,6 @@
 """News Agent 编排入口：按周排期 → 拉源 → 去重 → DeepSeek 打分 → top N 摘要 → PushPlus。
 
-每天只跑一个板块(周一治理 / 周二数据 / 周三行业落地),周四到周日跳过。
+每天只跑一个板块（周一治理 / 周三数据 / 周五行业落地），其他日期跳过。
 排期表写在 config.yaml 的 schedule.weekday_category。
 
 用法:

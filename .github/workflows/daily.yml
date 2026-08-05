@@ -18,8 +18,6 @@ on:
           - governance
           - data
           - industry
-          - agent
-          - wechat-and-website
 
 permissions:
   contents: write  # 需要写权限,跑完要 commit state/sent.json 回去
@@ -56,10 +54,6 @@ jobs:
         run: |
           ARGS=""
           CATEGORY="${{ github.event.inputs.category }}"
-          # 下拉里的 "wechat-and-website" 对应脚本的 wechat 板块(同时抓公众号+官网)
-          if [[ "$CATEGORY" == "wechat-and-website" ]]; then
-            CATEGORY="wechat"
-          fi
           if [[ "${{ github.event.inputs.test_push }}" == "true" ]]; then
             ARGS="--test-push"
           elif [[ -n "$CATEGORY" ]]; then
