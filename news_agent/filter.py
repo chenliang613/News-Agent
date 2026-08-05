@@ -151,6 +151,7 @@ def score_articles(
     model: str,
     batch_size: int = 20,
     active_category: str | None = None,
+    feedback_note: str = "",
 ) -> list[ScoredArticle]:
     if not articles:
         return []
@@ -170,6 +171,8 @@ def score_articles(
         SCORER_SYSTEM + focus_directive
         + f"\n\n以下是用户的关注主题说明:\n\n<keywords>\n{keywords_md}\n</keywords>"
     )
+    if feedback_note:
+        system_msg += f"\n\n{feedback_note}"
 
     scored: list[ScoredArticle] = []
 
@@ -251,6 +254,7 @@ def assess_research_value(
     model: str,
     active_category: str,
     batch_size: int = 10,
+    feedback_note: str = "",
 ) -> list[ScoredArticle]:
     """基于正文终评研究价值，并为后续事件级聚合生成稳定事件键。"""
     if not scored:
@@ -261,6 +265,8 @@ def assess_research_value(
         + f"\n\n【今日板块】{active_category}: {focus}。不属于此板块的条目各项应低分。"
         + f"\n\n用户关注主题：\n<keywords>\n{keywords_md}\n</keywords>"
     )
+    if feedback_note:
+        system_msg += f"\n\n{feedback_note}"
     for batch_start in range(0, len(scored), batch_size):
         batch = scored[batch_start : batch_start + batch_size]
         articles_json = json.dumps(
