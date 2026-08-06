@@ -200,10 +200,12 @@ def score_articles(
         except Exception as e:
             log.error("scorer API error on batch starting %d: %s", batch_start, e)
             for a in batch:
-                scored.append(ScoredArticle(article=a, score=5.0, reason="评分失败"))
+                # 评分失败不能给可入选的默认分，否则会把网络/API 故障
+                # 伪装成“相关资讯”。后续流程会自然丢弃 score=0 的条目。
+                scored.append(ScoredArticle(article=a, score=0.0, reason="评分失败"))
             continue
 
-        usage = response.usage
+        usage = getattr(response, "usage", None)
         log.info(
             "scorer batch %d: input=%d output=%d",
             batch_start // batch_size,
@@ -216,16 +218,21 @@ def score_articles(
         except (json.JSONDecodeError, ValueError) as e:
             log.error("scorer returned non-JSON, raw=%r, err=%s", text[:200], e)
             for a in batch:
-                scored.append(ScoredArticle(article=a, score=5.0, reason="解析失败"))
+                scored.append(ScoredArticle(article=a, score=0.0, reason="解析失败"))
             continue
 
+        if not isinstance(result, list):
+            log.error("scorer result is not a JSON array: %r", type(result).__name__)
+            for a in batch:
+                scored.append(ScoredArticle(article=a, score=0.0, reason="结果格式错误"))
+            continue
         by_id = {item.get("id"): item for item in result if isinstance(item, dict)}
         for idx, a in enumerate(batch):
             item = by_id.get(idx, {})
             try:
-                score = float(item.get("score", 5.0))
+                score = float(item.get("score", 0.0))
             except (TypeError, ValueError):
-                score = 5.0
+                score = 0.0
             raw_cats = item.get("categories") or []
             if not isinstance(raw_cats, list):
                 raw_cats = []
@@ -237,6 +244,10 @@ def score_articles(
                     cats.append(c)
             if active_category in VALID_CATEGORIES:
                 cats = [c for c in cats if c == active_category]
+            # 模型声称高分但没有给出当前板块，视为无效结果。这样可以
+            # 防止格式漂移或分类缺失绕过 candidates 的 category gate。
+            if score >= 4.0 and not cats:
+                score = 0.0
             scored.append(ScoredArticle(
                 article=a,
                 score=max(0.0, min(10.0, score)),
@@ -286,11 +297,23 @@ def assess_research_value(
             result = _extract_json_array(response.choices[0].message.content or "")
         except Exception as e:
             log.error("research-value API error on batch starting %d: %s", batch_start, e)
+            for item in batch:
+                item.relevance = item.novelty = item.evidence = item.actionability = 0.0
+                item.score = 0.0
+                item.event_key = ""
+                item.reason = "终评失败"
             continue
+        if not isinstance(result, list):
+            log.error("research-value result is not a JSON array: %r", type(result).__name__)
+            result = []
         by_id = {item.get("id"): item for item in result if isinstance(item, dict)}
         for idx, item in enumerate(batch):
             value = by_id.get(idx)
             if not value:
+                item.relevance = item.novelty = item.evidence = item.actionability = 0.0
+                item.score = 0.0
+                item.event_key = ""
+                item.reason = "终评缺失"
                 continue
             def metric(name: str) -> float:
                 try:
@@ -301,6 +324,12 @@ def assess_research_value(
             item.novelty = metric("novelty")
             item.evidence = metric("evidence")
             item.actionability = metric("actionability")
+            # 这是模型无法可靠推断的事实属性，必须由程序硬限制：没有
+            # 抓到正文时只能基于 preview；聚合发现源也不能被当作一手证据。
+            if not item.article.content:
+                item.evidence = min(item.evidence, 5.0)
+            if item.article.source_tier == "discovery":
+                item.evidence = min(item.evidence, 5.0)
             # 总分在本地重算，避免模型给出的总分与权重不一致。
             item.score = round(
                 0.35 * item.relevance + 0.30 * item.novelty

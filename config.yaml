@@ -190,6 +190,9 @@ sources:
   # 缺 published_at 的文章会保留(避免误杀)。
   # 每周推送一次,所以窗口设为 7 天
   max_age_hours: 168
+  # 普通源没有发布时间时不强行丢弃，避免兼容性过差；有发布时间的旧闻仍会过滤。
+  # 需要严格周报时可改为 true。
+  require_published: false
 
 # ---------- 去重配置 ----------
 state:

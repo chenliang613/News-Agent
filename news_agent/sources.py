@@ -13,7 +13,7 @@ from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Iterable
-from urllib.parse import quote_plus, urlparse, urlunparse
+from urllib.parse import parse_qsl, quote_plus, urlencode, urlparse, urlunparse
 
 import feedparser
 import httpx
@@ -27,9 +27,18 @@ MAX_HTTP_ATTEMPTS = 3
 
 
 def _url_for_dedup(url: str) -> str:
-    """去掉 query 参数和 fragment，只用 scheme+host+path 做去重。"""
+    """规范化 URL，去掉追踪参数但保留可能承载文章 ID 的业务参数。"""
     p = urlparse(url)
-    return urlunparse((p.scheme, p.netloc, p.path.rstrip("/"), "", "", ""))
+    tracking = {
+        "fbclid", "gclid", "dclid", "msclkid", "mc_cid", "mc_eid",
+        "ref", "ref_", "source", "spm", "utm_source", "utm_medium",
+        "utm_campaign", "utm_content", "utm_term",
+    }
+    query = urlencode(sorted(
+        (key, value) for key, value in parse_qsl(p.query, keep_blank_values=True)
+        if key.lower() not in tracking and not key.lower().startswith("utm_")
+    ))
+    return urlunparse((p.scheme.lower(), p.netloc.lower(), p.path.rstrip("/"), "", query, ""))
 
 
 @dataclass
@@ -605,7 +614,10 @@ def dedupe_by_content(
         if dup_idx is not None:
             a_text = a.content or a.summary
             kept_text = kept[dup_idx].content or kept[dup_idx].summary
-            if len(a_text) > len(kept_text):
+            tier_rank = {"primary": 3, "trusted": 2, "discovery": 1}
+            a_rank = (tier_rank.get(a.source_tier, 0), len(a_text))
+            kept_rank = (tier_rank.get(kept[dup_idx].source_tier, 0), len(kept_text))
+            if a_rank > kept_rank:
                 log.debug("content dedup: replace [%s] with [%s]", kept[dup_idx].title, a.title)
                 kept[dup_idx] = a
                 normed[dup_idx] = na

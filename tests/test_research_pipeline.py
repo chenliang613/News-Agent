@@ -18,7 +18,33 @@ class _FakeClient:
         )
 
 
+class _FailingClient:
+    def __init__(self):
+        self.chat = SimpleNamespace(completions=self)
+
+    def create(self, **kwargs):
+        raise RuntimeError("simulated API outage")
+
+
 class ResearchPipelineTests(unittest.TestCase):
+    def test_coarse_scoring_failure_is_not_treated_as_relevant(self):
+        article = Article("AI 新闻", "https://example.com/a", "preview", "Media")
+        result = __import__("news_agent.filter", fromlist=["score_articles"]).score_articles(
+            _FailingClient(), [article], "focus", "model", active_category="governance",
+        )
+        self.assertEqual(0.0, result[0].score)
+        self.assertEqual([], result[0].categories)
+
+    def test_discovery_without_body_cannot_receive_high_evidence(self):
+        article = Article("Policy", "https://example.com/a", "preview", "Google", source_tier="discovery")
+        scored = [ScoredArticle(article=article, score=5, reason="coarse", categories=["governance"])]
+        payload = [{
+            "id": 0, "relevance": 8, "novelty": 7, "evidence": 10,
+            "actionability": 6, "event_key": "policy-2026", "reason": "有事实",
+        }]
+        result = assess_research_value(_FakeClient(payload), scored, "focus", "model", "governance")
+        self.assertEqual(5.0, result[0].evidence)
+
     def test_extract_page_text_excludes_navigation_and_script(self):
         html = """<html><body><nav>Menu</nav><article><h1>Title</h1>
         <p>First verified fact.</p><p>Second verified fact.</p></article>

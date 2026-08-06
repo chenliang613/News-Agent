@@ -252,8 +252,11 @@ def run(
             config["rsshub"].get("routes", []),
         ))
         log.info("fetched %d raw articles", len(raw))
-        max_age = config.get("sources", {}).get("max_age_hours")
-        fresh_in_window = sources.filter_by_age(raw, max_age)
+        source_conf = config.get("sources", {})
+        max_age = source_conf.get("max_age_hours")
+        fresh_in_window = sources.filter_by_age(
+            raw, max_age, drop_undated=bool(source_conf.get("require_published", False)),
+        )
         if max_age:
             log.info("after age filter (<=%dh): %d articles", max_age, len(fresh_in_window))
 
