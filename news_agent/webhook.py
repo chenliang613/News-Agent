@@ -1,17 +1,11 @@
-"""PushPlus 微信回调 webhook：用户在微信输入关键词触发对应板块的新闻推送。
+"""供自建调用方触发新闻任务的 HTTP webhook。
 
 使用方法:
     python -m news_agent.webhook                 # 默认监听 0.0.0.0:8088
     python -m news_agent.webhook --port 9000     # 自定义端口
 
-配置 PushPlus:
-    在 pushplus.plus 后台 → 功能设置 → 消息回调，填入: http://你的服务器IP:8088/
-
-支持的关键词(在微信「推送加」公众号里发送):
-    AI治理   → governance 板块
-    AI数据   → data 板块
-    AI行业   → industry 板块
-    帮助     → 查看支持的关键词
+支持的自定义 POST 内容:
+    {"content": "AI治理"} → governance 板块
 """
 from __future__ import annotations
 
@@ -19,17 +13,13 @@ import json
 import logging
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
-from .feedback import RATING_ALIASES, record_feedback
 from .main import load_config, run
 
 log = logging.getLogger("news_agent.webhook")
 
 _running: set[str] = set()
 _lock = threading.Lock()
-FEEDBACK_PATH = Path(__file__).resolve().parent.parent / "state" / "feedback.json"
 
 
 def _normalize(text: str) -> str:
@@ -80,24 +70,11 @@ class WebhookHandler(BaseHTTPRequestHandler):
         content = (data.get("content") or "").strip()
         log.info("received webhook: %r", content)
 
-        # 在推送加公众号回复：反馈 1 https://文章链接（兼容旧的文字评级）。
-        parts = content.split(maxsplit=2)
-        if len(parts) == 3 and parts[0] == "反馈":
-            try:
-                score = int(parts[1])
-            except ValueError:
-                score = RATING_ALIASES.get(parts[1], 0)
-            if record_feedback(FEEDBACK_PATH, score, parts[2]):
-                self._reply(200, "ok", "反馈已记录，将用于优化后续筛选。")
-            else:
-                self._reply(400, "invalid feedback", "格式：反馈 1-5 https://文章链接")
-            return
-
         if _normalize(content) in ("帮助", "help", "?", "？"):
             config = load_config()
             labels = config.get("category_labels") or {}
             hint = "\n".join(f"  {label}" for label in labels.values())
-            self._reply(200, "ok", f"支持的关键词：\n{hint}\n\n反馈格式：反馈 1-5 https://文章链接")
+            self._reply(200, "ok", f"支持的关键词：\n{hint}")
             return
 
         keyword_map = _build_keyword_map()
@@ -126,22 +103,6 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self._reply(200, "ok", f"已触发【{label}】新闻推送，预计 2-3 分钟后推送结果")
 
     def do_GET(self) -> None:
-        query = parse_qs(urlparse(self.path).query)
-        if "score" in query and "url" in query:
-            try:
-                score = int(query["score"][0])
-            except ValueError:
-                score = 0
-            if record_feedback(
-                FEEDBACK_PATH, score, query["url"][0],
-                source=query.get("source", [""])[0], category=query.get("category", [""])[0],
-                title=query.get("title", [""])[0],
-            ):
-                self.send_response(200)
-                self.send_header("Content-Type", "text/plain; charset=utf-8")
-                self.end_headers()
-                self.wfile.write("反馈已记录，感谢！".encode())
-                return
         self.send_response(200)
         self.send_header("Content-Type", "text/plain; charset=utf-8")
         self.end_headers()

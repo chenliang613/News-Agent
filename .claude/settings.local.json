@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Skill(claude-api)",
-      "WebFetch(domain:wechat2rss.xlab.app)"
-    ]
-  }
-}

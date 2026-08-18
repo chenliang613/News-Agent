@@ -20,11 +20,11 @@ RSS / Google News / RSSHub
 
 | 北京时间 | 板块 | 配置 key |
 |---|---|---|
-| 周一 08:00 | AI 治理 | `governance` |
-| 周三 08:00 | AI 数据 | `data` |
-| 周五 08:00 | AI 行业落地 | `industry` |
+| 周一 07:00 | AI 治理 | `governance` |
+| 周三 07:00 | AI 数据 | `data` |
+| 周五 07:00 | AI 行业落地 | `industry` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`；GitHub Actions 使用 UTC，当前 cron 为 `0 0 * * 1,3,5`，即上表的北京时间 08:00。
+Python weekday 使用 `0=周一` 至 `6=周日`；GitHub Actions 使用 UTC，当前 cron 为 `0 23 * * 0,2,4`，即上表的北京时间 07:00。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述三个板块；历史的公众号/官网配置保留但未启用。
 
@@ -91,22 +91,20 @@ rss_feeds:
 
 此文件及 `wechat` 配置保留为将来扩展用，当前不参与自动排期、GitHub Actions 手动选项或 webhook 关键词映射。
 
-## 微信 webhook 与反馈
+## 微信 webhook
 
 ```bash
 python -m news_agent.webhook
 python -m news_agent.webhook --port 9000
 ```
 
-在 PushPlus 后台配置回调地址后，可发送板块关键词触发手动推送。支持的展示名以 `category_labels` 为准。
+程序的 webhook 可用于自建调用方按板块触发新闻任务。支持的展示名以 `category_labels` 为准。
 
-对已推送文章可回复：
+## 安全的关键词反馈闭环
 
-```text
-反馈 5 https://文章链接
-```
+在 GitHub 的 **Issues → New issue → 新闻筛选反馈** 提交文章评分和建议词。每周六北京时间 07:20，工作流只汇总带 `news-feedback` 标签、且提交者为仓库 `OWNER`、`MEMBER` 或 `COLLABORATOR` 的反馈，调用 DeepSeek 生成受限的候选规则，并创建独立 PR。
 
-每条推送默认显示 1–5 分反馈：1=无关，5=很有价值。将 `feedback.base_url` 设置为 webhook 的公网地址后，点击分数即可记录文章、来源和板块；未设置时可复制上面的文本格式回复。系统仅在同一来源积累至少两次近期评分后，才会将明显偏好（平均 ≥4 或 ≤2）作为粗筛和终评的轻度加/降权信号，正文事实和研究价值仍优先。
+工作流只会替换 `keywords.md` 中带内部标记的“反馈驱动的调优规则”区，不能改写既有研究目标或全局过滤规则；它不会直接合并 PR。合并候选 PR 后，对应反馈 Issue 会自动关闭。私有仓库可天然限制提交者；公开仓库中，外部用户的反馈会被忽略。
 
 ## 质量回归与调优
 

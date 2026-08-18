@@ -2,8 +2,8 @@ name: Daily News Push
 
 on:
   schedule:
-    # 周一/三/五北京时间 08:00；GitHub Actions cron 使用 UTC 且 1=Mon、3=Wed、5=Fri。
-    - cron: '0 0 * * 1,3,5'
+    # 周一/三/五北京时间 07:00；GitHub Actions cron 使用 UTC，故为前一日 23:00。
+    - cron: '0 23 * * 0,2,4'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
     inputs:
       test_push:
@@ -51,15 +51,15 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          CATEGORY: ${{ github.event.inputs.category }}
         run: |
-          ARGS=""
-          CATEGORY="${{ github.event.inputs.category }}"
-          if [[ "${{ github.event.inputs.test_push }}" == "true" ]]; then
-            ARGS="--test-push"
-          elif [[ -n "$CATEGORY" ]]; then
-            ARGS="--category $CATEGORY"
+          if [[ -n "$CATEGORY" ]]; then
+            python -m news_agent.main --category "$CATEGORY"
+          elif [[ "${{ github.event.inputs.test_push }}" == "true" ]]; then
+            python -m news_agent.main --test-push
+          else
+            python -m news_agent.main
           fi
-          python -m news_agent.main $ARGS
 
       - name: Commit updated state and output
         run: |

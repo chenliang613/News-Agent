@@ -24,7 +24,6 @@ import yaml
 from . import filter as filter_mod
 from . import push as push_mod
 from . import sources
-from .feedback import feedback_links, feedback_profile
 from .state import SentState
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -34,7 +33,6 @@ STATE_PATH = ROOT / "state" / "sent.json"
 OUTPUT_DIR = ROOT / "output"
 WECHAT_LIST_PATH = ROOT / "WeChat and website list.md"
 WECHAT_FEED_CACHE_PATH = ROOT / "state" / "wechat_feeds.json"
-FEEDBACK_PATH = ROOT / "state" / "feedback.json"
 
 # 微信公众号板块:不在 filter 的四个打分板块里,走单独的"全部摘要"流程
 WECHAT_CATEGORY = "wechat"
@@ -80,7 +78,6 @@ def render_push_content(
     trends: list[str] | None = None,
     watchlist: list[str] | None = None,
     run_stats: str = "",
-    feedback_base_url: str = "",
 ) -> str:
     """单板块渲染。打分板块按分数倒序;公众号(show_score=False)保持传入顺序、不显示相关度。"""
     items_sorted = sorted(items, key=lambda s: s.score, reverse=True) if show_score else items
@@ -121,9 +118,6 @@ def render_push_content(
         lines.append("")
         lines.append(f"[阅读原文]({a.url})")
         lines.append("")
-        lines.append(feedback_links(
-            feedback_base_url, url=a.url, source=a.source, category=category, title=a.title,
-        ))
         if item.related_articles:
             refs = "、".join(
                 f"[{related.source}]({related.url})" for related in item.related_articles[:3]
@@ -179,10 +173,6 @@ def run(
 
     category_labels = config.get("category_labels") or {}
     category_label = category_labels.get(category, category)
-    feedback_conf = config.get("feedback") or {}
-    preference_note = feedback_profile(
-        FEEDBACK_PATH, category, int(feedback_conf.get("retention_days", 90)),
-    )
 
     today_queries: list[str] = []
     if not is_wechat:
@@ -305,7 +295,6 @@ def run(
             model=config["deepseek"]["scorer_model"],
             batch_size=config["deepseek"]["scorer_batch_size"],
             active_category=category,
-            feedback_note=preference_note,
         )
 
         research_conf = config.get("research_filter") or {}
@@ -358,7 +347,6 @@ def run(
             model=config["deepseek"]["scorer_model"],
             active_category=category,
             batch_size=int(research_conf.get("assessment_batch_size", 10)),
-            feedback_note=preference_note,
         )
 
         # 5c. 按终评分过滤；相同事件合并成一张卡片，保留证据最强的主报道。
@@ -431,7 +419,6 @@ def run(
     content = render_push_content(
         top, category, category_label, show_score=not is_wechat,
         trends=trends, watchlist=watchlist, run_stats=run_stats,
-        feedback_base_url=str(feedback_conf.get("base_url", "")),
     )
 
     # 无条件落盘:dry-run 也写,没有 PUSHPLUS_TOKEN 也写,推送失败也写

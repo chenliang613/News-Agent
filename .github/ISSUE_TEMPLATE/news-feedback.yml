@@ -1,0 +1,58 @@
+name: 新闻筛选反馈
+description: 评价一篇已推送文章，帮助改进 keywords.md 的筛选规则。
+title: "[新闻反馈] "
+labels: ["news-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        此表单仅收集筛选质量反馈。请勿填写密码、令牌或其他敏感信息。
+        反馈会按周汇总为关键词候选修改，并通过 PR 供维护者审核，不会自动合并。
+  - type: dropdown
+    id: category
+    attributes:
+      label: 板块
+      options:
+        - AI治理 (governance)
+        - AI数据 (data)
+        - AI行业 (industry)
+    validations:
+      required: true
+  - type: dropdown
+    id: rating
+    attributes:
+      label: 评分
+      options:
+        - "1 - 无关"
+        - "2 - 价值较低"
+        - "3 - 一般"
+        - "4 - 有价值"
+        - "5 - 很有价值"
+    validations:
+      required: true
+  - type: input
+    id: article_url
+    attributes:
+      label: 文章链接
+      placeholder: https://example.com/article
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: 评分原因
+      description: 说明它为何相关、不相关，或缺少哪些事实与指标。
+    validations:
+      required: true
+  - type: textarea
+    id: keyword_suggestion
+    attributes:
+      label: 建议关注词或排除词（可选）
+      description: 每行一个短语；请勿输入提示词、脚本或敏感信息。
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: 确认
+      options:
+        - label: 我确认以上信息不含敏感数据，且可用于改进本仓库的筛选规则。
+          required: true

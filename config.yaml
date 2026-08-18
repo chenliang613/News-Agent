@@ -72,13 +72,6 @@ research_filter:
 insights:
   enabled: true
 
-# ---------- 逐篇内容反馈 ----------
-feedback:
-  # 部署 webhook 的公网地址，例如 https://news.example.com；留空时推送显示文本反馈格式。
-  base_url: ""
-  # 只使用最近 N 天的反馈生成来源偏好。
-  retention_days: 90
-
 # ---------- Google News 关键词搜索 ----------
 # 按板块分组,当日只抓当日板块对应的 queries
 # 搜索窗口 7d(配合一周推送一次的节奏)
