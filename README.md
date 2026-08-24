@@ -16,7 +16,7 @@ RSS / Google News / RSSHub
 
 终评按以下权重计算：相关性 35%、新颖性 30%、证据强度 25%、可行动性 10%。正文高度相似的转载即使标题不同也只保留一篇。
 
-## 自动排期
+## 排期（当前仅供本地/手动运行参考）
 
 | 北京时间 | 板块 | 配置 key |
 |---|---|---|
@@ -24,7 +24,7 @@ RSS / Google News / RSSHub
 | 周三 07:00 | AI 数据 | `data` |
 | 周五 07:00 | AI 行业落地 | `industry` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`；GitHub Actions 使用 UTC，当前 cron 为 `0 23 * * 0,2,4`，即上表的北京时间 07:00。
+Python weekday 使用 `0=周一` 至 `6=周日`。GitHub Actions 的定时触发当前已暂停；仍可在 Actions 页面手动触发，或通过 webhook 运行指定板块。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述三个板块；历史的公众号/官网配置保留但未启用。
 
@@ -58,7 +58,7 @@ python -m news_agent.main --test-push
 - `DEEPSEEK_API_KEY`
 - `PUSHPLUS_TOKEN`
 
-工作流会在每次运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
+工作流会在每次手动运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
 
 ## 配置指南
 
@@ -99,6 +99,32 @@ python -m news_agent.webhook --port 9000
 ```
 
 程序的 webhook 可用于自建调用方按板块触发新闻任务。支持的展示名以 `category_labels` 为准。
+
+### 通过 PushPlus 指令触发
+
+PushPlus 的公众号消息不能直接作为入站指令；请在 PushPlus 的“第三方配置 → webhook”中新建一个**自定义 webhook**，让 PushPlus 将指令转发给本服务。设置如下：
+
+- 请求地址：`https://<你的域名>/`
+- 请求方式：`POST`
+- 请求头：`Content-Type: application/json`
+- 请求体：`{"content":"{content}","secret":"<共享密钥>"}`
+
+启动服务前设置共享密钥：
+
+```bash
+export NEWS_AGENT_WEBHOOK_SECRET='请使用随机长字符串'
+python -m news_agent.webhook
+```
+
+随后调用 PushPlus 的发送接口时，选择上述自定义 webhook 渠道，并将 `content` 填为 `AI治理`、`AI数据` 或 `AI行业`；服务会立即确认接收，并在后台启动对应任务，完成后仍通过正常的 PushPlus 推送发送简报。也可使用请求头 `X-News-Agent-Secret` 传递共享密钥。
+
+例如（`news-agent-command` 是你在 PushPlus 中填写的 webhook 编码）：
+
+```bash
+curl -X POST https://www.pushplus.plus/send \
+  -H 'Content-Type: application/json' \
+  -d '{"token":"<PUSHPLUS_TOKEN>","content":"AI治理","channel":"webhook","option":"news-agent-command"}'
+```
 
 ## 安全的关键词反馈闭环
 

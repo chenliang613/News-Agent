@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import secrets
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -20,6 +22,16 @@ log = logging.getLogger("news_agent.webhook")
 
 _running: set[str] = set()
 _lock = threading.Lock()
+
+
+def _is_authorized(headers, data: dict) -> bool:
+    """校验自定义 Webhook 的共享密钥；未配置时兼容既有调用方。"""
+    expected = os.environ.get("NEWS_AGENT_WEBHOOK_SECRET")
+    if not expected:
+        log.warning("NEWS_AGENT_WEBHOOK_SECRET is not set; accepting an unauthenticated webhook request")
+        return True
+    supplied = headers.get("X-News-Agent-Secret") or str(data.get("secret") or "")
+    return secrets.compare_digest(supplied, expected)
 
 
 def _normalize(text: str) -> str:
@@ -66,6 +78,13 @@ class WebhookHandler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             self._reply(400, "invalid JSON")
             return
+        if not isinstance(data, dict):
+            self._reply(400, "JSON object required")
+            return
+        if not _is_authorized(self.headers, data):
+            log.warning("rejected unauthorized webhook request from %s", self.client_address[0])
+            self._reply(403, "unauthorized")
+            return
 
         content = (data.get("content") or "").strip()
         log.info("received webhook: %r", content)
@@ -109,7 +128,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self.wfile.write("News Agent webhook is running\n".encode())
 
     def _reply(self, code: int, msg: str, content: str | None = None) -> None:
-        self.send_response(200)
+        self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.end_headers()
         resp: dict = {"code": code, "msg": msg}

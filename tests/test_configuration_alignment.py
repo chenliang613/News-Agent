@@ -19,4 +19,4 @@ class ConfigurationAlignmentTests(unittest.TestCase):
         )
         options = set(workflow["on"]["workflow_dispatch"]["inputs"]["category"]["options"]) - {""}
         self.assertEqual(scheduled, options)
-        self.assertEqual("0 23 * * 0,2,4", workflow["on"]["schedule"][0]["cron"])
+        self.assertNotIn("schedule", workflow["on"])
