@@ -68,9 +68,26 @@ def _run_task(category: str) -> None:
             _running.discard(category)
 
 
+def _trigger_category(category: str) -> tuple[bool, str]:
+    """启动单个板块任务；供 JSON webhook 与微信公众号回调共用。"""
+    config = load_config()
+    label = (config.get("category_labels") or {}).get(category, category)
+    with _lock:
+        if category in _running:
+            return False, f"该板块正在推送中，请稍候..."
+        _running.add(category)
+    thread = threading.Thread(target=_run_task, args=(category,), daemon=True)
+    thread.start()
+    log.info("triggered task: %s (%s)", category, label)
+    return True, f"已触发【{label}】新闻推送，预计 2-3 分钟后推送结果"
+
+
 class WebhookHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:
         content_length = int(self.headers.get("Content-Length", 0))
+        if content_length <= 0 or content_length > 64_000:
+            self._reply(400, "invalid content length")
+            return
         body = self.rfile.read(content_length)
 
         try:
@@ -106,20 +123,8 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._reply(200, "ok", f"未识别的关键词。\n支持：{supported}\n发送「帮助」查看详情")
             return
 
-        with _lock:
-            if category in _running:
-                self._reply(200, "ok", f"该板块正在推送中，请稍候...")
-                return
-            _running.add(category)
-
-        config = load_config()
-        label = (config.get("category_labels") or {}).get(category, category)
-
-        thread = threading.Thread(target=_run_task, args=(category,), daemon=True)
-        thread.start()
-        log.info("triggered task: %s (%s)", category, label)
-
-        self._reply(200, "ok", f"已触发【{label}】新闻推送，预计 2-3 分钟后推送结果")
+        _, message = _trigger_category(category)
+        self._reply(200, "ok", message)
 
     def do_GET(self) -> None:
         self.send_response(200)

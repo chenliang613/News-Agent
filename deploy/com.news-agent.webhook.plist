@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.news-agent.webhook</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/apple/News-Agent/scripts/run_hermes_news_webhook.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/apple/News-Agent</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/apple/News-Agent/logs/hermes-news-webhook.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/apple/News-Agent/logs/hermes-news-webhook.log</string>
+</dict>
+</plist>

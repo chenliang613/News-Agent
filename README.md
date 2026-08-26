@@ -100,31 +100,76 @@ python -m news_agent.webhook --port 9000
 
 程序的 webhook 可用于自建调用方按板块触发新闻任务。支持的展示名以 `category_labels` 为准。
 
-### 通过 PushPlus 指令触发
+### 手动指令触发
 
-PushPlus 的公众号消息不能直接作为入站指令；请在 PushPlus 的“第三方配置 → webhook”中新建一个**自定义 webhook**，让 PushPlus 将指令转发给本服务。设置如下：
+PushPlus 的公众号对话框不能接收并转发自定义指令；在其中输入 `AI治理`、`AI数据` 或 `AI行业` 不会触发任务。请改用以下任一方式：
 
-- 请求地址：`https://<你的域名>/`
-- 请求方式：`POST`
-- 请求头：`Content-Type: application/json`
-- 请求体：`{"content":"{content}","secret":"<共享密钥>"}`
+- GitHub Actions 页面手动运行，并选择板块；
+- 向本服务的 webhook 发送 `POST` JSON，例如 `{"content":"AI数据"}`。
 
-启动服务前设置共享密钥：
+### Hermes 微信机器人触发
+
+未认证公众号无法接收开发者消息；当前已将本机 Hermes 微信适配器配置为固定指令模式。微信小号发给 Hermes 的以下完整消息会直接触发任务：`AI治理`、`AI数据`、`AI行业`。允许在词内换行或空格；其他消息被忽略，不进入 Hermes 模型，也不会消耗 DeepSeek。
+
+这使用腾讯 iLink 的个人微信机器人身份，不是公众号，且无需公网地址或 Cloudflare Worker。二维码登录后生成的 `@im.bot` 身份不可作为普通微信号搜索；请在扫码确认后创建的机器人会话中发送指令。
+
+```bash
+# 在一个终端长期运行；密钥已保存在 ~/.hermes/.env，不要贴到聊天或提交到 Git
+./scripts/run_hermes_news_webhook.sh
+
+# 在另一个终端启动（或重启）Hermes gateway
+cd ~/.hermes/hermes-agent
+hermes gateway
+```
+
+适配器会先调用 `news_agent/hermes_command.py`，由它通过 `127.0.0.1:8088` 触发任务并向微信回复“已触发…”。实际新闻搜集才会调用 DeepSeek；关键词识别、未识别消息和 webhook 常驻均不调用模型。
+
+在 `~/.hermes/.env` 中配置运行所需密钥（填写实际值，切勿提交或发送到聊天）：
+
+```bash
+DEEPSEEK_API_KEY=sk-...
+PUSHPLUS_TOKEN=...
+```
+
+初次使用时，保持 `WEIXIN_DM_POLICY=pairing`。未配对账号发送任意文字会收到配对码，管理员执行以下命令批准：
+
+```bash
+hermes pairing approve weixin 配对码
+```
+
+已配对账号的普通消息会被静默忽略，这是防止误调用模型的设计；请直接发送 `AI数据` 测试。机器人会立即确认“已触发…”，约 2–3 分钟后收到 PushPlus 汇总。为避免任意人消耗额度，建议始终保持 `pairing`，或改为 `allowlist`。
+
+本机已安装 `com.news-agent.webhook` LaunchAgent，登录后会自动启动 webhook。可用以下命令查看运行状态或日志：
+
+```bash
+launchctl print gui/$(id -u)/com.news-agent.webhook
+tail -f /Users/apple/News-Agent/logs/hermes-news-webhook.log
+```
+
+修改 `~/.hermes/.env` 中的 `PUSHPLUS_TOKEN` 后，需要重启 webhook 才会生效：
+
+```bash
+launchctl kickstart -k gui/$(id -u)/com.news-agent.webhook
+```
+
+若机器人不回复，先检查 Hermes 连接日志：
+
+```bash
+tail -f ~/.hermes/logs/errors.log
+```
+
+若出现 `Session expired`，重新运行 `hermes gateway setup`，选择 Weixin 重新扫码确认，再重启 `hermes gateway`。若出现 SSL 证书域名不匹配或 DNS 错误，关闭代理的 HTTPS 解密/拦截后重试；不要关闭 TLS 证书校验。
+
+Hermes 升级可能覆盖其本地的 `gateway/platforms/weixin.py` 修改；升级后重新应用本项目中标有 `News-Agent fixed commands` 的小段适配器补丁即可。请使用专用微信小号，个人微信自动化存在账号风控和会话失效风险。
+
+Webhook 部署在公网时，建议设置共享密钥：
 
 ```bash
 export NEWS_AGENT_WEBHOOK_SECRET='请使用随机长字符串'
 python -m news_agent.webhook
 ```
 
-随后调用 PushPlus 的发送接口时，选择上述自定义 webhook 渠道，并将 `content` 填为 `AI治理`、`AI数据` 或 `AI行业`；服务会立即确认接收，并在后台启动对应任务，完成后仍通过正常的 PushPlus 推送发送简报。也可使用请求头 `X-News-Agent-Secret` 传递共享密钥。
-
-例如（`news-agent-command` 是你在 PushPlus 中填写的 webhook 编码）：
-
-```bash
-curl -X POST https://www.pushplus.plus/send \
-  -H 'Content-Type: application/json' \
-  -d '{"token":"<PUSHPLUS_TOKEN>","content":"AI治理","channel":"webhook","option":"news-agent-command"}'
-```
+随后在请求 JSON 中加上 `secret` 字段，或通过请求头 `X-News-Agent-Secret` 传递该密钥。
 
 ## 安全的关键词反馈闭环
 

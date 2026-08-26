@@ -24,5 +24,6 @@ class WebhookAuthenticationTests(unittest.TestCase):
         self.assertTrue(_is_authorized({"X-News-Agent-Secret": "test-secret"}, {}))
 
 
+
 if __name__ == "__main__":
     unittest.main()
