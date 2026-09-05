@@ -66,10 +66,12 @@ python -m news_agent.main --test-push
 
 定义“什么值得推送”。每个板块建议包含研究目标、高优先级事件、重点机构/标准/场景、降权或排除项，以及高价值判断标准。它影响模型筛选，不直接决定 Google News 搜索范围。
 
+每次运行只会把当日板块对应的 `## [板块名]` 小节 + 通用的“过滤规则”“scorer 输出格式约定”小节喂给 DeepSeek（见 `filter.focus_keywords_md`），不再把三个板块的内容一起塞给模型：这样可以避免其它板块的高优先级/排除项干扰当日打分，也降低 token 消耗。因此新增板块小节时，标题必须包含板块展示名（如 `AI治理`/`AI数据`/`AI 行业落地`，与 `config.yaml` 的 `category_labels` 对应，中间可以有空格），解析不到匹配小节时会自动回退成整份文档，不会漏发规则。
+
 ### `config.yaml`
 
 - `schedule.weekday_category`：自动排期。
-- `google_news_queries`：每个板块的发现查询词；使用“主体 + 事件/动作”而非宽泛词。
+- `google_news_queries`：每个板块的发现查询词；使用“主体 + 事件/动作”而非宽泛词。应覆盖 `keywords.md` 里列出的高优先级地区/机构/场景——检索阶段没抓到的新闻，后面打分再准也没用。
 - `push.max_articles` / `push.min_score`：单次上限与终评阈值。
 - `research_filter`：粗筛阈值、正文候选上限、抓取并发、正文长度和正文去重阈值。
 - `insights.enabled`：是否生成本周观察与持续跟踪。

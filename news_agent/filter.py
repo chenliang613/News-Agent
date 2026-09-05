@@ -120,6 +120,42 @@ RESEARCH_VALUE_SYSTEM = """你是新闻研究价值终评助手。输入新闻�
 只返回 JSON，不要 markdown 或解释。"""
 
 
+def _norm(s: str) -> str:
+    return re.sub(r"\s+", "", s or "")
+
+
+def focus_keywords_md(keywords_md: str, category_label: str) -> str:
+    """按当日板块从 keywords.md 中裁出该板块小节 + 通用过滤/输出格式规则。
+
+    keywords.md 目前把三个板块的研究目标、高优先级、排除项都写在同一份文档里；
+    过去无论今天跑哪个板块，scorer/终评/摘要都会收到全部三块内容。这会稀释模型
+    对当日板块的注意力（甚至可能被无关板块的排除项误导），也白白多花 token。
+
+    这里按 "## " 二级标题切分文档，只保留标题包含当日 category_label(如"AI治理")
+    的板块小节，再拼上标题含"过滤规则"或"输出格式"的通用小节(它们对所有板块都适用)。
+    解析不到匹配小节时（如公众号板块、keywords.md 结构被改动）原样返回全文兜底，
+    绝不因为裁剪逻辑而让模型收不到规则。
+    """
+    sections = re.split(r"(?=^## )", keywords_md, flags=re.M)
+    if len(sections) <= 1:
+        return keywords_md
+
+    label = _norm(category_label)
+    preamble = sections[0]
+    matched: list[str] = []
+    shared: list[str] = []
+    for sec in sections[1:]:
+        header = _norm(sec.splitlines()[0]) if sec.strip() else ""
+        if label and label in header:
+            matched.append(sec)
+        elif "过滤规则" in header or "输出格式" in header:
+            shared.append(sec)
+
+    if not matched:
+        return keywords_md
+    return preamble + "".join(matched) + "".join(shared)
+
+
 def _article_to_dict(
     idx: int, a: Article, include_content: bool = False, content_limit: int = 6000,
 ) -> dict:

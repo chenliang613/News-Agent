@@ -173,6 +173,9 @@ def run(
 
     category_labels = config.get("category_labels") or {}
     category_label = category_labels.get(category, category)
+    # 只把当日板块的小节 + 通用过滤/输出格式规则喂给模型，避免其余板块的关注点和
+    # 排除项干扰当日打分；解析不到匹配小节时(如 wechat)会原样回退到全文。
+    focused_keywords_md = filter_mod.focus_keywords_md(keywords_md, category_label)
 
     today_queries: list[str] = []
     if not is_wechat:
@@ -280,7 +283,7 @@ def run(
         top = filter_mod.summarize_top(
             client=client,
             scored=top,
-            keywords_md=keywords_md,
+            keywords_md=focused_keywords_md,
             model=config["deepseek"]["summarizer_model"],
         )
         # 公众号只标记真正推过的,溢出的(超过 max_n)下次还能再出
@@ -291,7 +294,7 @@ def run(
         scored = filter_mod.score_articles(
             client=client,
             articles=fresh,
-            keywords_md=keywords_md,
+            keywords_md=focused_keywords_md,
             model=config["deepseek"]["scorer_model"],
             batch_size=config["deepseek"]["scorer_batch_size"],
             active_category=category,
@@ -343,7 +346,7 @@ def run(
         assessed = filter_mod.assess_research_value(
             client=client,
             scored=candidates,
-            keywords_md=keywords_md,
+            keywords_md=focused_keywords_md,
             model=config["deepseek"]["scorer_model"],
             active_category=category,
             batch_size=int(research_conf.get("assessment_batch_size", 10)),
@@ -389,7 +392,7 @@ def run(
         top = filter_mod.summarize_top(
             client=client,
             scored=top,
-            keywords_md=keywords_md,
+            keywords_md=focused_keywords_md,
             model=config["deepseek"]["summarizer_model"],
         )
         # 标记所有打过分的,避免下次反复打同样低分
