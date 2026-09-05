@@ -84,6 +84,15 @@ google_news_queries:
     - '"ISO/IEC JTC 1/SC 42" artificial intelligence'
     - '中国 生成式人工智能 备案 标准 监管'
     - 'TC260 人工智能 标准'
+    - '中国 生成式人工智能服务管理暂行办法 配套标准'
+    - '"AI executive order" United States'
+    - '"U.S. AI Safety Institute" policy'
+    - '日本 AI法 生成AI 規制'
+    - '韩国 AI基本法 시행'
+    - '"Brazil" AI regulation bill congress'
+    - '"India" AI governance regulation policy'
+    - '"Singapore" AI governance framework model'
+    - '"CEN-CENELEC" "JTC 21" artificial intelligence standard'
 
   data:
     - '"EU Data Act" implementation'
@@ -94,6 +103,14 @@ google_news_queries:
     - '"synthetic data" enterprise deployment'
     - '"ISO/IEC JTC 1/SC 42" data standard'
     - '"企业数据本体"'
+    - '"ISO" "SC 38" data sharing standard'
+    - '中国TC609 数据标准 数据要素'
+    - '"United States" federal AI data policy regulation'
+    - 'UK "Data Protection" AI regulation'
+    - '日本 データ利活用 AI政策'
+    - '韩国 데이터 산업 진흥 정책'
+    - '"Brazil" data protection AI LGPD'
+    - '"India" data protection AI policy'
 
   industry:
     - '"enterprise AI" deployment ROI'
@@ -102,6 +119,14 @@ google_news_queries:
     - '大模型 企业 部署 效率 客户'
     - '制造业 AI 项目 上线'
     - '金融 AI 应用 部署'
+    - '医院 医疗 AI 应用 部署 效率'
+    - '"healthcare AI" hospital deployment case study'
+    - '零售 AI 应用 部署 效率'
+    - '"retail AI" deployment case study'
+    - '政务 AI 应用 部署 效率'
+    - '"government AI" agency deployment case study'
+    - '"AI agent" software development automation'
+    - '"AI agent" IT operations automation'
 
 
 # ---------- 直接订阅的 RSS 源 ----------
