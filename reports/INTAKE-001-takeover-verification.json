@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "work_item": "INTAKE-001",
+  "source_sha": "daabfe00f3d0653065291bda1ca31a7bc076cf91",
+  "command": ".venv/bin/python -m unittest discover -s tests; gh run list --workflow 'Weekly Keyword Feedback Proposal' --limit 6; launchctl print gui/$(id -u)/com.news-agent.webhook; awr intake inspect --json; awr work show PUSH-002",
+  "scope": [
+    "GOALS.md",
+    "work-ledger.yaml",
+    ".awr/project.toml",
+    "README.md",
+    "config.yaml",
+    "news_agent/",
+    "tests/",
+    ".github/workflows/",
+    "logs/hermes-news-webhook.log",
+    "reports/PUSH-002-webhook-restart.json"
+  ],
+  "verified_at": 1791727021885,
+  "producer": "claude-code (agent)",
+  "checks": [
+    {
+      "name": "goal-and-criteria-traced-to-sources",
+      "passed": true,
+      "details": "GOALS.md 位于仓库根目录并为 goal 主来源（.awr/project.toml: domain=goal path=GOALS.md）；目标与成功标准对照 README.md（定位/工作流/排期）、config.yaml（schedule/push/insights/category_labels=四板块）、news_agent 实现与 git 历史核对；GOALS.md 内含来源与核对说明段。",
+      "criteria": [
+        "目标与成功标准已对照 README.md、config.yaml、news_agent 实现与 git 历史核对，并在 GOALS.md 记录来源。"
+      ]
+    },
+    {
+      "name": "existing-state-recorded-without-overclaim",
+      "passed": true,
+      "details": "复验：.venv/bin/python -m unittest discover -s tests -> Ran 29 tests OK；output/AI终端+2026-10-11_092603.md 由 6ff5363 人工提交（当日该板块 CI 运行失败，非 CI 产物）；Weekly Keyword Feedback Proposal 近 6 次运行 38016833404/37088499919/36209145127/35412100529/34664113716/33934971962 全部 success；LaunchAgent com.news-agent.webhook state=running pid=12112。",
+      "criteria": [
+        "已有实现状态按来源登记且不夸大：tests 29 项通过（.venv Python 3.11）；output/AI终端+2026-10-11_092603.md 是当日排期板块（周日 terminal）的本地运行产物，由人工提交（6ff5363），并非 CI 产物；关键词反馈工作流近 6 次运行全部成功；本地 webhook LaunchAgent 处于 running。"
+      ]
+    },
+    {
+      "name": "unfinished-items-cited-with-evidence",
+      "passed": true,
+      "details": "失败运行 38132730402（schedule）与 38139346203（dispatch）日志均为 selectolax 1.0 弃用导致 googlenewsdecoder ImportError，daabfe0 pin selectolax<1.0 修复；webhook 常驻进程已于 2026-10-11 21:49:33 重启（pid 697 -> 12112），见 PUSH-002 及其证据 reports/PUSH-002-webhook-restart.json。",
+      "criteria": [
+        "未完成事项有证据引用：2026-10-11 定时与手动运行各失败一次（selectolax 1.0 弃用导致 googlenewsdecoder 导入失败，daabfe0 已修复）；本机 webhook 常驻进程自 2026-10-10 23:27 起运行旧代码，已于 2026-10-11 21:49 重启（PUSH-002）。"
+      ]
+    },
+    {
+      "name": "work-items-structurally-complete",
+      "passed": true,
+      "details": "台账三项均含 goal 引用、acceptance 与 next_action（work-ledger.yaml）；awr intake inspect: business_execution_ready=true，executable_work=[PUSH-003]（非 intake 工作）；剩余 gap 仅为 intake_work_only（INTAKE-001 自身的说明性提示）与 completion_not_checked（需 --source-sha 才校验 PUSH-002 的完成报告，非失败）。",
+      "criteria": [
+        "工作项均含 goal、acceptance 与 next_action，executable_work 出现非 intake 工作（现为 PUSH-003），inspect 仅剩 intake 任务自身的说明性提示。"
+      ]
+    },
+    {
+      "name": "sources-moved-to-root-and-writeback-works",
+      "passed": true,
+      "details": "权威来源已迁至仓库根目录：GOALS.md、work-ledger.yaml（.awr/project.toml 中 path 均为根路径，README.md 为 supporting）；回写实测可用——PUSH-002 经 work progress 与 work complete 后，台账内该条 status=completed 且由 AWR 写入 verification.evidence_level=locally_verified 与 evidence 定位。",
+      "criteria": [
+        "权威来源已从 .awr/intake/ 迁到仓库根目录（GOALS.md、work-ledger.yaml），AWR 状态回写实际可用：PUSH-002 的 work progress 与 work complete 已走通并把状态写回台账。"
+      ]
+    }
+  ]
+}

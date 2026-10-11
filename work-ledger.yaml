@@ -1,0 +1,44 @@
+work_items:
+  - id: INTAKE-001
+    title: 用 AWR 接管项目：核对目标、已有任务与来源，并登记基线与下一步
+    status: completed
+    kind: intake
+    priority: P0
+    required: true
+    goal: "file:///Users/apple/News-Agent/GOALS.md#intake-goal"
+    acceptance:
+      - 目标与成功标准已对照 README.md、config.yaml、news_agent 实现与 git 历史核对，并在 GOALS.md 记录来源。
+      - 已有实现状态按来源登记且不夸大：tests 29 项通过（.venv Python 3.11）；output/AI终端+2026-10-11_092603.md 是当日排期板块（周日 terminal）的本地运行产物，由人工提交（6ff5363），并非 CI 产物；关键词反馈工作流近 6 次运行全部成功；本地 webhook LaunchAgent 处于 running。
+      - 未完成事项有证据引用：2026-10-11 定时与手动运行各失败一次（selectolax 1.0 弃用导致 googlenewsdecoder 导入失败，daabfe0 已修复）；本机 webhook 常驻进程自 2026-10-10 23:27 起运行旧代码，已于 2026-10-11 21:49 重启（PUSH-002）。
+      - 工作项均含 goal、acceptance 与 next_action，executable_work 出现非 intake 工作（现为 PUSH-003），inspect 仅剩 intake 任务自身的说明性提示。
+      - 权威来源已从 .awr/intake/ 迁到仓库根目录（GOALS.md、work-ledger.yaml），AWR 状态回写实际可用：PUSH-002 的 work progress 与 work complete 已走通并把状态写回台账。
+    next_action: 把本次核对的检查项整理为 reports/ 下的验证报告并登记证据，然后完成本项。
+    summary: 本次 AWR 接管工作：建立项目基线，并把权威来源从 .awr/intake/ 迁到仓库根目录以启用状态回写（迁移中原运行时实体的 key 冲突导致重建，原状态备份在 /tmp/awr-backup-1791726875）。组织基线不等于业务交付完成，已完成事实与未验证事项分别登记。
+    "evidence": ["reports/INTAKE-001-takeover-verification.json"]
+    "verification": {"evidence_level":"locally_verified"}
+  - id: PUSH-002
+    title: 重启本机 Hermes webhook，使常驻进程运行当前代码并让启动日志反映四板块
+    status: completed
+    kind: task
+    priority: P1
+    goal: "file:///Users/apple/News-Agent/GOALS.md#intake-goal"
+    acceptance:
+      - 执行 launchctl kickstart -k gui/$(id -u)/com.news-agent.webhook 后，logs/hermes-news-webhook.log 的启动行列出四个板块：AI治理, AI数据, AI行业, AI终端。
+      - 重启不改变推送范围：未触发任何真实新闻任务，不产生额外 DeepSeek 调用。
+      - 重启后的进程启动时间晚于最后一次代码提交（daabfe0，2026-10-11 20:29），确认常驻进程运行当前代码。
+    next_action: 登记验证报告并执行 work complete
+    summary: 更正原诊断（2026-10-11）：do_POST 每次请求都会调用 _build_keyword_map()，而 load_config() 每次直接读 config.yaml、无缓存，因此重启前的进程本就能匹配 AI终端。真实问题有两个：启动日志行打印的是进程启动时读到的 category_labels（当时只有 3 个板块），以及该常驻进程自 2026-10-10 23:27 起一直运行 10-10 的代码，未包含今日 50a02cd/6ff5363 对 main/filter/sources/state 的改动。
+    "evidence": ["reports/PUSH-002-webhook-restart.json"]
+    "verification": {"evidence_level":"locally_verified"}
+  - id: PUSH-003
+    title: 验证下一次定时推送在 GitHub Actions 成功
+    status: ready
+    kind: task
+    priority: P1
+    goal: "file:///Users/apple/News-Agent/GOALS.md#intake-goal"
+    acceptance:
+      - 下一次 schedule 运行（周一 UTC 04:00 / 北京 12:00，governance 板块）结论为 success。
+      - 该运行产出的 output/ 与 state/ 变更由工作流自行提交，state/sent.json 的 URL 去重记录跨运行生效。
+    next_action: 定时运行结束后执行 gh run list 与 gh run view 核对结论、产物提交与推送摘要，并把运行编号登记为证据。
+    summary: 2026-10-11 的定时运行（38132730402）与手动运行（38139346203）因 selectolax 1.0 弃用失败，daabfe0 已 pin selectolax<1.0 并于当日 20:29 手动运行成功；定时链路本身仍需下一次 schedule 运行确认。
+    depends_on: []

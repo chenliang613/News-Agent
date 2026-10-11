@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "work_item": "PUSH-002",
+  "source_sha": "daabfe00f3d0653065291bda1ca31a7bc076cf91",
+  "command": "launchctl kickstart -k gui/$(id -u)/com.news-agent.webhook; tail -5 logs/hermes-news-webhook.log; launchctl print gui/$(id -u)/com.news-agent.webhook; curl -s --max-time 3 http://127.0.0.1:8088/",
+  "scope": [
+    "deploy/com.news-agent.webhook.plist",
+    "logs/hermes-news-webhook.log",
+    "news_agent/webhook.py",
+    "config.yaml"
+  ],
+  "verified_at": 1791726669738,
+  "producer": "claude-code (agent), session 01M4NKKDRA008QX5FR7P400P2S",
+  "checks": [
+    {
+      "name": "startup-log-lists-four-categories",
+      "passed": true,
+      "details": "2026-10-11 21:49:33,880 [INFO] news_agent.webhook: 支持关键词: AI治理, AI数据, AI行业, AI终端；21:49:33,882 webhook server listening on 127.0.0.1:8088。重启前同为该启动行，仅列出三个板块。",
+      "criteria": [
+        "执行 launchctl kickstart -k gui/$(id -u)/com.news-agent.webhook 后，logs/hermes-news-webhook.log 的启动行列出四个板块：AI治理, AI数据, AI行业, AI终端。"
+      ]
+    },
+    {
+      "name": "no-task-triggered-no-model-calls",
+      "passed": true,
+      "details": "重启后日志仅新增上述两行启动记录，无 'triggered task' 行、无任务异常；验证只做 HTTP GET 存活探测（返回 News Agent webhook is running）与函数级关键词映射检查（_build_keyword_map/_match_category，AI终端 -> terminal），两者都不调用 DeepSeek。",
+      "criteria": [
+        "重启不改变推送范围：未触发任何真实新闻任务，不产生额外 DeepSeek 调用。"
+      ]
+    },
+    {
+      "name": "resident-process-runs-current-code",
+      "passed": true,
+      "details": "新进程 pid 12112，命令 .venv/bin/python -m news_agent.webhook --host 127.0.0.1 --port 8088，启动于 2026-10-11 21:49:33，晚于最后一次代码提交 daabfe0（2026-10-11 20:29:38 +0800）；旧进程 pid 697 启动于 2026-10-10 23:27。",
+      "criteria": [
+        "重启后的进程启动时间晚于最后一次代码提交（daabfe0，2026-10-11 20:29），确认常驻进程运行当前代码。"
+      ]
+    }
+  ]
+}
