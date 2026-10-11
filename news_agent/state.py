@@ -48,3 +48,63 @@ class SentState:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.path.write_text(json.dumps(self._data, ensure_ascii=False, indent=2), "utf-8")
         log.info("saved state: %d entries", len(self._data))
+
+
+class EventHistory:
+    """已推送事件的历史：标题 + event_key，用于跨次运行的“同一事件”去重。
+
+    SentState 只按 URL 判重；同一事件下周换一家媒体、换一个标题再报道时
+    URL 不同，会被当成新闻重新推送。这里额外记下推过的标题和事件键：
+    - 新文章标题与历史标题高度相似 → 打分前直接丢弃(省 token)；
+    - 终评后 event_key 与历史相同 → 不再推送。
+    存储格式：[{"title": ..., "event_key": ..., "ts": ISO 时间}, ...]
+    """
+
+    def __init__(self, path: Path, retention_days: int = 21, title_threshold: float = 0.8) -> None:
+        self.path = path
+        self.retention_days = retention_days
+        self.title_threshold = title_threshold
+        self._entries: list[dict[str, str]] = []
+        if path.exists():
+            try:
+                data = json.loads(path.read_text("utf-8"))
+                self._entries = [e for e in data if isinstance(e, dict) and e.get("ts")]
+            except (json.JSONDecodeError, OSError) as e:
+                log.warning("failed to load event history, starting fresh: %s", e)
+
+    def prune(self) -> int:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=self.retention_days)
+        before = len(self._entries)
+        self._entries = [e for e in self._entries if datetime.fromisoformat(e["ts"]) > cutoff]
+        return before - len(self._entries)
+
+    def event_keys(self) -> list[str]:
+        """近期已推送的 event_key，按时间从新到旧、去重。"""
+        keys = [e["event_key"] for e in reversed(self._entries) if e.get("event_key")]
+        return list(dict.fromkeys(keys))
+
+    def has_event_key(self, key: str) -> bool:
+        return bool(key) and any(e.get("event_key") == key for e in self._entries)
+
+    def matching_title(self, title: str) -> str | None:
+        """返回与 title 高度相似的历史标题；没有则返回 None。"""
+        from .sources import _is_similar, _normalize_title
+
+        norm = _normalize_title(title)
+        for entry in self._entries:
+            old = entry.get("title") or ""
+            if old and _is_similar(norm, _normalize_title(old), title, old, self.title_threshold):
+                return old
+        return None
+
+    def add(self, title: str, event_key: str = "", ts: datetime | None = None) -> None:
+        self._entries.append({
+            "title": title,
+            "event_key": event_key,
+            "ts": (ts or datetime.now(timezone.utc)).isoformat(),
+        })
+
+    def save(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.path.write_text(json.dumps(self._entries, ensure_ascii=False, indent=2), "utf-8")
+        log.info("saved event history: %d entries", len(self._entries))

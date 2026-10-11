@@ -14,8 +14,9 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import openai
@@ -24,12 +25,13 @@ import yaml
 from . import filter as filter_mod
 from . import push as push_mod
 from . import sources
-from .state import SentState
+from .state import EventHistory, SentState
 
 ROOT = Path(__file__).resolve().parent.parent
 KEYWORDS_PATH = ROOT / "keywords.md"
 CONFIG_PATH = ROOT / "config.yaml"
 STATE_PATH = ROOT / "state" / "sent.json"
+EVENT_HISTORY_PATH = ROOT / "state" / "events.json"
 OUTPUT_DIR = ROOT / "output"
 WECHAT_LIST_PATH = ROOT / "WeChat and website list.md"
 WECHAT_FEED_CACHE_PATH = ROOT / "state" / "wechat_feeds.json"
@@ -134,6 +136,25 @@ def render_push_content(
     return "\n".join(lines)
 
 
+def seed_event_history(history: EventHistory, output_dir: Path) -> None:
+    """首次启用事件历史时，从 output/ 里近期已落盘的简报回填已推送标题。"""
+    cutoff = datetime.now() - timedelta(days=history.retention_days)
+    seeded = 0
+    for path in sorted(output_dir.glob("*+*.md")):
+        try:
+            ts = datetime.strptime(path.stem.split("+", 1)[1], "%Y-%m-%d_%H%M%S")
+        except ValueError:
+            continue
+        if ts < cutoff:
+            continue
+        for match in re.finditer(r"^### \d+\. (.+)$", path.read_text("utf-8"), flags=re.M):
+            title, _ = sources._split_google_news_title(match.group(1).strip())
+            history.add(title, ts=ts.astimezone(timezone.utc))
+            seeded += 1
+    if seeded:
+        log.info("seeded event history with %d titles from %s", seeded, output_dir.name)
+
+
 def notify_no_results(category_label: str, reason: str, token: str | None, dry_run: bool) -> None:
     """没有可推送事件时给出明确状态，避免采集失败被误认为“没有新闻”。"""
     title = f"{category_label}本次运行状态"
@@ -199,6 +220,15 @@ def run(
     pruned = state.prune()
     if pruned:
         log.info("pruned %d expired state entries", pruned)
+    state_conf = config["state"]
+    history = EventHistory(
+        EVENT_HISTORY_PATH,
+        retention_days=int(state_conf.get("event_retention_days", 21)),
+        title_threshold=float(state_conf.get("history_title_threshold", 0.8)),
+    )
+    if not EVENT_HISTORY_PATH.exists():
+        seed_event_history(history, OUTPUT_DIR)
+    history.prune()
 
     # 2. 采集 + 3. 时间窗口过滤
     log.info("=== 1. fetching sources for category=%s ===", category)
@@ -240,7 +270,10 @@ def run(
     else:
         # 只抓当日板块的 Google News queries;RSS 维持全量,由 scorer 判定
         raw.extend(sources.fetch_rss_sources(config["rss_feeds"]))
-        raw.extend(sources.fetch_google_news(today_queries))
+        raw.extend(sources.fetch_google_news(
+            today_queries,
+            max_per_query=(config.get("google_news") or {}).get("max_per_query"),
+        ))
         raw.extend(sources.fetch_rsshub(
             config["rsshub"]["instance"],
             config["rsshub"].get("routes", []),
@@ -257,8 +290,19 @@ def run(
     # 4. 去重(URL 去重 + 标题相似度跨源去重 + 历史已推送去重)
     deduped = sources.dedupe(fresh_in_window)
     deduped = sources.dedupe_by_content(deduped)
-    fresh = [a for a in deduped if not state.contains(a.uid)]
-    log.info("after dedup: %d unique, %d new (vs sent history)", len(deduped), len(fresh))
+    unseen = [a for a in deduped if not state.contains(a.uid)]
+    # URL 没推过但标题与近期已推事件高度相似的(换家媒体转载)，打分前就丢掉。
+    fresh = []
+    for a in unseen:
+        old_title = history.matching_title(a.title)
+        if old_title:
+            log.debug("history dedup: drop [%s] (already pushed as [%s])", a.title, old_title)
+        else:
+            fresh.append(a)
+    log.info(
+        "after dedup: %d unique, %d new URLs, %d not matching pushed events",
+        len(deduped), len(unseen), len(fresh),
+    )
 
     if not fresh:
         log.info("no new articles; exiting")
@@ -351,6 +395,7 @@ def run(
             model=config["deepseek"]["scorer_model"],
             active_category=category,
             batch_size=int(research_conf.get("assessment_batch_size", 10)),
+            known_event_keys=history.event_keys()[:200],
         )
 
         # 5c. 按终评分过滤；相同事件合并成一张卡片，保留证据最强的主报道。
@@ -361,9 +406,16 @@ def run(
             if s.score >= min_score
         ]
         event_cards = filter_mod.group_by_event(qualified)
+        new_cards = []
+        for card in event_cards:
+            if history.has_event_key(card.event_key):
+                log.info("history dedup: drop [%s] (event_key %s already pushed)", card.article.title, card.event_key)
+            else:
+                new_cards.append(card)
+        event_cards = new_cards
         top = event_cards[:max_n]
         log.info(
-            "final assessed: %d candidates, %d >= %.1f, %d event cards, top %d selected",
+            "final assessed: %d candidates, %d >= %.1f, %d new event cards, top %d selected",
             len(assessed), len(qualified), min_score, len(event_cards), len(top),
         )
 
@@ -409,7 +461,7 @@ def run(
 
     run_stats = (
         f"- 采集 {len(raw)} 篇；时间窗口内 {len(fresh_in_window)} 篇；"
-        f"URL/内容去重后 {len(deduped)} 篇；历史新增 {len(fresh)} 篇。\n"
+        f"URL/内容去重后 {len(deduped)} 篇；排除已推送后新增 {len(fresh)} 篇。\n"
         f"- 最终推送 {len(top)} 个事件。"
     )
 
@@ -447,8 +499,14 @@ def run(
     # 9. 标记已处理(打分板块标记全部打过分的;公众号只标记推过的)
     for s in to_mark:
         state.mark(s.article.uid)
+    # 只记录真正推出去的事件：主报道 + 同事件参考来源的标题都算“已读过”。
+    for card in top:
+        history.add(card.article.title, card.event_key)
+        for related in card.related_articles:
+            history.add(related.title, card.event_key)
     if not dry_run:
         state.save()
+        history.save()
     log.info("done")
     return 0
 

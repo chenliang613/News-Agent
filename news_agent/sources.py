@@ -127,21 +127,31 @@ def _extract_page_text(html: str, max_chars: int) -> str:
     return "\n".join(unique)[:max_chars]
 
 
-def _fetch_article_text(article: Article, max_chars: int) -> tuple[Article, bool]:
-    try:
-        r = httpx.get(article.url, headers={"User-Agent": USER_AGENT}, timeout=15.0, follow_redirects=True)
-        r.raise_for_status()
-        content_type = r.headers.get("content-type", "")
-        if "html" not in content_type.lower():
-            return article, False
-        text = _extract_page_text(r.text, max_chars)
-        if len(text) < 200:
-            return article, False
-        article.content = text
-        return article, True
-    except (httpx.HTTPError, ValueError) as e:
-        log.debug("fetch article body failed for %s: %s", article.url[:100], e)
-        return article, False
+def _fetch_article_text(article: Article, max_chars: int, attempts: int = 2) -> tuple[Article, bool]:
+    for attempt in range(1, attempts + 1):
+        try:
+            r = httpx.get(article.url, headers={"User-Agent": USER_AGENT}, timeout=15.0, follow_redirects=True)
+            r.raise_for_status()
+            content_type = r.headers.get("content-type", "")
+            if "html" not in content_type.lower():
+                return article, False
+            text = _extract_page_text(r.text, max_chars)
+            if len(text) < 200:
+                return article, False
+            article.content = text
+            return article, True
+        except httpx.HTTPStatusError as e:
+            # 4xx(付费墙/反爬/404)重试无意义；5xx/429 属于临时故障，值得再试一次。
+            status = e.response.status_code
+            if (status < 500 and status != 429) or attempt == attempts:
+                log.debug("fetch article body failed for %s: %s", article.url[:100], e)
+                return article, False
+        except (httpx.HTTPError, ValueError) as e:
+            if attempt == attempts:
+                log.debug("fetch article body failed for %s: %s", article.url[:100], e)
+                return article, False
+        time.sleep(1.0 * attempt)
+    return article, False
 
 
 def fetch_article_bodies(
@@ -227,20 +237,56 @@ def fetch_rss_sources(feeds: list[dict]) -> list[Article]:
     return all_articles
 
 
-def fetch_google_news(queries: list[str]) -> list[Article]:
+# Google News 的检索区域决定了能搜到哪些语种的报道：在 zh-CN 区域里搜英文引号
+# 短语几乎总是 0 条。因此按查询词的文字自动选区域(韩文 > 日文假名 > 汉字 > 其他)。
+_GOOGLE_NEWS_LOCALES = (
+    (re.compile(r"[\uac00-\ud7af]"), ("ko", "KR", "KR:ko")),
+    (re.compile(r"[\u3040-\u30ff]"), ("ja", "JP", "JP:ja")),
+    (re.compile(r"[\u4e00-\u9fff]"), ("zh-CN", "CN", "CN:zh")),
+)
+_GOOGLE_NEWS_DEFAULT_LOCALE = ("en-US", "US", "US:en")
+# Google News 标题固定以 " - 媒体名" 结尾；不剥掉会干扰跨源标题去重。
+_GOOGLE_NEWS_PUBLISHER = re.compile(r"^(?P<title>.*\S)\s+-\s+(?P<publisher>[^-]{1,40})$")
+
+
+def _google_news_locale(query: str) -> tuple[str, str, str]:
+    for pattern, locale in _GOOGLE_NEWS_LOCALES:
+        if pattern.search(query):
+            return locale
+    return _GOOGLE_NEWS_DEFAULT_LOCALE
+
+
+def _split_google_news_title(title: str) -> tuple[str, str]:
+    """'标题 - 媒体' → ('标题', '媒体')；无后缀时媒体为空。"""
+    m = _GOOGLE_NEWS_PUBLISHER.match(title)
+    if not m:
+        return title, ""
+    return m.group("title"), m.group("publisher").strip()
+
+
+def fetch_google_news(queries: list[str], max_per_query: int | None = None) -> list[Article]:
     """Google News RSS 搜索（免费、稳定、不需 key）。
 
-    URL 模板：https://news.google.com/rss/search?q=KEYWORD&hl=zh-CN&gl=CN&ceid=CN:zh
-    when:7d 限制 7 天窗口（配合一周推送一次的节奏）。
+    URL 模板：https://news.google.com/rss/search?q=KEYWORD&hl=<区域>&gl=<国家>&ceid=<国家:语言>
+    when:7d 限制 7 天窗口（配合一周推送一次的节奏）；区域按查询词文字自动选择。
+    max_per_query 截断每个查询的结果(Google 已按相关度排序)，控制粗筛 token 成本。
     """
     all_articles: list[Article] = []
     for query in queries:
         encoded = quote_plus(f"{query} when:7d")
-        url = f"https://news.google.com/rss/search?q={encoded}&hl=zh-CN&gl=CN&ceid=CN:zh"
+        hl, gl, ceid = _google_news_locale(query)
+        url = f"https://news.google.com/rss/search?q={encoded}&hl={hl}&gl={gl}&ceid={ceid}"
         articles = _fetch_feed(url, f"Google News: {query}")
+        total = len(articles)
+        if max_per_query:
+            articles = articles[:max_per_query]
         for article in articles:
             article.source_tier = "discovery"
-        log.info("Google News [%s] -> %d articles", query, len(articles))
+            title, publisher = _split_google_news_title(article.title)
+            if publisher:
+                article.title = title
+                article.source = publisher
+        log.info("Google News [%s] (%s) -> %d articles (kept %d)", query, hl, total, len(articles))
         all_articles.extend(articles)
         time.sleep(0.5)
 
@@ -541,6 +587,19 @@ def _extract_key_terms(raw_title: str) -> set[str]:
     return {t for t in re.findall(r"[a-z\d]+(?:[.\-][a-z\d]+)*", s) if len(t) >= 2}
 
 
+# 出现在大量标题里、不能指认具体事件的英文词。只共享这些词(如 "AI PC")
+# 的两个标题不应被判成同一事件。
+_GENERIC_TERMS = {
+    "ai", "pc", "pcs", "llm", "llms", "agi", "agent", "agents", "aigc", "app", "apps",
+    "os", "the", "and", "for", "with", "new", "from", "how", "why", "what", "its",
+    "eu", "us", "uk", "data", "model", "models", "chip", "chips", "phone", "phones",
+}
+
+
+def _is_specific_term(term: str) -> bool:
+    return term not in _GENERIC_TERMS and (len(term) >= 4 or any(c.isdigit() for c in term))
+
+
 def _is_similar(norm_a: str, norm_b: str, raw_a: str, raw_b: str, threshold: float) -> bool:
     from difflib import SequenceMatcher
 
@@ -548,12 +607,13 @@ def _is_similar(norm_a: str, norm_b: str, raw_a: str, raw_b: str, threshold: flo
         return True
 
     # 关键术语重叠（处理中英混排标题，如"谷歌发布Gemini 3.0" vs "Google releases Gemini 3.0"）
+    # 至少要共享一个具体术语(产品名/版本号)，避免 "AI PC" 这类泛词把不同事件合并。
     terms_a = _extract_key_terms(raw_a)
     terms_b = _extract_key_terms(raw_b)
     if len(terms_a) >= 2 and len(terms_b) >= 2:
         overlap = terms_a & terms_b
         smaller = min(len(terms_a), len(terms_b))
-        if len(overlap) / smaller >= 0.7:
+        if len(overlap) / smaller >= 0.7 and any(_is_specific_term(t) for t in overlap):
             return True
 
     return False

@@ -77,6 +77,12 @@ insights:
 # ---------- Google News 关键词搜索 ----------
 # 按板块分组,当日只抓当日板块对应的 queries
 # 搜索窗口 7d(配合一周推送一次的节奏)
+# 检索区域按查询词文字自动选择：含韩文→韩国、含日文假名→日本、含汉字→中国、其余→美国(英文)。
+# 写法提示：空格=且(AND)，词越多结果越少；同义词用 OR 连接；英文专有短语用双引号。
+google_news:
+  # 每个查询最多保留的结果数(Google 已按相关度排序)，控制粗筛 token 成本
+  max_per_query: 30
+
 google_news_queries:
   governance:
     - '"EU AI Act" code of practice'
@@ -85,16 +91,16 @@ google_news_queries:
     - '"AI Safety Institute" report'
     - '"ISO/IEC JTC 1/SC 42" artificial intelligence'
     - '中国 生成式人工智能 备案 标准 监管'
-    - 'TC260 人工智能 标准'
+    - '人工智能 国家标准 发布 OR 征求意见'
     - '中国 生成式人工智能服务管理暂行办法 配套标准'
     - '"AI executive order" United States'
     - '"U.S. AI Safety Institute" policy'
-    - '日本 AI法 生成AI 規制'
-    - '韩国 AI基本法 시행'
+    - 'AI 規制 法律 政府 ガイドライン'
+    - '인공지능 기본법 시행령'
     - '"Brazil" AI regulation bill congress'
     - '"India" AI governance regulation policy'
     - '"Singapore" AI governance framework model'
-    - '"CEN-CENELEC" "JTC 21" artificial intelligence standard'
+    - '"CEN-CENELEC" AI standard'
 
   data:
     - '"EU Data Act" implementation'
@@ -104,7 +110,7 @@ google_news_queries:
     - 'AI training data licensing privacy'
     - '"synthetic data" enterprise deployment'
     - '"ISO/IEC JTC 1/SC 42" data standard'
-    - '"企业数据本体"'
+    - '数据本体 OR 企业本体 大模型'
     - '"ISO" "SC 38" data sharing standard'
     - '中国TC609 数据标准 数据要素'
     - '"United States" federal AI data policy regulation'
@@ -121,28 +127,29 @@ google_news_queries:
     - '大模型 企业 部署 效率 客户'
     - '制造业 AI 项目 上线'
     - '金融 AI 应用 部署'
-    - '医院 医疗 AI 应用 部署 效率'
+    - '医疗 大模型 医院 部署 OR 上线'
     - '"healthcare AI" hospital deployment case study'
-    - '零售 AI 应用 部署 效率'
+    - '零售 大模型 OR 智能体 落地'
     - '"retail AI" deployment case study'
-    - '政务 AI 应用 部署 效率'
+    - '政务 大模型 OR 智能体 上线'
     - '"government AI" agency deployment case study'
     - '"AI agent" software development automation'
     - '"AI agent" IT operations automation'
 
   terminal:
     - 'AI手机 出货量 市场份额'
-    - '"AI smartphone" shipments market share'
-    - '"AI PC" shipments IDC Canalys'
+    - '"AI smartphone" OR "GenAI smartphone"'
+    - '"AI PC" shipments OR market share'
+    - 'AI PC 出货量 OR 渗透率'
     - '端侧大模型 手机 NPU 芯片'
-    - '"on-device AI" NPU TOPS chip'
-    - 'AI眼镜 出货量 销量'
-    - '"AI glasses" smart glasses shipments'
+    - '"on-device AI" chip OR NPU'
+    - 'AI眼镜 出货量 OR 销量'
+    - '"smart glasses" AI shipments OR sales'
     - '智能座舱 大模型 上车 量产'
-    - '"in-car AI assistant" automaker cockpit'
-    - '智能家居 AI 大模型 Matter 星闪'
+    - '"AI cockpit" OR "in-car AI assistant" OR "AI in-vehicle"'
+    - '智能家居 大模型 OR 星闪 OR Matter'
     - '鸿蒙 HarmonyOS AI 智能体 终端'
-    - '"Apple Intelligence" "Galaxy AI" on-device'
+    - '"Apple Intelligence" OR "Galaxy AI" OR "Gemini Nano"'
     - 'AI 可穿戴 医疗器械 认证'
     - 'AI终端 标准 个人信息保护 数据安全'
 
@@ -234,3 +241,7 @@ sources:
 state:
   # 已推送文章记录保留天数（防止反复推同一篇）
   retention_days: 30
+  # 已推送事件(标题 + event_key)保留天数：期间同一事件换媒体/换标题再报道不再推送
+  event_retention_days: 21
+  # 新文章标题与已推送标题的相似度达到此值即视为同一事件(0-1，越高越保守)
+  history_title_threshold: 0.8

@@ -21,16 +21,16 @@ class ConfigurationAlignmentTests(unittest.TestCase):
         self.assertEqual(scheduled, options)
 
     def test_cron_fires_on_beijing_scheduled_weekdays(self):
-        """cron 按 UTC 23:00 触发，对应北京时间次日；必须与 weekday_category 一致。"""
+        """cron 按 UTC 04:00 触发，对应北京时间同日 12:00；必须与 weekday_category 一致。"""
         config = load_config()
         workflow = yaml.load(
             Path(".github/workflows/daily.yml").read_text("utf-8"), Loader=yaml.BaseLoader,
         )
         (entry,) = workflow["on"]["schedule"]
         minute, hour, _, _, dow = entry["cron"].split()
-        self.assertEqual("23", hour)
-        # cron 星期 d(0=周日) 的 UTC 23:00 是北京时间星期 d+1；换算到 Python
-        # weekday(0=周一) 需再减 1，两者抵消，数值上恰好等于 d。
-        beijing_weekdays = {int(d) % 7 for d in dow.split(",")}
+        self.assertEqual("4", hour)
+        # cron 星期 d(0=周日) 的 UTC 04:00 是北京时间同日 12:00；换算到 Python
+        # weekday(0=周一) 需减 1。
+        beijing_weekdays = {(int(d) - 1) % 7 for d in dow.split(",")}
         scheduled_days = {day for day in range(7) if resolve_category(config, day)}
         self.assertEqual(scheduled_days, beijing_weekdays)

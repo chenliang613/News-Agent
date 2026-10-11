@@ -20,12 +20,12 @@ RSS / Google News / RSSHub
 
 | 北京时间 | 板块 | 配置 key |
 |---|---|---|
-| 周一 07:00 | AI 治理 | `governance` |
-| 周三 07:00 | AI 数据 | `data` |
-| 周五 07:00 | AI 行业落地 | `industry` |
-| 周日 07:00 | AI 终端 | `terminal` |
+| 周一 12:00 | AI 治理 | `governance` |
+| 周三 12:00 | AI 数据 | `data` |
+| 周五 12:00 | AI 行业落地 | `industry` |
+| 周日 12:00 | AI 终端 | `terminal` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`。GitHub Actions 按上表自动运行（cron `0 23 * * 0,2,4,6`，即 UTC 前一天 23:00；GitHub 定时任务高峰期可能延迟数十分钟）；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
+Python weekday 使用 `0=周一` 至 `6=周日`。GitHub Actions 按上表自动运行（cron `0 4 * * 1,3,5,0`，即 UTC 同日 04:00；GitHub 定时任务高峰期可能延迟数十分钟）；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述四个板块；历史的公众号/官网配置保留但未启用。
 

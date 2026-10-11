@@ -74,8 +74,13 @@ DEDUP_SYSTEM = """你是新闻去重助手。你会收到一批已筛选的新�
 任务:把【报道同一件事/同一事件】的新闻归为一组。判断依据是**事件本身**(同一项政策/法案、同一场会议、同一份报告发布、同一家公司的同一动作、同一起事件),而不是话题相近。
 
 严格要求:
-- 只有确实是"同一件事"才合并。话题相关但不是同一事件的(如都谈 AI 治理但讲不同政策),**不要**合并。
+- 只有确实是"同一件事"才合并:必须是**同一主体**(同一家公司/机构/政府)的**同一个动作或发布**。
+- 话题相关但不是同一事件的,**不要**合并。例如:
+  · 都谈 AI 治理但讲不同政策 → 不合并;
+  · "极米押注 AI 硬件" 与 "华强北 AI 眼镜出海" → 主体不同,不合并;
+  · "全球 PC 出货下滑" 与 "某厂商 AI PC 评测" → 一个是市场数据、一个是产品,不合并。
 - 同一事件即使标题措辞、语言、来源不同,也要合并(如"北京新增6款备案 AI 服务" 与 "北京生成式人工智能服务登记公告" 是同一事件)。
+- 拿不准时不要合并:漏合并只多一条,错合并会丢掉一条有价值的新闻。
 
 返回 JSON:{"groups": [[id, id, ...], ...]}
 - 每个子数组是一组报道同一事件的 id(至少 2 个)。
@@ -299,8 +304,12 @@ def assess_research_value(
     model: str,
     active_category: str,
     batch_size: int = 10,
+    known_event_keys: list[str] | None = None,
 ) -> list[ScoredArticle]:
-    """基于正文终评研究价值，并为后续事件级聚合生成稳定事件键。"""
+    """基于正文终评研究价值，并为后续事件级聚合生成稳定事件键。
+
+    known_event_keys 为近期已推送事件的 key：同一事件复用旧 key，调用方据此跨次去重。
+    """
     if not scored:
         return scored
     focus = CATEGORY_FOCUS_LABELS[active_category]
@@ -309,6 +318,14 @@ def assess_research_value(
         + f"\n\n【今日板块】{active_category}: {focus}。不属于此板块的条目各项应低分。"
         + f"\n\n用户关注主题：\n<keywords>\n{keywords_md}\n</keywords>"
     )
+    if known_event_keys:
+        system_msg += (
+            "\n\n【近期已推送事件】以下 event_key 对应用户已经读过的事件："
+            "若某条新闻报道的是其中同一事件且没有实质性新进展(仅转载、复述、评论)，"
+            "必须原样复用该 event_key，并把 novelty 打到 3 分以下；"
+            "若有实质性新进展(如草案→正式发布、宣布→落地、新数据披露)，使用新的 event_key。\n"
+            + "\n".join(known_event_keys)
+        )
     for batch_start in range(0, len(scored), batch_size):
         batch = scored[batch_start : batch_start + batch_size]
         articles_json = json.dumps(
