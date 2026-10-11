@@ -1,6 +1,6 @@
 # News Agent
 
-面向 AI 治理、AI 数据和 AI 行业落地的个人情报 Agent。它从 RSS、Google News 与 RSSHub 发现候选新闻，抓取正文后完成研究价值终评、正文去重和事件聚合，再通过 PushPlus 推送到微信。
+面向 AI 治理、AI 数据、AI 行业落地和 AI 终端的个人情报 Agent。它从 RSS、Google News 与 RSSHub 发现候选新闻，抓取正文后完成研究价值终评、正文去重和事件聚合，再通过 PushPlus 推送到微信。
 
 ## 工作流
 
@@ -16,17 +16,18 @@ RSS / Google News / RSSHub
 
 终评按以下权重计算：相关性 35%、新颖性 30%、证据强度 25%、可行动性 10%。正文高度相似的转载即使标题不同也只保留一篇。
 
-## 排期（当前仅供本地/手动运行参考）
+## 排期
 
 | 北京时间 | 板块 | 配置 key |
 |---|---|---|
 | 周一 07:00 | AI 治理 | `governance` |
 | 周三 07:00 | AI 数据 | `data` |
 | 周五 07:00 | AI 行业落地 | `industry` |
+| 周日 07:00 | AI 终端 | `terminal` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`。GitHub Actions 的定时触发当前已暂停；仍可在 Actions 页面手动触发，或通过 webhook 运行指定板块。
+Python weekday 使用 `0=周一` 至 `6=周日`。GitHub Actions 按上表自动运行（cron `0 23 * * 0,2,4,6`，即 UTC 前一天 23:00；GitHub 定时任务高峰期可能延迟数十分钟）；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
 
-当前默认配置、GitHub Actions 和 webhook 仅面向上述三个板块；历史的公众号/官网配置保留但未启用。
+当前默认配置、GitHub Actions 和 webhook 仅面向上述四个板块；历史的公众号/官网配置保留但未启用。
 
 ## 本地运行
 
@@ -58,7 +59,7 @@ python -m news_agent.main --test-push
 - `DEEPSEEK_API_KEY`
 - `PUSHPLUS_TOKEN`
 
-工作流会在每次手动运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
+工作流会在每次运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
 
 ## 配置指南
 
@@ -66,7 +67,7 @@ python -m news_agent.main --test-push
 
 定义“什么值得推送”。每个板块建议包含研究目标、高优先级事件、重点机构/标准/场景、降权或排除项，以及高价值判断标准。它影响模型筛选，不直接决定 Google News 搜索范围。
 
-每次运行只会把当日板块对应的 `## [板块名]` 小节 + 通用的“过滤规则”“scorer 输出格式约定”小节喂给 DeepSeek（见 `filter.focus_keywords_md`），不再把三个板块的内容一起塞给模型：这样可以避免其它板块的高优先级/排除项干扰当日打分，也降低 token 消耗。因此新增板块小节时，标题必须包含板块展示名（如 `AI治理`/`AI数据`/`AI 行业落地`，与 `config.yaml` 的 `category_labels` 对应，中间可以有空格），解析不到匹配小节时会自动回退成整份文档，不会漏发规则。
+每次运行只会把当日板块对应的 `## [板块名]` 小节 + 通用的“过滤规则”“scorer 输出格式约定”小节喂给 DeepSeek（见 `filter.focus_keywords_md`），不再把所有板块的内容一起塞给模型：这样可以避免其它板块的高优先级/排除项干扰当日打分，也降低 token 消耗。因此新增板块小节时，标题必须包含板块展示名（如 `AI治理`/`AI数据`/`AI行业`/`AI终端`，与 `config.yaml` 的 `category_labels` 对应，中间可以有空格），解析不到匹配小节时会自动回退成整份文档，不会漏发规则。
 
 ### `config.yaml`
 
@@ -104,14 +105,14 @@ python -m news_agent.webhook --port 9000
 
 ### 手动指令触发
 
-PushPlus 的公众号对话框不能接收并转发自定义指令；在其中输入 `AI治理`、`AI数据` 或 `AI行业` 不会触发任务。请改用以下任一方式：
+PushPlus 的公众号对话框不能接收并转发自定义指令；在其中输入 `AI治理`、`AI数据`、`AI行业` 或 `AI终端` 不会触发任务。请改用以下任一方式：
 
 - GitHub Actions 页面手动运行，并选择板块；
 - 向本服务的 webhook 发送 `POST` JSON，例如 `{"content":"AI数据"}`。
 
 ### Hermes 微信机器人触发
 
-未认证公众号无法接收开发者消息；当前已将本机 Hermes 微信适配器配置为固定指令模式。微信小号发给 Hermes 的以下完整消息会直接触发任务：`AI治理`、`AI数据`、`AI行业`。允许在词内换行或空格；其他消息被忽略，不进入 Hermes 模型，也不会消耗 DeepSeek。
+未认证公众号无法接收开发者消息；当前已将本机 Hermes 微信适配器配置为固定指令模式。微信小号发给 Hermes 的以下完整消息会直接触发任务：`AI治理`、`AI数据`、`AI行业`、`AI终端`。允许在词内换行或空格；其他消息被忽略，不进入 Hermes 模型，也不会消耗 DeepSeek。
 
 这使用腾讯 iLink 的个人微信机器人身份，不是公众号，且无需公网地址或 Cloudflare Worker。二维码登录后生成的 `@im.bot` 身份不可作为普通微信号搜索；请在扫码确认后创建的机器人会话中发送指令。
 
@@ -125,6 +126,8 @@ hermes gateway
 ```
 
 适配器会先调用 `news_agent/hermes_command.py`，由它通过 `127.0.0.1:8088` 触发任务并向微信回复“已触发…”。实际新闻搜集才会调用 DeepSeek；关键词识别、未识别消息和 webhook 常驻均不调用模型。
+
+新增板块时需同步两处白名单：本仓库 `news_agent/hermes_command.py` 的 `COMMANDS`，以及 Hermes 适配器 `~/.hermes/hermes-agent/gateway/platforms/weixin.py` 的 `_NEWS_AGENT_COMMANDS`；修改后重启 `hermes gateway`。
 
 在 `~/.hermes/.env` 中配置运行所需密钥（填写实际值，切勿提交或发送到聊天）：
 

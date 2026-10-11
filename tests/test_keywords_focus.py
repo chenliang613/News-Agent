@@ -44,11 +44,12 @@ class FocusKeywordsTests(unittest.TestCase):
 
     def test_real_keywords_md_extracts_expected_category_only(self):
         keywords_md = KEYWORDS_PATH.read_text("utf-8")
-        # (板块 label, 该板块独有的关键片段, 其余两个板块独有、不应混入的片段)
+        # (板块 label, 该板块独有的关键片段, 其余板块独有、不应混入的片段)
         cases = (
-            ("AI治理", "AI治理能力", ["国家数据局", "数字员工"]),
-            ("AI数据", "国家数据局", ["AI治理能力", "数字员工"]),
-            ("AI行业", "数字员工", ["AI治理能力", "国家数据局"]),
+            ("AI治理", "AI治理能力", ["国家数据局", "数字员工", "端侧AI能力"]),
+            ("AI数据", "国家数据局", ["AI治理能力", "数字员工", "端侧AI能力"]),
+            ("AI行业", "数字员工", ["AI治理能力", "国家数据局", "端侧AI能力"]),
+            ("AI终端", "端侧AI能力", ["AI治理能力", "国家数据局", "数字员工"]),
         )
         for label, own_fragment, other_fragments in cases:
             focused = focus_keywords_md(keywords_md, label)

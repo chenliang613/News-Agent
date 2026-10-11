@@ -8,6 +8,7 @@ class HermesCommandTests(unittest.TestCase):
         self.assertEqual("AI治理", resolve_command("AI治理"))
         self.assertEqual("AI数据", resolve_command("AI 数 据"))
         self.assertEqual("AI行业", resolve_command("AI行\n业"))
+        self.assertEqual("AI终端", resolve_command("ai 终端"))
 
     def test_non_command_text_is_ignored(self):
         self.assertIsNone(resolve_command("请运行 AI治理"))

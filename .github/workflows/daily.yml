@@ -1,6 +1,10 @@
 name: Daily News Push
 
 on:
+  schedule:
+    # 北京时间周一/三/五/日 07:00 = UTC 周日/二/四/六 23:00。
+    # 运行时 TZ=Asia/Shanghai，main.py 按北京时间 weekday 选择板块。
+    - cron: '0 23 * * 0,2,4,6'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
     inputs:
       test_push:
@@ -15,6 +19,7 @@ on:
           - governance
           - data
           - industry
+          - terminal
 
 permissions:
   contents: write  # 需要写权限,跑完要 commit state/sent.json 回去

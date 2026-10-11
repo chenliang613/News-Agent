@@ -3,7 +3,7 @@
 Hermes 收到文本消息后，可将原文作为第一个参数调用本模块：
     python -m news_agent.hermes_command 'AI治理'
 
-本模块只匹配三个固定关键词并调用本机 webhook；不会调用任何模型。
+本模块只匹配四个固定关键词并调用本机 webhook；不会调用任何模型。
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ COMMANDS = {
     "ai治理": "AI治理",
     "ai数据": "AI数据",
     "ai行业": "AI行业",
+    "ai终端": "AI终端",
 }
 
 

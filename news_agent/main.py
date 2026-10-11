@@ -1,6 +1,6 @@
 """News Agent 编排入口：按周排期 → 拉源 → 去重 → DeepSeek 打分 → top N 摘要 → PushPlus。
 
-每天只跑一个板块（周一治理 / 周三数据 / 周五行业落地），其他日期跳过。
+每天只跑一个板块（周一治理 / 周三数据 / 周五行业落地 / 周日终端），其他日期跳过。
 排期表写在 config.yaml 的 schedule.weekday_category。
 
 用法:
@@ -34,7 +34,7 @@ OUTPUT_DIR = ROOT / "output"
 WECHAT_LIST_PATH = ROOT / "WeChat and website list.md"
 WECHAT_FEED_CACHE_PATH = ROOT / "state" / "wechat_feeds.json"
 
-# 微信公众号板块:不在 filter 的四个打分板块里,走单独的"全部摘要"流程
+# 微信公众号板块:不在 filter 的打分板块里,走单独的"全部摘要"流程
 WECHAT_CATEGORY = "wechat"
 
 # 落盘文件名用的中文板块名(按用户要求:industry → "AI产业",不是 "AI 行业落地")
@@ -42,6 +42,7 @@ FILE_CATEGORY_NAMES = {
     "governance": "AI治理",
     "data": "AI数据",
     "industry": "AI产业",
+    "terminal": "AI终端",
     "agent": "AIAgent",
     "wechat": "微信公众号",
 }

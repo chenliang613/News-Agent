@@ -10,6 +10,7 @@ schedule:
     0: governance   # 周一: AI 治理
     2: data         # 周三: AI 数据
     4: industry     # 周五: AI 行业落地
+    6: terminal     # 周日: AI 终端
 
 # ---------- 推送配置 ----------
 push:
@@ -26,6 +27,7 @@ category_labels:
   governance: "AI治理"
   data: "AI数据"
   industry: "AI行业"
+  terminal: "AI终端"
 
 # ---------- 公众号 + 官网（当前未纳入自动排期）----------
 # 订阅清单维护在根目录 "WeChat and website list.md",分「微信公众号」「官网」两个小节。
@@ -127,6 +129,22 @@ google_news_queries:
     - '"government AI" agency deployment case study'
     - '"AI agent" software development automation'
     - '"AI agent" IT operations automation'
+
+  terminal:
+    - 'AI手机 出货量 市场份额'
+    - '"AI smartphone" shipments market share'
+    - '"AI PC" shipments IDC Canalys'
+    - '端侧大模型 手机 NPU 芯片'
+    - '"on-device AI" NPU TOPS chip'
+    - 'AI眼镜 出货量 销量'
+    - '"AI glasses" smart glasses shipments'
+    - '智能座舱 大模型 上车 量产'
+    - '"in-car AI assistant" automaker cockpit'
+    - '智能家居 AI 大模型 Matter 星闪'
+    - '鸿蒙 HarmonyOS AI 智能体 终端'
+    - '"Apple Intelligence" "Galaxy AI" on-device'
+    - 'AI 可穿戴 医疗器械 认证'
+    - 'AI终端 标准 个人信息保护 数据安全'
 
 
 # ---------- 直接订阅的 RSS 源 ----------
