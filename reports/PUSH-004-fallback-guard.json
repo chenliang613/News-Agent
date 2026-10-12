@@ -1,0 +1,25 @@
+{
+  "work_item": "PUSH-004",
+  "source_sha": "2f536f9",
+  "command": "python -m unittest discover -s tests; python -m news_agent.main --skip-if-ran-today --dry-run; gh workflow run daily.yml -f test_push=true; gh run list",
+  "scope": "GitHub Actions daily.yml（commit 2f536f9 已推送 main）+ 本地 guard 行为",
+  "verified_at": "2026-10-12T15:25:00+08:00",
+  "checks": [
+    {
+      "criteria": "schedule 触发的运行带 --skip-if-ran-today：当日已有产物静默跳过，否则完整流程；手动 dispatch 不受影响",
+      "result": "pass",
+      "evidence": "daily.yml Run 步骤按 GITHUB_EVENT_NAME==schedule 加 --skip-if-ran-today；本地实测：今日已有 output/AI治理+2026-10-12_*.md 时输出 'already has today's briefing; skip fallback run' 且 exit 0（未触达 DeepSeek/PushPlus 环境检查）；单测覆盖跳过/继续/--category 旁路三态（tests/test_schedule_guard.py）。"
+    },
+    {
+      "criteria": "daily.yml 含 16:30 兜底 cron 且覆盖相同四天；tests 全绿",
+      "result": "pass",
+      "evidence": "test_configuration_alignment 断言 {(0,4),(30,8)} 两条 cron 均落在 weekday_category 四天；python -m unittest discover -s tests 共 35 项全部通过（.venv Python 3.11，含拉取 64f0be8 后复跑）。"
+    },
+    {
+      "criteria": "修复推送到 main 后工作流可正常解析运行",
+      "result": "pass",
+      "evidence": "commit 2f536f9 推送 main 后手动 dispatch run 38217376253（test_push=true）18 秒 conclusion=success，证明新 YAML 与 Run 步骤分支在 GitHub 上有效；16:30 兜底 cron 的首次实弹验证待该运行结束后核对（预期：检出今日产物静默跳过、结论 success）。"
+    }
+  ],
+  "notes": "背景事实：2026-10-12（周一）04:00 UTC 的 schedule 截至 15:00 未触发，当日内容已由 04:45 UTC 手动 dispatch（run 38205072574，CI 提交 64f0be8 含 output/AI治理+2026-10-12_124737.md）推送。本地另有一份未跟踪的 output/AI治理+2026-10-12_141240.md（15 条、state 未标记，特征为 --dry-run 类本地运行产物），保留未提交。"
+}

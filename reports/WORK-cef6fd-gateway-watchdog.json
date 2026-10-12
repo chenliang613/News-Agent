@@ -1,0 +1,30 @@
+{
+  "work_item": "WORK-cef6fd256a08321f7c85265ae6a1eb66",
+  "source_sha": "2f536f9",
+  "command": "hermes gateway restart; tail/grep ~/.hermes/logs/errors.log; DRY_RUN=1 scripts/gateway_watchdog.sh; launchctl list",
+  "scope": "本地 macOS (Darwin 24.6.0)，hermes gateway 与 news-agent webhook 常驻进程",
+  "verified_at": "2026-10-12T15:25:00+08:00",
+  "checks": [
+    {
+      "criteria": "gateway 运行中且重启后 5 分钟观察期内 errors.log 无新增 poll error",
+      "result": "pass",
+      "evidence": "15:05 hermes gateway restart 成功（新 PID 5924）；后台脚本每 20s 检查 errors.log，300 秒观察期无新增 poll error，脚本以 OBSERVATION_CLEAN_300S 退出（exit 0）。"
+    },
+    {
+      "criteria": "ai.news-agent.gateway-watchdog LaunchAgent 已加载且脚本检出逻辑生效",
+      "result": "pass",
+      "evidence": "launchctl list 显示 ai.news-agent.gateway-watchdog（上次退出码 0，RunAtLoad 已写 state 0 0）。DRY_RUN=1 注入当前时间 poll error：第 1 次检出 streak=1 无动作，第 2 次检出输出 'DRY_RUN ... restart gateway ... streak=2' 并记录 last_restart；注入 2 小时前旧错误则 streak 清零无动作。冷却 15 分钟、阈值 2 次符合预期。"
+    },
+    {
+      "criteria": "微信端四板块指令路径各组件完好",
+      "result": "pass",
+      "evidence": "com.news-agent.webhook PID 725 在 127.0.0.1:8088 监听（LaunchAgent running，启动于 2026-10-12 10:16，晚于最后代码提交 daabfe0/2f536f9 之前经重启的旧代码已被替换）；gateway PID 5924 运行中。"
+    },
+    {
+      "criteria": "修复过程不触发真实新闻任务、不产生额外 DeepSeek 调用",
+      "result": "pass",
+      "evidence": "全程仅重启 gateway、读日志、DRY_RUN 脚本与 launchctl 操作；未调用 news_agent 采集/推送路径。"
+    }
+  ],
+  "notes": "诊断修订：本日两次重启（12:50、15:05）均只恢复约 2 小时，14:51 起新实例再次 DNS 失败（错误由 nodename nor servname 变为 [None]），同期新进程 getaddrinfo/curl 解析直连正常——判定为 macOS 长驻进程网络切换后解析状态失效的复发型问题，看门狗为针对性自愈方案；端到端验收（用户微信发指令）待用户完成。"
+}
