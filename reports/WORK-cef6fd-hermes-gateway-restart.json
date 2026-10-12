@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "work_item": "WORK-cef6fd256a08321f7c85265ae6a1eb66",
+  "source_sha": "adea893406be4960791304129e50dc140d0fa454",
+  "command": "hermes gateway status; hermes gateway restart; ps aux | grep hermes_cli.main; awk/tail on ~/.hermes/logs/{errors,gateway.error,gateway,agent}.log",
+  "scope": [
+    "deploy/com.news-agent.webhook.plist",
+    "logs/hermes-news-webhook.log",
+    "news_agent/webhook.py",
+    "news_agent/hermes_command.py",
+    "~/.hermes/hermes-agent/gateway/platforms/weixin.py",
+    "~/.hermes/logs/"
+  ],
+  "verified_at": 1791780974362,
+  "producer": "claude-code (agent), session 01M4Q748Q890F3HG7Y09WK22Y0",
+  "checks": [
+    {
+      "name": "gateway-restart-poll-recovered",
+      "passed": true,
+      "details": "旧 gateway 进程（PID 740，2026-10-12 10:16 启动）自 12:26 起对 ilinkai.weixin.qq.com 的长轮询持续失败（每 30 秒 3/3 DNS 错误 Cannot connect ... nodename nor servname provided, or not known），同一时刻 shell 中该域名解析（5/5 成功）与 HTTPS 连通（404/0.2s）均正常，判定进程内状态卡死。12:50 执行 hermes gateway restart，launchd 拉起新进程 PID 3606；agent.log 12:50:23 出现 '[Weixin] Connected account=74492535 base=https://ilinkai.weixin.qq.com' 与 '✓ weixin connected'。重启后约 7 分钟观察期内 errors.log 与 gateway.error.log 零新增 ERROR（此前每 30 秒 3 条），gateway.error.log 最后写入时间停留在重启时刻 12:50。",
+      "criteria": [
+        "执行 hermes gateway restart 后，gateway 进程重启且 ilinkai.weixin.qq.com 长轮询恢复：重启后 5 分钟内 errors.log 不再新增 poll error。"
+      ]
+    },
+    {
+      "name": "command-path-components-intact",
+      "passed": true,
+      "details": "webhook 常驻进程（PID 725，LaunchAgent com.news-agent.webhook state=running）监听 127.0.0.1:8088，启动日志列出四板块：AI治理, AI数据, AI行业, AI终端（2026-10-12 10:16 启动行）。Hermes 适配器补丁完好：~/.hermes/hermes-agent/gateway/platforms/weixin.py:1055 _NEWS_AGENT_COMMANDS = {'ai治理', 'ai数据', 'ai行业', 'ai终端'}。",
+      "criteria": [
+        "微信端四板块指令路径各组件完好：webhook 常驻进程在 127.0.0.1:8088 监听（LaunchAgent running），weixin.py 适配器补丁 _NEWS_AGENT_COMMANDS 含 AI治理/AI数据/AI行业/AI终端 四项。"
+      ]
+    },
+    {
+      "name": "no-real-task-triggered",
+      "passed": true,
+      "details": "修复全程仅重启 gateway 与读取日志，未向 webhook 发送任何板块指令，未触发新闻任务，无 DeepSeek 调用。端到端验证（微信小号发送板块指令）待用户执行。",
+      "criteria": [
+        "修复过程不触发任何真实新闻任务、不产生额外 DeepSeek 调用；端到端验证由用户在微信小号发送一条板块指令完成。"
+      ]
+    },
+    {
+      "name": "related-issue-1-governance-push-delivered",
+      "passed": true,
+      "details": "今日 04:00 UTC（北京 12:00）的 GitHub schedule 运行截至 12:50 未触发（workflow state=active，cron 0 4 * * 1,3,5,0 无误；2026-10-11 的 schedule 运行曾被延迟 6.5 小时至 10:39 UTC，属 GitHub 定时任务高峰延迟）。用户 12:45 手动 dispatch 运行 38205072574 成功：governance 板块 60 候选→42 达标→16 篇成稿，output/AI治理+2026-10-12_124737.md 落盘，PushPlus 执行成功，state/sent.json 与 events.json 由 CI 提交为 64f0be8。若 GitHub 稍后补跑延迟的 schedule 运行，因去重状态已更新，预期仅发送无新内容状态通知。PUSH-003 的 schedule 结论验收仍需等待下一次真实 schedule 运行。",
+      "criteria": [
+        "恢复微信推送链路的同时，确认今日 AI治理 内容已送达（GitHub Actions workflow_dispatch 运行 38205072574 成功）。"
+      ]
+    }
+  ]
+}

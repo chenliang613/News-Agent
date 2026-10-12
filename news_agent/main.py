@@ -155,6 +155,23 @@ def seed_event_history(history: EventHistory, output_dir: Path) -> None:
         log.info("seeded event history with %d titles from %s", seeded, output_dir.name)
 
 
+def already_pushed_today(
+    category: str,
+    output_dir: Path | None = None,
+    now: datetime | None = None,
+) -> bool:
+    """当日该板块是否已产出过简报（output/ 里有今天的落盘文件）。
+
+    每次成功推送都会无条件落盘 `{中文板块名}+{日期}_{时间}.md` 并由 CI 提交回仓库，
+    兜底定时运行据此判断主梯队是否已经推过，保证补跑一天最多推一次。
+    """
+    now = now or datetime.now()
+    output_dir = output_dir or OUTPUT_DIR
+    file_category = FILE_CATEGORY_NAMES.get(category, category)
+    # glob() 返回生成器，必须用 any() 判存在，bool(生成器) 恒为 True。
+    return any(output_dir.glob(f"{file_category}+{now:%Y-%m-%d}_*.md"))
+
+
 def notify_no_results(category_label: str, reason: str, token: str | None, dry_run: bool) -> None:
     """没有可推送事件时给出明确状态，避免采集失败被误认为“没有新闻”。"""
     title = f"{category_label}本次运行状态"
@@ -169,6 +186,7 @@ def run(
     dry_run: bool = False,
     override_category: str | None = None,
     override_weekday: int | None = None,
+    skip_if_ran_today: bool = False,
 ) -> int:
     config = load_config()
     keywords_md = KEYWORDS_PATH.read_text("utf-8")
@@ -192,6 +210,12 @@ def run(
             category, sorted(filter_mod.VALID_CATEGORIES) + [WECHAT_CATEGORY],
         )
         return 1
+
+    # 兜底定时运行的守卫：当日该板块已有落盘产物说明主梯队已成功推送，
+    # 直接静默跳过（不发通知），避免补跑造成一天双推。手动 --category 不走此守卫。
+    if skip_if_ran_today and not override_category and already_pushed_today(category):
+        log.info("%s already has today's briefing; skip fallback run", category)
+        return 0
 
     category_labels = config.get("category_labels") or {}
     category_label = category_labels.get(category, category)
@@ -550,6 +574,11 @@ def main() -> None:
         help="手动指定板块(忽略 weekday 排期),含 wechat=微信公众号",
     )
     parser.add_argument(
+        "--skip-if-ran-today",
+        action="store_true",
+        help="当日该板块已有落盘产物时直接跳过（schedule 兜底补跑用；手动 --category 不受影响）",
+    )
+    parser.add_argument(
         "--weekday",
         type=int,
         choices=range(7),
@@ -562,6 +591,7 @@ def main() -> None:
         dry_run=args.dry_run,
         override_category=args.category,
         override_weekday=args.weekday,
+        skip_if_ran_today=args.skip_if_ran_today,
     ))
 
 

@@ -61,6 +61,8 @@ python -m news_agent.main --test-push
 
 工作流会在每次运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
 
+定时触发有两条 cron：主梯队北京时间 12:00，兜底梯队 16:30（覆盖相同的周一/三/五/日）。GitHub 高峰期 schedule 可能延迟数小时甚至整个跳过，兜底运行带 `--skip-if-ran-today`：当日该板块 `output/` 已有落盘产物（即当日已成功推送过）时静默跳过，否则执行完整流程补跑，保证一天最多推一次。手动触发不受此守卫影响。
+
 ## 配置指南
 
 ### `keywords.md`
@@ -126,6 +128,13 @@ hermes gateway
 ```
 
 适配器会先调用 `news_agent/hermes_command.py`，由它通过 `127.0.0.1:8088` 触发任务并向微信回复“已触发…”。实际新闻搜集才会调用 DeepSeek；关键词识别、未识别消息和 webhook 常驻均不调用模型。
+
+**gateway 看门狗**：macOS 上长驻的 gateway 进程在网络切换（睡眠唤醒/代理切换）后解析状态会失效，微信消息收不到，表现为 `~/.hermes/logs/errors.log` 持续出现 `[Weixin] poll error`，而同机新进程网络正常；重启即恢复但数小时后复发。`ai.news-agent.gateway-watchdog` LaunchAgent（定义在 `deploy/`，脚本 `scripts/gateway_watchdog.sh`）每 60 秒检查一次，连续两次检出 120 秒内的 poll error 就自动重启 gateway（冷却 15 分钟），动作记录在 `~/.hermes/logs/gateway-watchdog.log`。安装：
+
+```bash
+cp deploy/ai.news-agent.gateway-watchdog.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ai.news-agent.gateway-watchdog.plist
+```
 
 新增板块时需同步两处白名单：本仓库 `news_agent/hermes_command.py` 的 `COMMANDS`，以及 Hermes 适配器 `~/.hermes/hermes-agent/gateway/platforms/weixin.py` 的 `_NEWS_AGENT_COMMANDS`；修改后重启 `hermes gateway`。
 

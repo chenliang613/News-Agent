@@ -21,16 +21,21 @@ class ConfigurationAlignmentTests(unittest.TestCase):
         self.assertEqual(scheduled, options)
 
     def test_cron_fires_on_beijing_scheduled_weekdays(self):
-        """cron 按 UTC 04:00 触发，对应北京时间同日 12:00；必须与 weekday_category 一致。"""
+        """两条 cron（主梯队 12:00 / 兜底 16:30 北京时间）都必须落在 weekday_category 的四天。"""
         config = load_config()
         workflow = yaml.load(
             Path(".github/workflows/daily.yml").read_text("utf-8"), Loader=yaml.BaseLoader,
         )
-        (entry,) = workflow["on"]["schedule"]
-        minute, hour, _, _, dow = entry["cron"].split()
-        self.assertEqual("4", hour)
-        # cron 星期 d(0=周日) 的 UTC 04:00 是北京时间同日 12:00；换算到 Python
-        # weekday(0=周一) 需减 1。
-        beijing_weekdays = {(int(d) - 1) % 7 for d in dow.split(",")}
+        entries = workflow["on"]["schedule"]
+        # 主梯队 UTC 04:00（北京 12:00）+ 兜底梯队 UTC 08:30（北京 16:30）
+        self.assertEqual(
+            {("0", "4"), ("30", "8")},
+            {(e["cron"].split()[0], e["cron"].split()[1]) for e in entries},
+        )
         scheduled_days = {day for day in range(7) if resolve_category(config, day)}
-        self.assertEqual(scheduled_days, beijing_weekdays)
+        for entry in entries:
+            minute, hour, _, _, dow = entry["cron"].split()
+            # cron 星期 d(0=周日) 的 UTC 时刻是北京时间同日；换算到 Python
+            # weekday(0=周一) 需减 1。
+            beijing_weekdays = {(int(d) - 1) % 7 for d in dow.split(",")}
+            self.assertEqual(scheduled_days, beijing_weekdays)
