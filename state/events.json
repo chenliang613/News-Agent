@@ -1,105 +1,5 @@
 [
   {
-    "title": "从战略抉择到价值重塑——阿里巴巴财务AI转型的路径与启示",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How Trane gets building insights 60x faster with Amazon Bedrock AgentCore",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How Tata Elxsi detects industrial safety risks in seconds on AWS",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Reducing medical claims review time with AI on AWS: The EXL Medical IDP solution",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "千问办公押注的企业上下文，是 Agent 时代的组织语言",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Ema raises $77M as AI starts eating into enterprise software and services",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "告别浅层应用！各大银行AI大模型规模化落地，核心业务迎来智能化改造",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How BMW Group detects cost anomalies across 14,000 cloud accounts",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "AT&T Is Automating Away Jobs—and Its Old Telecom Empire",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Reduce time-to-hire for quality candidates with AI-powered Amazon Connect Talent",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "华为云加码企业级智能体：智果AgentArts服务超百家，“行业AI梦工厂”落地项目超千个",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "腾讯、飞书、百度搭子数据攀升……AI办公赛道竞争全面提速",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Extending public sector intelligence with Agentforce and AWS",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "一家清华系具身公司撬开车厂产线，部署效率提升10倍",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "千机进厂赋能制造！广东具身智能机器人加速规模化应用",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How Benchling secured multi-tenant AI agents with Amazon Bedrock AgentCore",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "夸夸菁领发布两大增收型智能体 企业级AI竞争进入“AI+数智员工”新赛道",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "2026世界制造业大会 | 羚羊工业大模型3.5重磅发布",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "从“会干活”到“会思考” 太古可口可乐智能拣配机器人上线",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "联想集团、新华三、浪潮的AI方案服务实践：从项目交付到持续运营",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
     "title": "Windows 迎来 AI 时代最大更新，拉来黄仁勋跟 Mac 宣战",
     "event_key": "",
     "ts": "2026-10-11T01:26:03+00:00"
@@ -583,5 +483,105 @@
     "title": "Microsoft, OpenAI face copyright lawsuit from more local US outlets",
     "event_key": "usa-today-openai-copyright-lawsuit-2026",
     "ts": "2026-10-14T09:24:43.380756+00:00"
+  },
+  {
+    "title": "How Tamnoon built AI-powered cloud security remediation with Amazon Bedrock",
+    "event_key": "tamnoon-tami-bedrock-cloud-remediation-2026",
+    "ts": "2026-10-16T08:52:36.253122+00:00"
+  },
+  {
+    "title": "腾讯摊牌了",
+    "event_key": "tencent-workbuddy-wecom-integration-2026",
+    "ts": "2026-10-16T08:52:36.253126+00:00"
+  },
+  {
+    "title": "Agent落地风电，将带来哪些改变？",
+    "event_key": "envision-ai-wind-storage-agent-2026",
+    "ts": "2026-10-16T08:52:36.253128+00:00"
+  },
+  {
+    "title": "Fujitsu transforms business processes with 100,000 Microsoft 365 Copilot licenses",
+    "event_key": "fujitsu-100k-copilot-deployment-2026",
+    "ts": "2026-10-16T08:52:36.253130+00:00"
+  },
+  {
+    "title": "南岗区AI政务助手“南南”上岗！依托“龙政智数”大模型零成本打造，试运行一周分流咨询近200人次",
+    "event_key": "harbin-nangang-ai-gov-assistant-nannan-2026",
+    "ts": "2026-10-16T08:52:36.253133+00:00"
+  },
+  {
+    "title": "调度效率提升80%！商汤大装置助力上海量子城市首批智能体落地",
+    "event_key": "sensetime-shanghai-quantum-city-agents-2026",
+    "ts": "2026-10-16T08:52:36.253135+00:00"
+  },
+  {
+    "title": "Inside Track - Automating engineering operations at Microsoft with a Smart DRI Agent",
+    "event_key": "microsoft-smart-dri-agent-2026",
+    "ts": "2026-10-16T08:52:36.253137+00:00"
+  },
+  {
+    "title": "Kyndryl Applies Agentic AI Framework to Toyota Finance IT Operations",
+    "event_key": "kyndryl-toyota-finance-agentic-ai-it-ops-2026",
+    "ts": "2026-10-16T08:52:36.253140+00:00"
+  },
+  {
+    "title": "Cresta Launches Deputy Agent: an AI Agent That Keeps Working Long After the Customer Hangs Up",
+    "event_key": "cresta-deputy-agent-launch-2026",
+    "ts": "2026-10-16T08:52:36.253142+00:00"
+  },
+  {
+    "title": "Build self-improving document processing using Amazon Bedrock AgentCore",
+    "event_key": "aws-bedrock-agentcore-self-improving-idp-2026",
+    "ts": "2026-10-16T08:52:36.253144+00:00"
+  },
+  {
+    "title": "Generate presentations with Amazon Bedrock AgentCore",
+    "event_key": "aws-bedrock-agentcore-presentation-generation-2026",
+    "ts": "2026-10-16T08:52:36.253146+00:00"
+  },
+  {
+    "title": "Enterprise AI Search in 2026: Eight Deployments Deliver Faster Answers and Productivity Gains",
+    "event_key": "enterprise-ai-search-deployments-2026",
+    "ts": "2026-10-16T08:52:36.253148+00:00"
+  },
+  {
+    "title": "AI进入企业，开始算“生意账”",
+    "event_key": "lingyang-ai-employee-business-2026",
+    "ts": "2026-10-16T08:52:36.253172+00:00"
+  },
+  {
+    "title": "对话京东工业：从采购到工厂现场，工业AI走到哪一步？_公司新闻",
+    "event_key": "jd-industrial-ai-model-2026",
+    "ts": "2026-10-16T08:52:36.253174+00:00"
+  },
+  {
+    "title": "Enterprise AI Deployment in 2026: Eight Companies Turning Pilots Into Business Results",
+    "event_key": "enterprise-ai-deployment-eight-companies-2026",
+    "ts": "2026-10-16T08:52:36.253176+00:00"
+  },
+  {
+    "title": "Zenzap raises $44M for its AI chat app that aims to replace WhatsApp in the workplace",
+    "event_key": "zenzap-44m-ai-workplace-chat-2026",
+    "ts": "2026-10-16T08:52:36.253178+00:00"
+  },
+  {
+    "title": "Floqer’s AI agents research sales prospects so teams don’t have to",
+    "event_key": "floqer-ai-sales-agents-arr-2026",
+    "ts": "2026-10-16T08:52:36.253180+00:00"
+  },
+  {
+    "title": "The Latest SaaStr AI Agent Playbook for GTM Is Out: Everything We’ve Learned Running SaaStr on 3 Humans and 21+ AI Agents, In One Handy Guide",
+    "event_key": "saastr-ai-agent-gtm-playbook-2026-10",
+    "ts": "2026-10-16T08:52:36.253182+00:00"
+  },
+  {
+    "title": "Agentic AI for VSC Claims Processing:",
+    "event_key": "cars-protection-plus-circuitry-ai-claims-2026",
+    "ts": "2026-10-16T08:52:36.253184+00:00"
+  },
+  {
+    "title": "金融监管领域的 Harness 实践：让知识与数据驱动 Agent 稳定运行 - InfoQ-CN",
+    "event_key": "zhongruan-ruanxin-financial-regtech-harness-2026",
+    "ts": "2026-10-16T08:52:36.253186+00:00"
   }
 ]
