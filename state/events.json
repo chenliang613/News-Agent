@@ -1,105 +1,5 @@
 [
   {
-    "title": "从战略抉择到价值重塑——阿里巴巴财务AI转型的路径与启示",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How Trane gets building insights 60x faster with Amazon Bedrock AgentCore",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How Tata Elxsi detects industrial safety risks in seconds on AWS",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Reducing medical claims review time with AI on AWS: The EXL Medical IDP solution",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "千问办公押注的企业上下文，是 Agent 时代的组织语言",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Ema raises $77M as AI starts eating into enterprise software and services",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "告别浅层应用！各大银行AI大模型规模化落地，核心业务迎来智能化改造",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How BMW Group detects cost anomalies across 14,000 cloud accounts",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "AT&T Is Automating Away Jobs—and Its Old Telecom Empire",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Reduce time-to-hire for quality candidates with AI-powered Amazon Connect Talent",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "华为云加码企业级智能体：智果AgentArts服务超百家，“行业AI梦工厂”落地项目超千个",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "腾讯、飞书、百度搭子数据攀升……AI办公赛道竞争全面提速",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "Extending public sector intelligence with Agentforce and AWS",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "一家清华系具身公司撬开车厂产线，部署效率提升10倍",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "千机进厂赋能制造！广东具身智能机器人加速规模化应用",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "How Benchling secured multi-tenant AI agents with Amazon Bedrock AgentCore",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "夸夸菁领发布两大增收型智能体 企业级AI竞争进入“AI+数智员工”新赛道",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "2026世界制造业大会 | 羚羊工业大模型3.5重磅发布",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "从“会干活”到“会思考” 太古可口可乐智能拣配机器人上线",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
-    "title": "联想集团、新华三、浪潮的AI方案服务实践：从项目交付到持续运营",
-    "event_key": "",
-    "ts": "2026-09-23T12:51:30+00:00"
-  },
-  {
     "title": "Windows 迎来 AI 时代最大更新，拉来黄仁勋跟 Mac 宣战",
     "event_key": "",
     "ts": "2026-10-11T01:26:03+00:00"
@@ -445,6 +345,7 @@
     "ts": "2026-10-12T04:47:39.402998+00:00"
   },
   {
+<<<<<<< HEAD
     "title": "Should We Track AI Chips?",
     "event_key": "cset-ai-chip-location-verification-report-2026",
     "ts": "2026-10-12T08:17:50.729305+00:00"
@@ -823,5 +724,245 @@
     "title": "지방성장 키워드 ‘AI 데이터센터’ 관심집중",
     "event_key": "korea-ai-datacenter-special-act-2027",
     "ts": "2026-10-14T01:46:37.517356+00:00"
+=======
+    "title": "AI labs are buying data from dead startups to train their models",
+    "event_key": "ai-labs-buying-dead-startup-data-2026",
+    "ts": "2026-10-14T09:24:43.380698+00:00"
+  },
+  {
+    "title": "AI labs are offering companies big money to hand over their employees' private Slack DMs and emails",
+    "event_key": "ai-labs-buying-dead-startup-data-2026",
+    "ts": "2026-10-14T09:24:43.380702+00:00"
+  },
+  {
+    "title": "Minions: A Dynamic and Distributed Virtual GPU Cloud Built on Idle Apple Silicon Devices",
+    "event_key": "apple-minions-distributed-gpu-cloud-2026",
+    "ts": "2026-10-14T09:24:43.380704+00:00"
+  },
+  {
+    "title": "Self-Compacting Language Model Agents",
+    "event_key": "apple-selfcompact-agent-context-compaction-2026",
+    "ts": "2026-10-14T09:24:43.380706+00:00"
+  },
+  {
+    "title": "浙江医疗数据合作新规：合作须审批、对合作方全程监督、鼓励依托AI中试基地开展合作_医健资讯",
+    "event_key": "zhejiang-medical-data-cooperation-rules-2026",
+    "ts": "2026-10-14T09:24:43.380709+00:00"
+  },
+  {
+    "title": "Mix, Don't Tune: Bilingual Pre-Training Outperforms Hyperparameter Search in Data-Constrained Settings",
+    "event_key": "apple-bilingual-pretraining-data-constrained-2026",
+    "ts": "2026-10-14T09:24:43.380711+00:00"
+  },
+  {
+    "title": "山东省数字强省建设“十五五”规划：打造300个省级以上行业高质量数据集，人工智能核心产业营收突破3000亿元，算力规模突破3.5万P，全面打造科技强、产业强、治理强、基建强、生态强的数字强省– 智慧城市行业分析",
+    "event_key": "shandong-digital-strong-province-15th-five-year-plan-2026",
+    "ts": "2026-10-14T09:24:43.380713+00:00"
+  },
+  {
+    "title": "《山东省数据条例》全文：2026年12月1日起施行，8章66条，重点内容覆盖统筹数据资源管理、加强数据权益保护、促进数据流通交易、促进产业发展与应用、强化数据安全与保障等",
+    "event_key": "shandong-data-regulation-2026",
+    "ts": "2026-10-14T09:24:43.380716+00:00"
+  },
+  {
+    "title": "AI기본법·데이터산업법 개정안 국무회의 통과…국가 AI 데이터 관리 강화",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T09:24:43.380719+00:00"
+  },
+  {
+    "title": "과기정통부 “국가 데이터 연계 및 AI 학습·활용 촉진 위한 AI기본법, 데이터산업법 개정안 국무회의 통과”",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T09:24:43.380721+00:00"
+  },
+  {
+    "title": "정부 사업 AI 데이터, 'AI 허브'에 모으고 누구나 활용한다",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T09:24:43.380723+00:00"
+  },
+  {
+    "title": "정부 예산으로 만든 AI 학습 데이터, ‘AI 허브’에 모은다 - 조선비즈",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T09:24:43.380725+00:00"
+  },
+  {
+    "title": "정부 사업으로 구축한 AI 학습용 데이터 개방 의무화",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T09:24:43.380727+00:00"
+  },
+  {
+    "title": "CARUSO Publishes Connected Vehicle Field Test 5.0 Report on EU Data Act Implementation",
+    "event_key": "caruso-cvft-5-eu-data-act-implementation-2026",
+    "ts": "2026-10-14T09:24:43.380729+00:00"
+  },
+  {
+    "title": "CARUSO study finds EU Data Act fails to enable competition in connected vehicle services",
+    "event_key": "caruso-cvft-5-eu-data-act-implementation-2026",
+    "ts": "2026-10-14T09:24:43.380730+00:00"
+  },
+  {
+    "title": "患者通知なく診療データ提供、大病院に義務づけ 創薬活用へ政府検討",
+    "event_key": "japan-medical-data-mandatory-provision-2026",
+    "ts": "2026-10-14T09:24:43.380732+00:00"
+  },
+  {
+    "title": "两部门印发文件 加强知识产权数据资源开发利用",
+    "event_key": "cn-ip-data-resource-development-2026",
+    "ts": "2026-10-14T09:24:43.380734+00:00"
+  },
+  {
+    "title": "India’s AI Data Debate Moves Beyond Data Localisation",
+    "event_key": "india-psa-cross-border-data-interoperability-ai-2026",
+    "ts": "2026-10-14T09:24:43.380736+00:00"
+  },
+  {
+    "title": "Economic Watch: China rolls out \"token factories\" to drive AI economy",
+    "event_key": "beijing-token-economy-action-plan-2026",
+    "ts": "2026-10-14T09:24:43.380738+00:00"
+  },
+  {
+    "title": "政策先行、标准先试、产业先落地 解码北京词元经济的三个“全国第一” 北京如何抢占词元经济制高点",
+    "event_key": "beijing-token-economy-action-plan-2026",
+    "ts": "2026-10-14T09:24:43.380740+00:00"
+  },
+  {
+    "title": "micro1 Commits $1 Billion To License Enterprise AI Training Data",
+    "event_key": "micro1-1b-enterprise-data-licensing-2026",
+    "ts": "2026-10-14T09:24:43.380742+00:00"
+  },
+  {
+    "title": "告别资料散落，让知识持续积累：openJiuwen首发个人知识空间，重塑个人办公智能体新体验！",
+    "event_key": "openjiuwen-personal-knowledge-space-launch-2026",
+    "ts": "2026-10-14T09:24:43.380745+00:00"
+  },
+  {
+    "title": "附件 江岸区经信和科创局关于“数据券”补贴资金的实施方案（征求意见稿）",
+    "event_key": "wuhan-jiangan-data-voucher-subsidy-2026",
+    "ts": "2026-10-14T09:24:43.380747+00:00"
+  },
+  {
+    "title": "COPYRIGHT NEWS: USA TODAY and affiliated publications sue OpenAI over alleged mass copying of news content",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-14T09:24:43.380749+00:00"
+  },
+  {
+    "title": "USA Today Sues OpenAI for More Than $250 Million Over Alleged Copyright Infringement",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-14T09:24:43.380751+00:00"
+  },
+  {
+    "title": "USA Today Hits OpenAI With $250 Million-Plus Copyright Lawsuit Over ChatGPT",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-14T09:24:43.380753+00:00"
+  },
+  {
+    "title": "USA Today Sues OpenAI, Claiming It Unlawfully Used Reporting To Train And Operate Models",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-14T09:24:43.380755+00:00"
+  },
+  {
+    "title": "Microsoft, OpenAI face copyright lawsuit from more local US outlets",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-14T09:24:43.380756+00:00"
+  },
+  {
+    "title": "How Tamnoon built AI-powered cloud security remediation with Amazon Bedrock",
+    "event_key": "tamnoon-tami-bedrock-cloud-remediation-2026",
+    "ts": "2026-10-16T08:52:36.253122+00:00"
+  },
+  {
+    "title": "腾讯摊牌了",
+    "event_key": "tencent-workbuddy-wecom-integration-2026",
+    "ts": "2026-10-16T08:52:36.253126+00:00"
+  },
+  {
+    "title": "Agent落地风电，将带来哪些改变？",
+    "event_key": "envision-ai-wind-storage-agent-2026",
+    "ts": "2026-10-16T08:52:36.253128+00:00"
+  },
+  {
+    "title": "Fujitsu transforms business processes with 100,000 Microsoft 365 Copilot licenses",
+    "event_key": "fujitsu-100k-copilot-deployment-2026",
+    "ts": "2026-10-16T08:52:36.253130+00:00"
+  },
+  {
+    "title": "南岗区AI政务助手“南南”上岗！依托“龙政智数”大模型零成本打造，试运行一周分流咨询近200人次",
+    "event_key": "harbin-nangang-ai-gov-assistant-nannan-2026",
+    "ts": "2026-10-16T08:52:36.253133+00:00"
+  },
+  {
+    "title": "调度效率提升80%！商汤大装置助力上海量子城市首批智能体落地",
+    "event_key": "sensetime-shanghai-quantum-city-agents-2026",
+    "ts": "2026-10-16T08:52:36.253135+00:00"
+  },
+  {
+    "title": "Inside Track - Automating engineering operations at Microsoft with a Smart DRI Agent",
+    "event_key": "microsoft-smart-dri-agent-2026",
+    "ts": "2026-10-16T08:52:36.253137+00:00"
+  },
+  {
+    "title": "Kyndryl Applies Agentic AI Framework to Toyota Finance IT Operations",
+    "event_key": "kyndryl-toyota-finance-agentic-ai-it-ops-2026",
+    "ts": "2026-10-16T08:52:36.253140+00:00"
+  },
+  {
+    "title": "Cresta Launches Deputy Agent: an AI Agent That Keeps Working Long After the Customer Hangs Up",
+    "event_key": "cresta-deputy-agent-launch-2026",
+    "ts": "2026-10-16T08:52:36.253142+00:00"
+  },
+  {
+    "title": "Build self-improving document processing using Amazon Bedrock AgentCore",
+    "event_key": "aws-bedrock-agentcore-self-improving-idp-2026",
+    "ts": "2026-10-16T08:52:36.253144+00:00"
+  },
+  {
+    "title": "Generate presentations with Amazon Bedrock AgentCore",
+    "event_key": "aws-bedrock-agentcore-presentation-generation-2026",
+    "ts": "2026-10-16T08:52:36.253146+00:00"
+  },
+  {
+    "title": "Enterprise AI Search in 2026: Eight Deployments Deliver Faster Answers and Productivity Gains",
+    "event_key": "enterprise-ai-search-deployments-2026",
+    "ts": "2026-10-16T08:52:36.253148+00:00"
+  },
+  {
+    "title": "AI进入企业，开始算“生意账”",
+    "event_key": "lingyang-ai-employee-business-2026",
+    "ts": "2026-10-16T08:52:36.253172+00:00"
+  },
+  {
+    "title": "对话京东工业：从采购到工厂现场，工业AI走到哪一步？_公司新闻",
+    "event_key": "jd-industrial-ai-model-2026",
+    "ts": "2026-10-16T08:52:36.253174+00:00"
+  },
+  {
+    "title": "Enterprise AI Deployment in 2026: Eight Companies Turning Pilots Into Business Results",
+    "event_key": "enterprise-ai-deployment-eight-companies-2026",
+    "ts": "2026-10-16T08:52:36.253176+00:00"
+  },
+  {
+    "title": "Zenzap raises $44M for its AI chat app that aims to replace WhatsApp in the workplace",
+    "event_key": "zenzap-44m-ai-workplace-chat-2026",
+    "ts": "2026-10-16T08:52:36.253178+00:00"
+  },
+  {
+    "title": "Floqer’s AI agents research sales prospects so teams don’t have to",
+    "event_key": "floqer-ai-sales-agents-arr-2026",
+    "ts": "2026-10-16T08:52:36.253180+00:00"
+  },
+  {
+    "title": "The Latest SaaStr AI Agent Playbook for GTM Is Out: Everything We’ve Learned Running SaaStr on 3 Humans and 21+ AI Agents, In One Handy Guide",
+    "event_key": "saastr-ai-agent-gtm-playbook-2026-10",
+    "ts": "2026-10-16T08:52:36.253182+00:00"
+  },
+  {
+    "title": "Agentic AI for VSC Claims Processing:",
+    "event_key": "cars-protection-plus-circuitry-ai-claims-2026",
+    "ts": "2026-10-16T08:52:36.253184+00:00"
+  },
+  {
+    "title": "金融监管领域的 Harness 实践：让知识与数据驱动 Agent 稳定运行 - InfoQ-CN",
+    "event_key": "zhongruan-ruanxin-financial-regtech-harness-2026",
+    "ts": "2026-10-16T08:52:36.253186+00:00"
+>>>>>>> 53d663fa26b7824f1d51dffadc55c838e465c5cb
   }
 ]
