@@ -24,7 +24,12 @@
       "criteria": "修复过程不触发真实新闻任务、不产生额外 DeepSeek 调用",
       "result": "pass",
       "evidence": "全程仅重启 gateway、读日志、DRY_RUN 脚本与 launchctl 操作；未调用 news_agent 采集/推送路径。"
+    },
+    {
+      "criteria": "端到端验收：用户在微信 iLink 机器人会话发送板块指令，收到\"已触发\"确认并完成推送",
+      "result": "pass",
+      "evidence": "16:15:38 gateway 收到入站指令（from=o9cq809FrPLNKkp9oFENjjtMwpKs@im.wechat），16:15:59 webhook 日志显示 pipeline 开始抓取来源（Google News 解析 171 条 URL），约 2 分钟后 PushPlus 推送送达；用户确认\"手动触发推送的问题修复了\"。"
     }
   ],
-  "notes": "诊断修订：本日两次重启（12:50、15:05）均只恢复约 2 小时，14:51 起新实例再次 DNS 失败（错误由 nodename nor servname 变为 [None]），同期新进程 getaddrinfo/curl 解析直连正常——判定为 macOS 长驻进程网络切换后解析状态失效的复发型问题，看门狗为针对性自愈方案；端到端验收（用户微信发指令）待用户完成。"
+  "notes": "诊断修订：本日两次重启（12:50、15:05）均只恢复约 2 小时，14:51 起新实例再次 DNS 失败（错误由 nodename nor servname 变为 [None]），同期新进程 getaddrinfo/curl 解析直连正常——判定为 macOS 长驻进程网络切换后解析状态失效的复发型问题，看门狗为针对性自愈方案。用户最初的测试失败（发\"AI治理\"无回复）实因消息发在 PushPlus 公众号对话（单向推送通道，无法触发任务，README 已说明）；改到 iLink 机器人会话后链路全程打通。此前怀疑的\"长轮询挂死在失效隧道\"被代码否定：_api_post 每次请求均有 ClientTimeout(total=35s)，不会永久挂起。"
 }

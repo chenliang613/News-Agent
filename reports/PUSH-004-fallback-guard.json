@@ -19,7 +19,12 @@
       "criteria": "修复推送到 main 后工作流可正常解析运行",
       "result": "pass",
       "evidence": "commit 2f536f9 推送 main 后手动 dispatch run 38217376253（test_push=true）18 秒 conclusion=success，证明新 YAML 与 Run 步骤分支在 GitHub 上有效；16:30 兜底 cron 的首次实弹验证待该运行结束后核对（预期：检出今日产物静默跳过、结论 success）。"
+    },
+    {
+      "criteria": "16:30 兜底 cron 首次实弹运行结论 success 且静默跳过",
+      "result": "inconclusive",
+      "evidence": "兜底 cron '30 8 * * 1,3,5,0' 已确认存在于 origin/main 的 daily.yml（gh api contents 核对）。2026-10-12 16:43–17:25（UTC 08:43–09:25）每 60 秒轮询 gh run list，计划时间后 56 分钟内 GitHub 始终未创建该 schedule 运行——当日两条 cron（UTC 04:00 主梯队、08:30 兜底）全被 GitHub 丢弃，无一创建。守卫逻辑本身已有单测与本地实跑验证，未被证伪；缺的是 GitHub 侧一次真实 schedule 运行的实弹确认。当日内容无损失（12:45 手动 dispatch 38205072574 已推送），也无重复推送风险。"
     }
   ],
-  "notes": "背景事实：2026-10-12（周一）04:00 UTC 的 schedule 截至 15:00 未触发，当日内容已由 04:45 UTC 手动 dispatch（run 38205072574，CI 提交 64f0be8 含 output/AI治理+2026-10-12_124737.md）推送。本地另有一份未跟踪的 output/AI治理+2026-10-12_141240.md（15 条、state 未标记，特征为 --dry-run 类本地运行产物），保留未提交。"
+  "notes": "背景事实：2026-10-12（周一）04:00 UTC 的 schedule 截至 15:00 未触发，当日内容已由 04:45 UTC 手动 dispatch（run 38205072574，CI 提交 64f0be8 含 output/AI治理+2026-10-12_124737.md）推送。本地另有一份未跟踪的 output/AI治理+2026-10-12_141240.md（15 条、state 未标记，特征为 --dry-run 类本地运行产物），保留未提交。16:30 兜底同样被丢弃后，双 cron 只降低但不消除 GitHub schedule 丢概率；更强的候选方案：主/兜底挪错峰分钟（GitHub 官方建议避开整点），或本机 launchd 定时调 gh workflow run（workflow_dispatch 不受 schedule 丢弃影响、立即执行）——待用户选择后实施。下一次 schedule 排期日为 2026-10-14（周三）。"
 }

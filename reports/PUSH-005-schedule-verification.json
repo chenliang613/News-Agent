@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "work_item": "PUSH-005",
+  "source_sha": "203325f39f49dc725a26cf7ad0c0a90d3d5bcdec",
+  "command": "git rev-parse HEAD origin/main; gh api repos/{owner}/{repo}/actions/workflows; gh run list --workflow daily.yml --limit 25; gh run view 38244510008/38288615345/38139475540 --log; git show --stat 64f0be8 a40a929",
+  "scope": [
+    ".github/workflows/daily.yml",
+    "config.yaml",
+    "reports/PUSH-005-schedule-verification.json"
+  ],
+  "verified_at": 1791878000000,
+  "producer": "claude-code (agent), session 01M4T2M5GBN1E8Y38EC225WMXC",
+  "question": "每周一/三/五/日北京时间 12:00 是否正常跑任务并推送新闻？",
+  "answer": "配置正确、推送链路健康、守卫按设计工作；但 GitHub Actions 的 schedule 自 2026-10-11 启用以来从未在 12:00 准点运行——两个排期日均延迟/未触发，当日内容靠手动 dispatch 补推成功。自动兜底（16:30 cron）在 10-12 也被延迟 9.5 小时并跨过北京午夜，被 weekday 守卫静默跳过：若当日无手动补推，兜底救不回来。",
+  "checks": [
+    {
+      "name": "cron-config-covers-mon-wed-fri-sun-noon-beijing",
+      "passed": true,
+      "details": "daily.yml@203325f 两条 cron：'0 4 * * 1,3,5,0'（UTC 04:00 = 北京 12:00，主推送）与 '30 8 * * 1,3,5,0'（北京 16:30，兜底带 --skip-if-ran-today）。config.yaml weekday_category：周一→governance、周三→data、周五→industry、周日→terminal。workflow env TZ=Asia/Shanghai，main.py 按北京 weekday 选板块。GitHub 上 workflow state=active；本地 HEAD == origin/main == 203325f。",
+      "criteria": [
+        "daily.yml 的 cron 表达式核实覆盖周一/三/五/日 UTC 04:00（北京 12:00）主推送与兜底 cron，与 config.yaml 四板块排期一致，workflow 在 origin/main 上为 active。"
+      ]
+    },
+    {
+      "name": "per-day-run-history-since-enablement",
+      "passed": true,
+      "details": "定时推送功能 2026-10-11 才启用（50a02cd/6ff5363 'enable daily push news'；此前 09ddc42 于 2026-08-24 改为手动触发，故 08-24 至 10-10 无排期运行属预期）。启用以来两个排期日：① 2026-10-11（周日，AI终端）：schedule 38132730402 延迟 6.5h（UTC 10:39 创建）且失败（selectolax 弃用，daabfe0 修复）；当日推送由手动 dispatch 38139475540（UTC 12:29）完成：抓取 2838 篇→终评后选 14 篇→PushPlus 推送，CI 提交 a40a929 含 output/AI终端+2026-10-11_203445.md 与 state。② 2026-10-12（周一，AI治理）：UTC 04:00 的 cron 未在 12:00 触发；当日推送由手动 dispatch 38205072574（UTC 04:45）完成：16 篇、PushPlus 成功、CI 提交 64f0be8 含 output/AI治理+2026-10-12_124737.md 与 state。两条 schedule cron 此后延迟补建：38244510008（主，UTC 11:43，迟 7h43m）日志 'governance already has today's briefing; skip fallback run' 静默跳过；38288615345（兜底，UTC 18:05，迟 9h36m，已是北京周二 02:06）日志 'weekday=1 not in schedule.weekday_category; skip today' 跳过。③ 2026-10-13（周二）：无运行，符合排期（周二不调度）。",
+      "criteria": [
+        "用 gh run list/view 对 2026-10-11 以来每个排期日（周日/周一/周三/周五）的实际运行逐日给出结论（成功/延迟/被丢弃），引用具体运行编号。"
+      ]
+    },
+    {
+      "name": "push-evidence-ci-commits-and-dedup",
+      "passed": true,
+      "details": "CI 提交 a40a929（10-11）与 64f0be8（10-12）均由 workflow 最后一步自行提交 output/ 与 state/。state/sent.json 去重跨运行生效：10-12 的两次延迟 schedule 补跑均因当日已推送而跳过（'already has today's briefing'），未重复推送。38139475540 日志还显示 'seeded event history with 34 titles from output'，state 迁移正常。",
+      "criteria": [
+        "成功运行有推送证据：output/ 与 state/ 由工作流自行提交（CI commit），state/sent.json 的 URL 去重跨运行生效。"
+      ]
+    },
+    {
+      "name": "cross-check-with-push-003-004-open-loops",
+      "passed": true,
+      "details": "与 PUSH-003/004 已登记事实一致且补充两条新事实：① PUSH-003 判定'两条 cron 全被丢弃'需修正——主 cron 实际于 UTC 11:43 延迟补建并守卫跳过（38244510008），兜底 cron 于 UTC 18:05 补建（38288615345）；② 兜底盲区：延迟跨过北京午夜后 weekday 变化使兜底 cron 被 weekday 守卫静默跳过，当日兜底失效。此细节归入 PUSH-004 的未闭环范围，本项不重复登记修复工作。",
+      "criteria": [
+        "整体结论（正常或异常及原因）写入 reports/PUSH-005-schedule-verification.json 并登记为本项证据；与 PUSH-003/004 未闭环事项交叉核对，不重复登记。"
+      ]
+    }
+  ],
+  "run_ids": {
+    "38132730402": "schedule 2026-10-11，延迟 6.5h，failure（selectolax）",
+    "38139346203": "workflow_dispatch 2026-10-11，failure（selectolax）",
+    "38139475540": "workflow_dispatch 2026-10-11 12:29 UTC，success，14 篇推送，CI a40a929",
+    "38205072574": "workflow_dispatch 2026-10-12 04:45 UTC，success，16 篇推送，CI 64f0be8",
+    "38217376253": "workflow_dispatch 2026-10-12 07:22 UTC，success（新 YAML 兜底守卫验证）",
+    "38244510008": "schedule 2026-10-12 主 cron，延迟 7h43m 补建，success（守卫跳过）",
+    "38288615345": "schedule 2026-10-12 兜底 cron，延迟 9h36m 补建（已跨北京午夜），success（weekday 守卫跳过）"
+  },
+  "open_items": [
+    "2026-10-14（周三，AI数据）UTC 04:00 排期实弹核对未发生（明日到期），仍是 PUSH-003/004 的验收条件",
+    "兜底 cron 延迟跨北京午夜后被 weekday 守卫跳过的盲区（新发现，归 PUSH-004 处理）"
+  ]
+}

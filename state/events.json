@@ -443,5 +443,385 @@
     "title": "AI規制：世界の状況まとめ",
     "event_key": "global-ai-regulation-overview-2026-10",
     "ts": "2026-10-12T04:47:39.402998+00:00"
+  },
+  {
+    "title": "Should We Track AI Chips?",
+    "event_key": "cset-ai-chip-location-verification-report-2026",
+    "ts": "2026-10-12T08:17:50.729305+00:00"
+  },
+  {
+    "title": "UK ICO Opens 6-Week Agentic AI Call for Evidence [2026]",
+    "event_key": "uk-ico-agentic-ai-call-for-evidence-2026",
+    "ts": "2026-10-12T08:17:50.729317+00:00"
+  },
+  {
+    "title": "AI liability and regulation for India's GCCs",
+    "event_key": "india-gcc-ai-liability-regulation-2026",
+    "ts": "2026-10-12T08:17:50.729322+00:00"
+  },
+  {
+    "title": "一副AI眼镜，难倒「眼镜之都」的小店主",
+    "event_key": "ai-glasses-danyang-supply-chain-2026",
+    "ts": "2026-10-12T08:23:46.151587+00:00"
+  },
+  {
+    "title": "中国AI产品消费热潮涌动：智能眼镜成新宠",
+    "event_key": "china-ai-glasses-consumption-subsidy-2026",
+    "ts": "2026-10-12T08:23:46.151597+00:00"
+  },
+  {
+    "title": "The AI PC is finally here. It’s just very expensive",
+    "event_key": "microsoft-surface-laptop-ultra-nvidia-rtx-spark-launch-2026",
+    "ts": "2026-10-12T08:23:46.151601+00:00"
+  },
+  {
+    "title": "马克·古尔曼：苹果将推出智能家居中枢HomeView，联手LG完善产品线",
+    "event_key": "apple-homeview-lg-smart-home-launch-2026",
+    "ts": "2026-10-12T08:23:46.151605+00:00"
+  },
+  {
+    "title": "苹果LG联合智能家居新特性曝光：手机一碰，设备没电也能配对|iPhone|Apple|灵动岛|智能门锁|门铃",
+    "event_key": "apple-homeview-lg-smart-home-launch-2026",
+    "ts": "2026-10-12T08:23:46.151613+00:00"
+  },
+  {
+    "title": "苹果智能家居战略即将迎来关键转折：AI中枢、家庭入口与生态竞争的新信号",
+    "event_key": "apple-homeview-lg-smart-home-launch-2026",
+    "ts": "2026-10-12T08:23:46.151617+00:00"
+  },
+  {
+    "title": "Norway eyes temporary AI glasses ban in schools, gyms, parks, and beaches",
+    "event_key": "norway-ai-glasses-temporary-ban-2026",
+    "ts": "2026-10-12T08:23:46.151621+00:00"
+  },
+  {
+    "title": "Privacy concerns put smart glasses under scrutiny as Norway seeks temporary ban",
+    "event_key": "norway-ai-glasses-temporary-ban-2026",
+    "ts": "2026-10-12T08:23:46.151625+00:00"
+  },
+  {
+    "title": "Apple Reportedly Shifts Focus To AI And Smart Glasses With Job Cuts In Siri And Vision Pro Teams",
+    "event_key": "apple-siri-vision-pro-layoffs-smart-glasses-pivot-2026",
+    "ts": "2026-10-12T08:23:46.151629+00:00"
+  },
+  {
+    "title": "AI眼镜卖爆了，咋还人人喊打鸡肋？",
+    "event_key": "ai-glasses-sales-return-rate-2026",
+    "ts": "2026-10-12T08:23:46.151633+00:00"
+  },
+  {
+    "title": "CSHIA携手腾讯共建AI 智能硬件工作组，A2A 协同与 MCP 应用线上交流会成功举办",
+    "event_key": "cshia-tencent-ai-hardware-working-group-2026",
+    "ts": "2026-10-12T08:23:46.151637+00:00"
+  },
+  {
+    "title": "美光首次将AR眼镜写入年报，释放穿戴设备内存需求信号",
+    "event_key": "micron-ar-glasses-annual-report-2026",
+    "ts": "2026-10-12T08:23:46.151640+00:00"
+  },
+  {
+    "title": "用鸿蒙开发鸿蒙！DevEco Studio/Code/CLI 鸿蒙PC公测版来了！-AI云资讯",
+    "event_key": "harmonyos-pc-deveco-studio-public-beta-2026",
+    "ts": "2026-10-12T08:23:46.151644+00:00"
+  },
+  {
+    "title": "AI电脑越卖越贵？这届钱包属实有点扛不住",
+    "event_key": "ai-pc-price-increase-2026",
+    "ts": "2026-10-12T08:23:46.151648+00:00"
+  },
+  {
+    "title": "AI反而拖累了PC市场：内存涨价让全球PC出货量暴跌了20%",
+    "event_key": "ai-pc-price-increase-2026",
+    "ts": "2026-10-12T08:23:46.151652+00:00"
+  },
+  {
+    "title": "全球PC产业加速向AI转型 联想领先优势扩大",
+    "event_key": "ai-pc-price-increase-2026",
+    "ts": "2026-10-12T08:23:46.151655+00:00"
+  },
+  {
+    "title": "汽车芯片巨头开始“卖平台”，传统Tier1的位置还稳吗？",
+    "event_key": "auto-chip-platform-tier1-ecosystem-2026",
+    "ts": "2026-10-12T08:23:46.151659+00:00"
+  },
+  {
+    "title": "2026年第二季度中国PC市场：苹果无缘前三，华为出货量同比增长82%",
+    "event_key": "china-pc-market-q2-2026-huawei-growth",
+    "ts": "2026-10-12T08:23:46.151664+00:00"
+  },
+  {
+    "title": "持续升级辅助驾驶与智能座舱能力。奔驰联合Momenta推进物理AI落地，依靠R6强化学习技术",
+    "event_key": "mercedes-momenta-physical-ai-r6-2026",
+    "ts": "2026-10-12T08:23:46.151668+00:00"
+  },
+  {
+    "title": "QCOM Stock Slides Premarket: Qualcomm's Dragonfly AI Push Gets Overshadowed By Nvidia's Computex Blitz",
+    "event_key": "qualcomm-dragonfly-agentic-ai-computex-2026",
+    "ts": "2026-10-12T08:23:46.151672+00:00"
+  },
+  {
+    "title": "Fujitsu transforms business processes with 100,000 Microsoft 365 Copilot licenses",
+    "event_key": "fujitsu-100k-copilot-licenses-2026",
+    "ts": "2026-10-12T08:41:51.762007+00:00"
+  },
+  {
+    "title": "Nucleus Network taps AI agent to screen clinical trial volunteers",
+    "event_key": "nucleus-network-nora-agentforce-screening-2026",
+    "ts": "2026-10-12T08:41:51.762012+00:00"
+  },
+  {
+    "title": "NFP shifts from AI that assists to AI that executes with Microsoft Copilot Cowork",
+    "event_key": "nfp-copilot-cowork-execution-2026",
+    "ts": "2026-10-12T08:41:51.762017+00:00"
+  },
+  {
+    "title": "金智维二次冲刺港交所：已部署逾200万名AI数字员工，三年累计亏损约5.31亿元",
+    "event_key": "kingsoft-vision-hk-ipo-digital-employee-2026",
+    "ts": "2026-10-12T08:41:51.762020+00:00"
+  },
+  {
+    "title": "蚂蚁数科已服务全球 3 万家企业：零售 AI 智能体落地三条主线",
+    "event_key": "ant-digital-30k-enterprises-retail-agent-2026",
+    "ts": "2026-10-12T08:41:51.762024+00:00"
+  },
+  {
+    "title": "理赔时效0.36天，国寿AI跑出数智“加速度”",
+    "event_key": "china-life-500-agents-claims-2026",
+    "ts": "2026-10-12T08:41:51.762028+00:00"
+  },
+  {
+    "title": "医疗影像走到分叉口：谁在为「AI读片」买单？|肺结节|骨折|开源模型|医保|医院",
+    "event_key": "china-medical-imaging-ai-payment-model-2026",
+    "ts": "2026-10-12T08:41:51.762032+00:00"
+  },
+  {
+    "title": "Lenovo launches AI Express to speed enterprise AI deployment with NVIDIA, offering systems from 15 days",
+    "event_key": "lenovo-ai-express-nvidia-2026",
+    "ts": "2026-10-12T08:41:51.762036+00:00"
+  },
+  {
+    "title": "Gemini at Work 2026发布会| 又一巨头入场！智能体进入长任务时代？Gemini Agent的企业级答案",
+    "event_key": "google-gemini-agent-enterprise-launch-2026",
+    "ts": "2026-10-12T08:41:51.762040+00:00"
+  },
+  {
+    "title": "Webex Dialog targets long-tail customer relationships with AI",
+    "event_key": "cisco-webex-dialog-agentic-cx-2026",
+    "ts": "2026-10-12T08:41:51.762044+00:00"
+  },
+  {
+    "title": "大模型公司百万年薪招聘FDE，前线部署工程师成AI落地关键岗位",
+    "event_key": "fde-forward-deployment-engineer-talent-2026",
+    "ts": "2026-10-12T08:41:51.762048+00:00"
+  },
+  {
+    "title": "华尔街AI招聘从“造模型”转向“部署落地”，新型工程师成最抢手人才",
+    "event_key": "fde-forward-deployment-engineer-talent-2026",
+    "ts": "2026-10-12T08:41:51.762052+00:00"
+  },
+  {
+    "title": "ServiceNow takes aim at enterprise AI’s workflow bottleneck with AI Workflow Factory",
+    "event_key": "servicenow-ai-workflow-factory-launch-2026",
+    "ts": "2026-10-12T08:41:51.762056+00:00"
+  },
+  {
+    "title": "最快1分钟出结果，“广东造”病理大模型预筛实现肺癌靶向基因全覆盖！",
+    "event_key": "deepgem-2-lung-cancer-pathology-model-2026",
+    "ts": "2026-10-12T08:41:51.762060+00:00"
+  },
+  {
+    "title": "“看图识基因”辅助肺癌精准用药，病理基因大模型DeepGEM 2.0正式发布",
+    "event_key": "deepgem-2-lung-cancer-pathology-model-2026",
+    "ts": "2026-10-12T08:41:51.762064+00:00"
+  },
+  {
+    "title": "肺癌病理基因大模型新版发布，最快1分钟测出基因突变",
+    "event_key": "deepgem-2-lung-cancer-pathology-model-2026",
+    "ts": "2026-10-12T08:41:51.762068+00:00"
+  },
+  {
+    "title": "重庆医保局联合蚂蚁阿福上线“渝小保”智能体 ，市民可享AI医保服务",
+    "event_key": "chongqing-yuxiaobao-medical-insurance-agent-2026",
+    "ts": "2026-10-12T08:41:51.762071+00:00"
+  },
+  {
+    "title": "Cohere Introduces North 2 with Expanded Enterprise AI Agent Capabilities",
+    "event_key": "cohere-north-2-launch-2026",
+    "ts": "2026-10-12T08:41:51.762078+00:00"
+  },
+  {
+    "title": "Hexaware Technologies Enters Multi-Year Partnership With Anthropic to Integrate Claude AI",
+    "event_key": "hexaware-anthropic-claude-partnership-2026",
+    "ts": "2026-10-12T08:41:51.762082+00:00"
+  },
+  {
+    "title": "从“手工作坊”到流水线：解锁浪潮人工智能工厂量产密码｜山东人工智能垂域大模型系列报道_国内经济",
+    "event_key": "inspur-ai-factory-vertical-models-2026",
+    "ts": "2026-10-12T08:41:51.762086+00:00"
+  },
+  {
+    "title": "机器人“入职”医院 昆数星启具身医疗场景研发成果落地",
+    "event_key": "kunshan-embodied-ai-hospital-deployment-2026",
+    "ts": "2026-10-12T08:41:51.762090+00:00"
+  },
+  {
+    "title": "Conversational AI Is Finally Connected to the Work: Automation Anywhere to Acquire Boost.ai",
+    "event_key": "automation-anywhere-acquire-boost-ai-2026",
+    "ts": "2026-10-12T08:41:51.762094+00:00"
+  },
+  {
+    "title": "AI labs are buying data from dead startups to train their models",
+    "event_key": "ai-labs-buying-dead-startup-data-2026",
+    "ts": "2026-10-13T09:39:08.704225+00:00"
+  },
+  {
+    "title": "AI labs are offering companies big money to hand over their employees' private Slack DMs and emails",
+    "event_key": "ai-labs-buying-dead-startup-data-2026",
+    "ts": "2026-10-13T09:39:08.704230+00:00"
+  },
+  {
+    "title": "Minions: A Dynamic and Distributed Virtual GPU Cloud Built on Idle Apple Silicon Devices",
+    "event_key": "apple-minions-distributed-gpu-cloud-2026",
+    "ts": "2026-10-13T09:39:08.704234+00:00"
+  },
+  {
+    "title": "山东省数字强省建设“十五五”规划：打造300个省级以上行业高质量数据集，人工智能核心产业营收突破3000亿元，算力规模突破3.5万P，全面打造科技强、产业强、治理强、基建强、生态强的数字强省– 智慧城市行业分析",
+    "event_key": "shandong-digital-strong-province-15th-plan-2026",
+    "ts": "2026-10-13T09:39:08.704238+00:00"
+  },
+  {
+    "title": "《山东省数据条例》全文：2026年12月1日起施行，8章66条，重点内容覆盖统筹数据资源管理、加强数据权益保护、促进数据流通交易、促进产业发展与应用、强化数据安全与保障等",
+    "event_key": "shandong-data-regulation-2026",
+    "ts": "2026-10-13T09:39:08.704243+00:00"
+  },
+  {
+    "title": "정부 사업 AI 데이터, 'AI 허브'에 모으고 누구나 활용한다",
+    "event_key": "korea-ai-data-hub-mandate-2026",
+    "ts": "2026-10-13T09:39:08.704247+00:00"
+  },
+  {
+    "title": "정부 예산으로 만든 AI 학습 데이터, ‘AI 허브’에 모은다 - 조선비즈",
+    "event_key": "korea-ai-data-hub-mandate-2026",
+    "ts": "2026-10-13T09:39:08.704251+00:00"
+  },
+  {
+    "title": "CARUSO Publishes Connected Vehicle Field Test 5.0 Report on EU Data Act Implementation",
+    "event_key": "caruso-cvft-5-eu-data-act-report-2026",
+    "ts": "2026-10-13T09:39:08.704255+00:00"
+  },
+  {
+    "title": "浙江医疗数据合作新规：合作须审批、对合作方全程监督、鼓励依托AI中试基地开展合作_医健资讯",
+    "event_key": "zhejiang-medical-data-cooperation-rules-2026",
+    "ts": "2026-10-13T09:39:08.704259+00:00"
+  },
+  {
+    "title": "患者通知なく診療データ提供、大病院に義務づけ 創薬活用へ政府検討",
+    "event_key": "japan-medical-data-mandatory-provision-2026",
+    "ts": "2026-10-13T09:39:08.704263+00:00"
+  },
+  {
+    "title": "数字青岛“十五五”发展规划：按“12532”总体思路推动数智青岛建设，1个数字基础设施底座，数据要素和人工智能2大动能，全面开展5大领域数智化转型升级，加快3项改革，拓展2大空间– 智慧城市行业分析",
+    "event_key": "qingdao-digital-15th-five-year-plan-2026",
+    "ts": "2026-10-13T09:39:08.704267+00:00"
+  },
+  {
+    "title": "India’s AI Data Debate Moves Beyond Data Localisation",
+    "event_key": "india-psa-cross-border-data-interoperability-ai-2026",
+    "ts": "2026-10-13T09:39:08.704271+00:00"
+  },
+  {
+    "title": "micro1 Commits $1 Billion To License Enterprise AI Training Data",
+    "event_key": "micro1-1b-enterprise-data-licensing-2026",
+    "ts": "2026-10-13T09:39:08.704275+00:00"
+  },
+  {
+    "title": "智谱、Meta供应商称高质量语料稀缺性加剧，有公司已受益",
+    "event_key": "micro1-1b-enterprise-data-licensing-2026",
+    "ts": "2026-10-13T09:39:08.704279+00:00"
+  },
+  {
+    "title": "两部门印发文件 加强知识产权数据资源开发利用",
+    "event_key": "china-ip-data-development-policy-2026",
+    "ts": "2026-10-13T09:39:08.704283+00:00"
+  },
+  {
+    "title": "乘势数贸：杭州探路数据要素与人工智能“融合”",
+    "event_key": "hangzhou-data-elements-ai-integration-2026",
+    "ts": "2026-10-13T09:39:08.704288+00:00"
+  },
+  {
+    "title": "USA Today Hits OpenAI With $250 Million-Plus Copyright Lawsuit Over ChatGPT",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-13T09:39:08.704292+00:00"
+  },
+  {
+    "title": "USA Today Sues OpenAI, Claiming It Unlawfully Used Reporting To Train And Operate Models",
+    "event_key": "usa-today-openai-copyright-lawsuit-2026",
+    "ts": "2026-10-13T09:39:08.704296+00:00"
+  },
+  {
+    "title": "UK ICO gets 10 leading AI developers to commit to abide by data protection laws",
+    "event_key": "uk-ico-foundation-model-developers-commitment-2026",
+    "ts": "2026-10-13T09:39:08.704300+00:00"
+  },
+  {
+    "title": "日販がアンソロピックに日本の書籍を無断で販売、大量スキャンでＡＩ学習に利用か…出版関係者「許せない」",
+    "event_key": "nippan-anthropic-book-scan-copyright-2026",
+    "ts": "2026-10-13T09:39:08.704304+00:00"
+  },
+  {
+    "title": "Court Finds That Using Copyrighted Material as AI Training Data Is Not Fair Use",
+    "event_key": "ross-intelligence-thomson-reuters-fair-use-appeal-2026",
+    "ts": "2026-10-13T09:39:08.704309+00:00"
+  },
+  {
+    "title": "贵阳市数字经济促进条例",
+    "event_key": "guiyang-digital-economy-regulation-2026",
+    "ts": "2026-10-13T09:39:08.704312+00:00"
+  },
+  {
+    "title": "Mix, Don't Tune: Bilingual Pre-Training Outperforms Hyperparameter Search in Data-Constrained Settings",
+    "event_key": "apple-bilingual-pretraining-data-constrained-2026",
+    "ts": "2026-10-14T01:46:37.517325+00:00"
+  },
+  {
+    "title": "정부 사업으로 구축한 AI 학습용 데이터 개방 의무화",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T01:46:37.517330+00:00"
+  },
+  {
+    "title": "AI기본법·데이터산업법 개정안 국무회의 통과…국가 AI 데이터 관리 강화",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T01:46:37.517333+00:00"
+  },
+  {
+    "title": "과기정통부, 국가 AI 데이터의 체계적 관리·활용을 위한 'AI기본법' '데이터산업법' 개정안 국무회의 통과",
+    "event_key": "korea-ai-basic-act-data-industry-act-amendment-2026",
+    "ts": "2026-10-14T01:46:37.517337+00:00"
+  },
+  {
+    "title": "附件 江岸区经信和科创局关于“数据券”补贴资金的实施方案（征求意见稿）",
+    "event_key": "wuhan-jiangan-data-voucher-subsidy-2026",
+    "ts": "2026-10-14T01:46:37.517341+00:00"
+  },
+  {
+    "title": "CARUSO study finds EU Data Act fails to enable competition in connected vehicle services",
+    "event_key": "caruso-eu-data-act-connected-vehicle-2026",
+    "ts": "2026-10-14T01:46:37.517345+00:00"
+  },
+  {
+    "title": "Mode.Inc Launches $5 Billion Enterprise Data Monetization Initiative to Help Businesses & Nonprofits License Data to Leading AI Companies",
+    "event_key": "mode-inc-bizbuydata-enterprise-data-licensing-2026",
+    "ts": "2026-10-14T01:46:37.517349+00:00"
+  },
+  {
+    "title": "US moves to stop AI data centres from pushing up household electricity bills. Here's what could change for",
+    "event_key": "us-ratepayer-protection-act-data-center-2026",
+    "ts": "2026-10-14T01:46:37.517353+00:00"
+  },
+  {
+    "title": "지방성장 키워드 ‘AI 데이터센터’ 관심집중",
+    "event_key": "korea-ai-datacenter-special-act-2027",
+    "ts": "2026-10-14T01:46:37.517356+00:00"
   }
 ]
