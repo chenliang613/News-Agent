@@ -24,9 +24,13 @@ class SentState:
             return
         try:
             self._data = json.loads(self.path.read_text("utf-8"))
-        except (json.JSONDecodeError, OSError) as e:
-            log.warning("failed to load state, starting fresh: %s", e)
-            self._data = {}
+        except json.JSONDecodeError as e:
+            # 坏 state 绝不能静默清零后继续跑：那会把旧新闻当新文章全量重推
+            # （2026-10-17 合并冲突标记入库后就发生过一次）。修复/恢复后再运行。
+            raise RuntimeError(
+                f"state file {self.path} is corrupted ({e}); "
+                "修复或恢复该文件后再运行，避免带着空去重历史全量重推"
+            ) from e
 
     def contains(self, uid: str) -> bool:
         return uid in self._data
@@ -69,8 +73,12 @@ class EventHistory:
             try:
                 data = json.loads(path.read_text("utf-8"))
                 self._entries = [e for e in data if isinstance(e, dict) and e.get("ts")]
-            except (json.JSONDecodeError, OSError) as e:
-                log.warning("failed to load event history, starting fresh: %s", e)
+            except json.JSONDecodeError as e:
+                # 同 SentState：坏历史静默清零会导致已推事件被重复推送。
+                raise RuntimeError(
+                    f"event history {self.path} is corrupted ({e}); "
+                    "修复或恢复该文件后再运行，避免重复推送已推事件"
+                ) from e
 
     def prune(self) -> int:
         cutoff = datetime.now(timezone.utc) - timedelta(days=self.retention_days)

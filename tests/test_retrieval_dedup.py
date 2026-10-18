@@ -14,7 +14,7 @@ from news_agent.sources import (
     _normalize_title,
     _split_google_news_title,
 )
-from news_agent.state import EventHistory
+from news_agent.state import EventHistory, SentState
 
 
 class _RecordingClient:
@@ -98,6 +98,17 @@ class EventHistoryTests(unittest.TestCase):
         seed_event_history(history, out)
         self.assertIsNotNone(history.matching_title("阶跃首款智能体手机定档"))
         self.assertIsNone(history.matching_title("很久以前的新闻"))
+
+    def test_corrupt_state_files_fail_loudly(self):
+        # 合并冲突标记入库后，加载失败曾被静默吞掉并清空历史，导致全量重推。
+        corrupt = "<<<<<<< HEAD\n{}"
+        self.path.write_text(corrupt, "utf-8")
+        sent_path = Path(self.tmp.name) / "sent.json"
+        sent_path.write_text(corrupt, "utf-8")
+        with self.assertRaises(RuntimeError):
+            EventHistory(self.path)
+        with self.assertRaises(RuntimeError):
+            SentState(sent_path)
 
 
 class KnownEventKeyPromptTests(unittest.TestCase):

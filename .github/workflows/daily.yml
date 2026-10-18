@@ -1,13 +1,21 @@
 name: Daily News Push
 
 on:
+  # 外部 cron（cron-job.org 等）北京时间 12:00 精准触发，绕开 GitHub schedule
+  # 的高峰排队/丢弃（本仓库主梯队从未准点触发过，见 schedule 注释）。
+  # 需要仅授权本仓库 Actions 读写的 PAT，由外部任务 POST
+  # /repos/<owner>/<repo>/dispatches，body: {"event_type":"daily-news"}。
+  repository_dispatch:
+    types: [daily-news]
   schedule:
     # 主梯队：北京时间周一/三/五/日 12:00 = UTC 同日 04:00。
     # GitHub 整点 schedule 在高峰期可能延迟数小时甚至整个跳过
-    # （2026-10-11 延迟 6.5h，2026-10-12 未触发），故加 16:30（UTC 08:30）兜底梯队；
-    # 兜底运行带 --skip-if-ran-today，当日已有产物时静默跳过，保证一天只推一次。
+    # （2026-10-11 延迟 6.5h，2026-10-12 未触发，2026-10-18 主梯队缺席），
+    # 故加 12:30–15:30（UTC 04:30–07:30）逐小时补跑梯队与 16:30（UTC 08:30）兜底梯队；
+    # 补跑/兜底运行带 --skip-if-ran-today，当日已有产物时静默跳过，保证一天只推一次。
     # 运行时 TZ=Asia/Shanghai，main.py 按北京时间 weekday 选择板块。
     - cron: '0 4 * * 1,3,5,0'
+    - cron: '30 4,5,6,7 * * 1,3,5,0'
     - cron: '30 8 * * 1,3,5,0'
   workflow_dispatch:  # 允许手动触发(在 Actions 页面)
     inputs:
@@ -53,20 +61,37 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # state 文件若在合并时带入了冲突标记，JSON 解析会失败；代码里会静默清空去重
+      # 历史（只留 warning），导致全量重推已推送过的新闻。这里提前校验，坏了直接红 X。
+      - name: Validate state files
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          for p in ("state/sent.json", "state/events.json"):
+              path = pathlib.Path(p)
+              if path.exists():
+                  json.loads(path.read_text("utf-8"))
+                  print(f"{p}: OK")
+          PY
+
       - name: Run news agent
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-          CATEGORY: ${{ github.event.inputs.category }}
+          # workflow_dispatch 走 inputs，repository_dispatch 走 client_payload
+          CATEGORY: ${{ github.event.inputs.category || github.event.client_payload.category }}
+          TEST_PUSH: ${{ github.event.inputs.test_push || github.event.client_payload.test_push }}
         run: |
           if [[ -n "$CATEGORY" ]]; then
             python -m news_agent.main --category "$CATEGORY"
-          elif [[ "${{ github.event.inputs.test_push }}" == "true" ]]; then
+          elif [[ "$TEST_PUSH" == "true" ]]; then
             python -m news_agent.main --test-push
-          elif [[ "$GITHUB_EVENT_NAME" == "schedule" ]]; then
-            python -m news_agent.main --skip-if-ran-today
+          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            python -m news_agent.main  # 手动触发不受当日守卫影响
           else
-            python -m news_agent.main
+            # schedule 备用梯队与 repository_dispatch 外部触发均为自动档：
+            # 带当日守卫，当日已推送过则静默跳过，一天最多推一次。
+            python -m news_agent.main --skip-if-ran-today
           fi
 
       - name: Commit updated state and output

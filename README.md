@@ -25,7 +25,7 @@ RSS / Google News / RSSHub
 | 周五 12:00 | AI 行业落地 | `industry` |
 | 周日 12:00 | AI 终端 | `terminal` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`。GitHub Actions 按上表自动运行（cron `0 4 * * 1,3,5,0`，即 UTC 同日 04:00；GitHub 定时任务高峰期可能延迟数十分钟）；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
+Python weekday 使用 `0=周一` 至 `6=周日`。正常由外部 cron（cron-job.org）北京时间 12:00 通过 `repository_dispatch` 精准触发（见 [外部精准触发](#外部精准触发repository_dispatch推荐)）；GitHub Actions 的 schedule cron 系列保留为兜底梯队（高峰期可能延迟数小时甚至整个跳过）。也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述四个板块；历史的公众号/官网配置保留但未启用。
 
@@ -61,7 +61,28 @@ python -m news_agent.main --test-push
 
 工作流会在每次运行后提交 `state/` 与 `output/`，使 URL 去重跨运行生效。可在 Actions 页面手动触发，并指定板块或仅测试推送。
 
-定时触发有两条 cron：主梯队北京时间 12:00，兜底梯队 16:30（覆盖相同的周一/三/五/日）。GitHub 高峰期 schedule 可能延迟数小时甚至整个跳过，兜底运行带 `--skip-if-ran-today`：当日该板块 `output/` 已有落盘产物（即当日已成功推送过）时静默跳过，否则执行完整流程补跑，保证一天最多推一次。手动触发不受此守卫影响。
+GitHub schedule 梯队保留为兜底：主梯队北京时间 12:00、补跑梯队 12:30–15:30 每小时、兜底梯队 16:30（覆盖相同的周一/三/五/日）。GitHub 高峰期 schedule 可能延迟数小时甚至整个跳过（2026-10 观测：主梯队从未准点触发，实际推送多由兜底完成）。所有自动触发都带 `--skip-if-ran-today`：当日该板块 `output/` 已有落盘产物（即当日已成功推送过）时静默跳过，否则执行完整流程补跑，保证一天最多推一次。手动触发不受此守卫影响。
+
+### 外部精准触发（repository_dispatch，推荐）
+
+精准的 12:00 触发由外部 cron 完成（以 [cron-job.org](https://cron-job.org) 免费版为例）：
+
+1. 在 GitHub 创建 fine-grained Personal Access Token：仅授权本仓库，权限选 `Actions: Read and write`。
+2. cron-job.org 新建定时任务，时区选 `Asia/Shanghai`，每天 12:00 执行（非排期日运行会自动退出，约 1 分钟空跑）：
+   - 方法 `POST`，URL `https://api.github.com/repos/chenliang613/News-Agent/dispatches`
+   - Header：`Authorization: Bearer <PAT>` 和 `Accept: application/vnd.github+json`
+   - Body：`{"event_type":"daily-news"}`
+3. 本地验证（返回 204 即成功，可在 Actions 页看到运行）：
+
+   ```bash
+   curl -X POST \
+     -H "Authorization: Bearer <PAT>" \
+     -H "Accept: application/vnd.github+json" \
+     https://api.github.com/repos/chenliang613/News-Agent/dispatches \
+     -d '{"event_type":"daily-news"}'
+   ```
+
+`repository_dispatch` 与 schedule 一样带当日守卫，一天最多推一次；workflow 内的 schedule 梯队保留作兜底。
 
 ## 配置指南
 

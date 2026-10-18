@@ -21,15 +21,16 @@ class ConfigurationAlignmentTests(unittest.TestCase):
         self.assertEqual(scheduled, options)
 
     def test_cron_fires_on_beijing_scheduled_weekdays(self):
-        """两条 cron（主梯队 12:00 / 兜底 16:30 北京时间）都必须落在 weekday_category 的四天。"""
+        """每条 cron（主梯队 12:00 / 补跑梯队 12:30-15:30 / 兜底 16:30 北京时间）都必须落在 weekday_category 的四天。"""
         config = load_config()
         workflow = yaml.load(
             Path(".github/workflows/daily.yml").read_text("utf-8"), Loader=yaml.BaseLoader,
         )
         entries = workflow["on"]["schedule"]
-        # 主梯队 UTC 04:00（北京 12:00）+ 兜底梯队 UTC 08:30（北京 16:30）
+        # 主梯队 UTC 04:00（北京 12:00）+ 补跑梯队 UTC 04:30-07:30（北京 12:30-15:30）
+        # + 兜底梯队 UTC 08:30（北京 16:30）
         self.assertEqual(
-            {("0", "4"), ("30", "8")},
+            {("0", "4"), ("30", "4,5,6,7"), ("30", "8")},
             {(e["cron"].split()[0], e["cron"].split()[1]) for e in entries},
         )
         scheduled_days = {day for day in range(7) if resolve_category(config, day)}
@@ -39,3 +40,11 @@ class ConfigurationAlignmentTests(unittest.TestCase):
             # weekday(0=周一) 需减 1。
             beijing_weekdays = {(int(d) - 1) % 7 for d in dow.split(",")}
             self.assertEqual(scheduled_days, beijing_weekdays)
+
+    def test_external_dispatch_trigger_configured(self):
+        """外部 cron 的精准触发入口（repository_dispatch daily-news）必须存在。"""
+        workflow = yaml.load(
+            Path(".github/workflows/daily.yml").read_text("utf-8"), Loader=yaml.BaseLoader,
+        )
+        dispatch = workflow["on"]["repository_dispatch"]
+        self.assertEqual(["daily-news"], dispatch["types"])
