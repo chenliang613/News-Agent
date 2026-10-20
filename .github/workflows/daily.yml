@@ -1,9 +1,11 @@
 name: Daily News Push
 
 on:
-  # 外部 cron（cron-job.org 等）北京时间 12:00 精准触发，绕开 GitHub schedule
-  # 的高峰排队/丢弃（本仓库主梯队从未准点触发过，见 schedule 注释）。
-  # 需要仅授权本仓库 Actions 读写的 PAT，由外部任务 POST
+  # 精准触发（主）：本机 launchd（deploy/ai.news-agent.daily-trigger.plist，
+  # 北京时间 12:00/12:30/13:30）调 scripts/trigger_daily_news.sh 以 gh 身份 POST
+  # 本 event_type，绕开 GitHub schedule 的高峰排队/丢弃（2026-10-19 曾拖到 17:41
+  # 才推送）。外部 cron-job.org + PAT 亦可，见 README。
+  # 需要 repo 权限的凭据（gh 登录态或仅授权本仓库 Actions 读写的 PAT）POST
   # /repos/<owner>/<repo>/dispatches，body: {"event_type":"daily-news"}。
   repository_dispatch:
     types: [daily-news]
