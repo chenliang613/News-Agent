@@ -40,11 +40,3 @@ class ConfigurationAlignmentTests(unittest.TestCase):
             # weekday(0=周一) 需减 1。
             beijing_weekdays = {(int(d) - 1) % 7 for d in dow.split(",")}
             self.assertEqual(scheduled_days, beijing_weekdays)
-
-    def test_external_dispatch_trigger_configured(self):
-        """外部 cron 的精准触发入口（repository_dispatch daily-news）必须存在。"""
-        workflow = yaml.load(
-            Path(".github/workflows/daily.yml").read_text("utf-8"), Loader=yaml.BaseLoader,
-        )
-        dispatch = workflow["on"]["repository_dispatch"]
-        self.assertEqual(["daily-news"], dispatch["types"])

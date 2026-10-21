@@ -2,8 +2,8 @@ name: Weekly Keyword Feedback Proposal
 
 on:
   schedule:
-    # 周六北京时间 07:20；GitHub Actions cron 使用 UTC。
-    - cron: '20 23 * * 5'
+    # 周六北京时间 12:00；GitHub Actions cron 使用 UTC。
+    - cron: '0 4 * * 6'
   workflow_dispatch:
 
 permissions:

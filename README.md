@@ -25,7 +25,7 @@ RSS / Google News / RSSHub
 | 周五 12:00 | AI 行业落地 | `industry` |
 | 周日 12:00 | AI 终端 | `terminal` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`。12:00 的触发由本机 launchd 调用 GitHub `repository_dispatch` 精准完成（GitHub 自带的 schedule 定时在高峰期会延迟数小时，仅保留作兜底）；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。部署见下文。
+Python weekday 使用 `0=周一` 至 `6=周日`。12:00 由 GitHub Actions schedule 云端定时触发（UTC 04:00；GitHub 高峰期可能延迟，由 12:30–15:30 逐小时补跑与 16:30 兜底梯队收敛，一天最多推一次）；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述四个板块；历史的公众号/官网配置保留但未启用。
 
@@ -63,16 +63,9 @@ python -m news_agent.main --test-push
 
 ## 部署
 
-### 12:00 定时触发（本机 launchd）
+### 定时触发（GitHub Actions 云端）
 
-本机安装 GitHub CLI 并登录（`gh auth login`，需 `repo` 权限）后，安装 LaunchAgent：
-
-```bash
-cp deploy/ai.news-agent.daily-trigger.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ai.news-agent.daily-trigger.plist
-```
-
-它北京时间每天 12:00 触发 GitHub Actions 运行，非排期日自动空跑。没有常开的 Mac 时，可改用任意外部定时服务（如 cron-job.org）北京时间 12:00 向 `https://api.github.com/repos/chenliang613/News-Agent/dispatches` POST `{"event_type":"daily-news"}`（需仅授权本仓库 Actions 读写的 PAT）。无论哪种方式，一天最多推一次。
+定时完全由 GitHub Actions schedule 托管（`.github/workflows/daily.yml`），本机无需开机、无需安装任何定时组件：主梯队北京时间 12:00（UTC 04:00），另有 12:30–15:30 逐小时补跑梯队与 16:30 兜底梯队；所有梯队带当日守卫，一天最多推一次。仅需在仓库 Secrets 中配置 `DEEPSEEK_API_KEY` 与 `PUSHPLUS_TOKEN`（见上节）。
 
 ## 配置指南
 
@@ -198,7 +191,7 @@ python -m news_agent.webhook
 
 ## 安全的关键词反馈闭环
 
-在 GitHub 的 **Issues → New issue → 新闻筛选反馈** 提交文章评分和建议词。每周六北京时间 07:20，工作流只汇总带 `news-feedback` 标签、且提交者为仓库 `OWNER`、`MEMBER` 或 `COLLABORATOR` 的反馈，调用 DeepSeek 生成受限的候选规则，并创建独立 PR。
+在 GitHub 的 **Issues → New issue → 新闻筛选反馈** 提交文章评分和建议词。每周六北京时间 12:00，工作流只汇总带 `news-feedback` 标签、且提交者为仓库 `OWNER`、`MEMBER` 或 `COLLABORATOR` 的反馈，调用 DeepSeek 生成受限的候选规则，并创建独立 PR。
 
 工作流只会替换 `keywords.md` 中带内部标记的“反馈驱动的调优规则”区，不能改写既有研究目标或全局过滤规则；它不会直接合并 PR。合并候选 PR 后，对应反馈 Issue 会自动关闭。私有仓库可天然限制提交者；公开仓库中，外部用户的反馈会被忽略。
 
