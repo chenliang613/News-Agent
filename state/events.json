@@ -348,5 +348,145 @@
     "title": "粤东首个！粤港澳大湾区生成式人工智能安全发展联合实验室汕头服务中心正式授牌",
     "event_key": "gd-gba-genai-safety-lab-shantou-center-2026",
     "ts": "2026-10-19T09:43:55.996058+00:00"
+  },
+  {
+    "title": "国家数据集团有限公司正式在雄安揭牌成立：三大运营商+南网国网主导，主业定位数据要素服务国家队、数据基础设施互联互通引领者、国家数据科技创新战略力量– 智慧城市行业分析",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159841+00:00"
+  },
+  {
+    "title": "China establishes state-owned national data group to fuel AI and digital economy",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159845+00:00"
+  },
+  {
+    "title": "China Launches 10 Billion Yuan National Data Group, With the State Directly Supplying AI's Fuel: Data",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159847+00:00"
+  },
+  {
+    "title": "国家数据集团成立 加快构建全国一体化数据市场",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159849+00:00"
+  },
+  {
+    "title": "又一新的央企来了 国家数据集团即将挂牌",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159851+00:00"
+  },
+  {
+    "title": "中国、データ利活用進める国有企業設立 AI開発の競争力高める狙い [AIの時代]",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159853+00:00"
+  },
+  {
+    "title": "经纬度：组建数据要素“国家队”，有何考量？",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159854+00:00"
+  },
+  {
+    "title": "A股热点前瞻丨国家数据集团在雄安新区成立；物理AI与世界模型大会密集召开",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159857+00:00"
+  },
+  {
+    "title": "中国新设数据央企，赌的不是交易，是AI的燃料管线",
+    "event_key": "china-national-data-group-establishment-2026",
+    "ts": "2026-10-21T09:14:28.159860+00:00"
+  },
+  {
+    "title": "山东出台《关于加快推进数据产业高质量发展的实施意见》：到2028年，全省数据企业数量超过2.5万家，其中上市企业数量突破70家、独角兽和瞪羚企业数量突破500家，全省形成30个以上数据产业集群，数据产业规模年均增速达到20%以上 – 智慧城市行业分析",
+    "event_key": "shandong-data-industry-implementation-opinion-2026",
+    "ts": "2026-10-21T09:14:28.159863+00:00"
+  },
+  {
+    "title": "How Octave built a secure multi-tenant AI foundation on Amazon Bedrock",
+    "event_key": "octave-bedrock-multitenant-rag-2b-docs-2026",
+    "ts": "2026-10-21T09:14:28.159865+00:00"
+  },
+  {
+    "title": "日本のコンテンツ産業とAI開発の共栄を支える。情報価値の保護と公正な還元を両立するデータエコシステム基盤「GaranAI」",
+    "event_key": "softbank-garanai-data-ecosystem-2026",
+    "ts": "2026-10-21T09:14:28.159867+00:00"
+  },
+  {
+    "title": "上海市推动高水平对外开放促进数据跨境流动便利化的若干举措",
+    "event_key": "shanghai-cross-border-data-facilitation-measures-2026",
+    "ts": "2026-10-21T09:14:28.159869+00:00"
+  },
+  {
+    "title": "US Court Orders Meta to Identify Everyone Who \"Approved\" Obtaining Pirated Books in AI Training Copyright Suit",
+    "event_key": "meta-shadow-library-approvers-order-2026",
+    "ts": "2026-10-21T09:14:28.159871+00:00"
+  },
+  {
+    "title": "Meta tries to scapegoat staff who downloaded torrents to spare execs",
+    "event_key": "meta-shadow-library-approvers-order-2026",
+    "ts": "2026-10-21T09:14:28.159873+00:00"
+  },
+  {
+    "title": "Korean, Japanese, Taiwanese books targeted in Anthropic's 'Project Panama' hunt for AI training material",
+    "event_key": "anthropic-project-panama-asian-books-2026",
+    "ts": "2026-10-21T09:14:28.159875+00:00"
+  },
+  {
+    "title": "AI Copyright Bills Stall as Google Buys Up Korean Books",
+    "event_key": "google-korea-book-licensing-deals-2026",
+    "ts": "2026-10-21T09:14:28.159876+00:00"
+  },
+  {
+    "title": "Europe Wants Data Centers. Its Climate Goals Are Getting in The Way",
+    "event_key": "germany-data-center-waste-heat-law-amendment-2026",
+    "ts": "2026-10-21T09:14:28.159879+00:00"
+  },
+  {
+    "title": "Meta may use sweeping new commercial TOS to avoid millions in AI licensing fees",
+    "event_key": "meta-commercial-tos-ai-training-scraping-2026",
+    "ts": "2026-10-21T09:14:28.159881+00:00"
+  },
+  {
+    "title": "Build a semantic layer for agentic AI on AWS with Denodo and Amazon Bedrock AgentCore",
+    "event_key": "aws-denodo-agentcore-semantic-layer-2026",
+    "ts": "2026-10-21T09:14:28.159883+00:00"
+  },
+  {
+    "title": "辽宁省装备制造领域数据标注先行先试工作大会在沈阳召开",
+    "event_key": "liaoning-equipment-data-labeling-pilot-2026",
+    "ts": "2026-10-21T09:14:28.159885+00:00"
+  },
+  {
+    "title": "Thomson Reuters v. ROSS: Third Circuit Recognizes a Licensing Market for AI Training Data (via Passle)",
+    "event_key": "thomson-reuters-v-ross-third-circuit-2026",
+    "ts": "2026-10-21T09:14:28.159887+00:00"
+  },
+  {
+    "title": "Meta quietly deletes AI training clause from its new business terms",
+    "event_key": "meta-business-terms-ai-training-clause-removal-2026",
+    "ts": "2026-10-21T09:14:28.159888+00:00"
+  },
+  {
+    "title": "Meta removes AI training clause after backlash over web scraping concerns",
+    "event_key": "meta-business-terms-ai-training-clause-removal-2026",
+    "ts": "2026-10-21T09:14:28.159891+00:00"
+  },
+  {
+    "title": "系统阐述绿色词元工厂“能源基础设施—算力基础设施—Token生产—Token运营—Token流通”五层技术体系",
+    "event_key": "green-token-factory-whitepaper-2026",
+    "ts": "2026-10-21T09:14:28.159892+00:00"
+  },
+  {
+    "title": "OpenAI Accused of Using Children's ChatGPT Data to Train AI, Family Demands Company Shares",
+    "event_key": "openai-children-chatgpt-training-data-class-action-2026",
+    "ts": "2026-10-21T09:14:28.159894+00:00"
+  },
+  {
+    "title": "OpenAI used children to train ChatGPT, lawsuit alleges",
+    "event_key": "openai-children-chatgpt-training-data-class-action-2026",
+    "ts": "2026-10-21T09:14:28.159896+00:00"
+  },
+  {
+    "title": "Meta Sued by Hundreds of Authors in AI Training Copyright Cases",
+    "event_key": "meta-authors-individual-copyright-suits-2026",
+    "ts": "2026-10-21T09:14:28.159898+00:00"
   }
 ]
