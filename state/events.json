@@ -488,5 +488,115 @@
     "title": "Meta Sued by Hundreds of Authors in AI Training Copyright Cases",
     "event_key": "meta-authors-individual-copyright-suits-2026",
     "ts": "2026-10-21T09:14:28.159898+00:00"
+  },
+  {
+    "title": "How Rescale built an AI triage agent with Strands Agents and AI-DLC",
+    "event_key": "rescale-ai-triage-agent-strands-ai-dlc-2026",
+    "ts": "2026-10-23T09:14:23.944989+00:00"
+  },
+  {
+    "title": "Microsoft says its AI tool is better than doctors at diagnosing conditions",
+    "event_key": "microsoft-diagnostic-orchestrator-sdbench-2026",
+    "ts": "2026-10-23T09:14:23.944992+00:00"
+  },
+  {
+    "title": "Microsoft’s Mustafa Suleyman says its AI outperforms doctors on hard cases as he chases ‘medical superintelligence’",
+    "event_key": "microsoft-diagnostic-orchestrator-sdbench-2026",
+    "ts": "2026-10-23T09:14:23.944994+00:00"
+  },
+  {
+    "title": "微亿智造招股：从理解世界到改造世界，加速工业物理AI商业化",
+    "event_key": "micro-intelligence-eiir-hk-ipo-2026",
+    "ts": "2026-10-23T09:14:23.944996+00:00"
+  },
+  {
+    "title": "广州纺织服装探路“智造”，一家企业接入70万台织机，开机率从55%提升至70%",
+    "event_key": "guangzhou-textile-ai-700k-looms-2026",
+    "ts": "2026-10-23T09:14:23.944999+00:00"
+  },
+  {
+    "title": "国家人工智能应用中试基地（医疗领域）形成84个垂类模型矩阵",
+    "event_key": "national-medical-ai-pilot-base-guangzhou-84-models-2026",
+    "ts": "2026-10-23T09:14:23.945001+00:00"
+  },
+  {
+    "title": "国家医疗AI中试基地广东发布成果，大模型加速赋能基层",
+    "event_key": "national-medical-ai-pilot-base-guangzhou-84-models-2026",
+    "ts": "2026-10-23T09:14:23.945003+00:00"
+  },
+  {
+    "title": "While Amazon blocks AI agents, Walmart rolls out the welcome mat",
+    "event_key": "walmart-agent-gateway-agentic-commerce-2026",
+    "ts": "2026-10-23T09:14:23.945006+00:00"
+  },
+  {
+    "title": "Synthflow AI'S Voice Technology Goes Live on Zoom Phone and Zoom Contact Center, Powering Conversational CX at Scale",
+    "event_key": "synthflow-zoom-voice-agent-batteries-plus-2026",
+    "ts": "2026-10-23T09:14:23.945008+00:00"
+  },
+  {
+    "title": "陈国汪：银行业金融机构人工智能应用调研报告",
+    "event_key": "china-banking-ai-application-survey-report-2026",
+    "ts": "2026-10-23T09:14:23.945011+00:00"
+  },
+  {
+    "title": "How IskayPet unified corporate knowledge with Amazon Bedrock Managed Knowledge Bases",
+    "event_key": "iskaypet-bedrock-managed-knowledge-bases-2026",
+    "ts": "2026-10-23T09:14:23.945013+00:00"
+  },
+  {
+    "title": "智荟月刊 | 政务智能体上岗：从“盆景”走向连片“风景”",
+    "event_key": "china-government-agent-rollout-2026",
+    "ts": "2026-10-23T09:14:23.945016+00:00"
+  },
+  {
+    "title": "Oracle AI Agent Studio for Industry Applications Helps Accelerate Business Outcomes",
+    "event_key": "oracle-ai-agent-studio-industry-applications-2026",
+    "ts": "2026-10-23T09:14:23.945019+00:00"
+  },
+  {
+    "title": "已沉淀2万小时多模态数据，天奇股份加速补齐工业具身智能短板",
+    "event_key": "tianqi-industrial-embodied-data-20000-hours-2026",
+    "ts": "2026-10-23T09:14:23.945021+00:00"
+  },
+  {
+    "title": "多智能体协同重构医疗AI！清华AIR孵化：医生AI分身“坐诊”医院",
+    "event_key": "zijing-ai-hospital-multi-agent-2026",
+    "ts": "2026-10-23T09:14:23.945023+00:00"
+  },
+  {
+    "title": "Google launches Gemini for government services in preview with human approval gates",
+    "event_key": "google-gemini-government-services-preview-2026",
+    "ts": "2026-10-23T09:14:23.945025+00:00"
+  },
+  {
+    "title": "Motive brings agentic AI to physical operations with agents that act before problems escalate",
+    "event_key": "motive-agents-physical-operations-launch-2026",
+    "ts": "2026-10-23T09:14:23.945027+00:00"
+  },
+  {
+    "title": "Enterprise AI Agent Integration in 2026: How Salesforce, SAP, Oracle, Google and Microsoft Connect AI to ERP and CRM",
+    "event_key": "enterprise-ai-agent-erp-crm-integration-2026",
+    "ts": "2026-10-23T09:14:23.945029+00:00"
+  },
+  {
+    "title": "Cognizant puts 18,000 staff behind Google’s Gemini in AI agent push",
+    "event_key": "cognizant-google-gemini-frontier-capability-group-2026",
+    "ts": "2026-10-23T09:14:23.945031+00:00"
+  },
+  {
+    "title": "Uber puts all 30,000 employees on ChatGPT Work",
+    "event_key": "uber-chatgpt-work-30000-employees-2026",
+    "ts": "2026-10-23T09:14:23.945034+00:00"
+  },
+  {
+    "title": "Uber brings ChatGPT Work to all employees with OpenAI",
+    "event_key": "uber-chatgpt-work-30000-employees-2026",
+    "ts": "2026-10-23T09:14:23.945036+00:00"
+  },
+  {
+    "title": "智元灵犀X2落地北京大学人民医院，日均交互约707次",
+    "event_key": "zhiyuan-lingxi-x2-peking-university-hospital-2026",
+    "ts": "2026-10-23T09:14:23.945038+00:00"
   }
 ]
