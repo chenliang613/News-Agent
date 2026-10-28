@@ -833,5 +833,120 @@
     "title": "EU AI Act",
     "event_key": "eu-ai-act-omnibus-2026-1744-timeline",
     "ts": "2026-10-26T09:54:50.734185+00:00"
+  },
+  {
+    "title": "Anthropic is burning gas to feed the AI boom",
+    "event_key": "anthropic-s1-data-center-energy-risk-2026",
+    "ts": "2026-10-28T10:27:54.325778+00:00"
+  },
+  {
+    "title": "国家数据发展研究院院长胡坚波：释放数据要素乘数效应，塑造高质量发展新优势。国家数据局“531”体系终于形成一张完整的产业地图",
+    "event_key": "ndi-531-data-element-system-2026",
+    "ts": "2026-10-28T10:27:54.325782+00:00"
+  },
+  {
+    "title": "数智贵州“十五五”建设规划：数智产业规模达到5000亿元，全省算力运营服务收入达到1700亿元，数据标注人员达到8万人",
+    "event_key": "guizhou-digital-intelligence-15th-five-year-plan-2026",
+    "ts": "2026-10-28T10:27:54.325784+00:00"
+  },
+  {
+    "title": "四川省数据要素市场化配置改革攻坚突破行动方案（2026—2028年）",
+    "event_key": "sichuan-data-factor-market-reform-plan-2026-2028",
+    "ts": "2026-10-28T10:27:54.325786+00:00"
+  },
+  {
+    "title": "Build agentic retrieval on a Managed Amazon Bedrock Knowledge Base with CDK",
+    "event_key": "aws-bedrock-managed-kb-agentic-retrieval-cdk-2026",
+    "ts": "2026-10-28T10:27:54.325789+00:00"
+  },
+  {
+    "title": "Micro1 is rushing to buy up Slack DMs and Google Docs in a $1 billion bet on AI's latest data craze",
+    "event_key": "micro1-1b-enterprise-data-licensing-2026",
+    "ts": "2026-10-28T10:27:54.325791+00:00"
+  },
+  {
+    "title": "全国首批、广东唯一！广州数据要素改革经验何以获国家推广？",
+    "event_key": "guangzhou-public-data-authorization-national-promotion-2026",
+    "ts": "2026-10-28T10:27:54.325794+00:00"
+  },
+  {
+    "title": "国家数据局张慧星：探索订阅服务等商业模式，拓展汽车数据产业的发展空间",
+    "event_key": "ndb-auto-data-development-zhang-huixing-2026",
+    "ts": "2026-10-28T10:27:54.325797+00:00"
+  },
+  {
+    "title": "厦门出台国际数据中心管理办法，11月25日起施行",
+    "event_key": "xiamen-international-data-center-regulation-2026",
+    "ts": "2026-10-28T10:27:54.325799+00:00"
+  },
+  {
+    "title": "Huawei, DeepSeek AI training linked to pirated books by Korean authors",
+    "event_key": "huawei-deepseek-pirated-korean-books-training-2026",
+    "ts": "2026-10-28T10:27:54.325802+00:00"
+  },
+  {
+    "title": "BTS, Psy songs among 60,000 allegedly used by Suno to train AI",
+    "event_key": "huawei-deepseek-pirated-korean-books-training-2026",
+    "ts": "2026-10-28T10:27:54.325804+00:00"
+  },
+  {
+    "title": "Data center backlash is uniting America",
+    "event_key": "us-data-center-backlash-midterms-2026",
+    "ts": "2026-10-28T10:27:54.325806+00:00"
+  },
+  {
+    "title": "国家数据局局长刘烈宏2026年“数据要素×”大赛全国总决赛讲话：三年大赛见证了“三个成为”的积极态势，下一步将聚焦“三个着力”持续发力",
+    "event_key": "china-data-element-x-competition-2026-liuliehong-speech",
+    "ts": "2026-10-28T10:27:54.325808+00:00"
+  },
+  {
+    "title": "Tyres Europe: ‘Data Act failing to create competition'",
+    "event_key": "eu-data-act-caruso-connected-vehicle-assessment-2026",
+    "ts": "2026-10-28T10:27:54.325810+00:00"
+  },
+  {
+    "title": "Elvis Presley's Rights Holders Sue Anthropic Over 274 Songs, Seeking Up to $41.1 Million in Statutory Damages",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325812+00:00"
+  },
+  {
+    "title": "Elvis Presley Rights Holders Seek $41M From Anthropic in AI Copyright Lawsuit Over 274 Songs",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325814+00:00"
+  },
+  {
+    "title": "Suno and Anthropic Face Nearly $340 Million in Copyright Claims Over Songs by Madonna, Johnny Cash",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325816+00:00"
+  },
+  {
+    "title": "Reservoir Sues Suno and Anthropic Over AI Music Copyright, Seeking Nearly $338 Million",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325817+00:00"
+  },
+  {
+    "title": "Anthropic, Suno Sued Over Alleged AI Training Using Madonna, Johnny Cash, Joni Mitchell's Music",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325820+00:00"
+  },
+  {
+    "title": "Reservoir Files Copyright, DMCA Suits Against Suno and Anthropic",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325821+00:00"
+  },
+  {
+    "title": "Reservoir sues Suno for $157.5m over 1,050 songs in AI training data",
+    "event_key": "elvis-presley-rights-anthropic-copyright-suit-2026",
+    "ts": "2026-10-28T10:27:54.325823+00:00"
+  },
+  {
+    "title": "做能源与算力的“搭桥人”：达卯科技以能源大脑定义算电协同 | CPE 2026",
+    "event_key": "damao-cpe-2026-energy-computing-coordination",
+    "ts": "2026-10-28T10:27:54.325825+00:00"
+  },
+  {
+    "title": "中国网络空间安全协会指导，沙利文、头豹联合发布《行业研究数据治理 分类分级指南》团体标准",
+    "event_key": "csac-t-029-2026-research-data-grading-standard",
+    "ts": "2026-10-28T10:27:54.325827+00:00"
   }
 ]
