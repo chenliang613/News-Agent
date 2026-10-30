@@ -948,5 +948,105 @@
     "title": "中国网络空间安全协会指导，沙利文、头豹联合发布《行业研究数据治理 分类分级指南》团体标准",
     "event_key": "csac-t-029-2026-research-data-grading-standard",
     "ts": "2026-10-28T10:27:54.325827+00:00"
+  },
+  {
+    "title": "腾讯WorkBuddy覆盖50%中国企业500强，完成90亿次任务请求",
+    "event_key": "tencent-workbuddy-enterprise-500-2026",
+    "ts": "2026-10-30T10:47:58.862877+00:00"
+  },
+  {
+    "title": "讯飞星火医疗大模型V3.7升级，AI患者管理3.0发布并启动行业标准共建",
+    "event_key": "iflytek-medical-v3-7-patient-management-3-2026",
+    "ts": "2026-10-30T10:47:58.862880+00:00"
+  },
+  {
+    "title": "讯飞医疗发布AI患者管理平台3.0 已落地全国300余家医院",
+    "event_key": "iflytek-medical-v3-7-patient-management-3-2026",
+    "ts": "2026-10-30T10:47:58.862882+00:00"
+  },
+  {
+    "title": "卓驭发布商用车智能辅助驾驶解决方案「磐行」，一年可以让重卡省下 2-3 万元油钱",
+    "event_key": "zhuoyu-panxing-commercial-vehicle-ad-2026",
+    "ts": "2026-10-30T10:47:58.862884+00:00"
+  },
+  {
+    "title": "上半年中国大模型营收破百亿，火山引擎45%份额中国第一",
+    "event_key": "idc-china-maas-h1-2026-volcengine-45-share",
+    "ts": "2026-10-30T10:47:58.862886+00:00"
+  },
+  {
+    "title": "中国MaaS市场TOP2，商汤大装置再度蝉联",
+    "event_key": "idc-china-maas-h1-2026-volcengine-45-share",
+    "ts": "2026-10-30T10:47:58.862889+00:00"
+  },
+  {
+    "title": "从广东政务系统到国家级智库，腾讯云加速政务智能体落地",
+    "event_key": "tencent-cloud-government-agent-workbuddy-2026",
+    "ts": "2026-10-30T10:47:58.862890+00:00"
+  },
+  {
+    "title": "AI赋能基层医疗中国移动重庆公司助力秀山“边城智医”平台落地",
+    "event_key": "xiushan-biancheng-zhiyi-medical-llm-2026",
+    "ts": "2026-10-30T10:47:58.862893+00:00"
+  },
+  {
+    "title": "Building intent-driven UI testing with Amazon Nova Act",
+    "event_key": "epsilon-nova-act-ui-testing-agentcore-2026",
+    "ts": "2026-10-30T10:47:58.862896+00:00"
+  },
+  {
+    "title": "How MoEngage turned over 400 APIs into agent tools with AgentCore Gateway",
+    "event_key": "moengage-agentcore-gateway-400-apis-2026",
+    "ts": "2026-10-30T10:47:58.862898+00:00"
+  },
+  {
+    "title": "AI进厂上岗，智用开物闯关规模化",
+    "event_key": "zhiyong-kaiwu-industrial-ai-agent-scaleup-2026",
+    "ts": "2026-10-30T10:47:58.862900+00:00"
+  },
+  {
+    "title": "Alibaba Cloud’s Qoder Passes $100 Million in Recurring Revenue as Product Lines Split",
+    "event_key": "alibaba-qoder-100m-arr-product-split-2026",
+    "ts": "2026-10-30T10:47:58.862903+00:00"
+  },
+  {
+    "title": "民营银行加码智能体建设，AI能否成为第二增长曲线？",
+    "event_key": "china-private-banks-ai-agent-buildout-2026",
+    "ts": "2026-10-30T10:47:58.862905+00:00"
+  },
+  {
+    "title": "FDE进厂：AI原生新岗位重写产线的制造业实验",
+    "event_key": "fde-manufacturing-ai-native-role-2026",
+    "ts": "2026-10-30T10:47:58.862907+00:00"
+  },
+  {
+    "title": "AI购物智能体加速落地：Wizard接入Best Buy，沃尔玛开放通道，亚马逊拦截Meta Muse",
+    "event_key": "ai-shopping-agent-walmart-gateway-2026",
+    "ts": "2026-10-30T10:47:58.862909+00:00"
+  },
+  {
+    "title": "Enterprise AI Enters an ROI Reckoning: More Use, Uneven Value, Reveals Deloitte Survey",
+    "event_key": "deloitte-state-of-ai-enterprise-2026-survey",
+    "ts": "2026-10-30T10:47:58.862911+00:00"
+  },
+  {
+    "title": "Dun & Bradstreet Survey of 10,000 Businesses Finds AI Returns Stable for Most, but Data-Ready Companies Pull Ahead on ROI",
+    "event_key": "dnb-ai-momentum-survey-q4-2026",
+    "ts": "2026-10-30T10:47:58.862913+00:00"
+  },
+  {
+    "title": "Emro to Build AI Procurement Automation Agent for GS Caltex - THE ELEC, Korea Electronics Industry Media",
+    "event_key": "emro-gs-caltex-procurement-agent-2026",
+    "ts": "2026-10-30T10:47:58.862915+00:00"
+  },
+  {
+    "title": "市场监管巡检，百度智能云加速产业智能体深入华中业务一线",
+    "event_key": "baidu-agent-wuhan-community-governance-2026",
+    "ts": "2026-10-30T10:47:58.862917+00:00"
+  },
+  {
+    "title": "AI改写制造业研发时钟",
+    "event_key": "cambridge-new-whittle-lab-ai-hardware-2026",
+    "ts": "2026-10-30T10:47:58.862919+00:00"
   }
 ]
