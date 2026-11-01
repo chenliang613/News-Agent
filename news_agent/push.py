@@ -38,6 +38,10 @@ def push(token: str, title: str, content: str, template: str = "markdown") -> bo
         log.error("pushplus request failed: %s", e)
         return False
 
+    if not isinstance(result, dict):
+        log.error("pushplus returned an invalid response")
+        return False
+
     if result.get("code") != 200:
         log.error("pushplus returned error: %s", result)
         return False

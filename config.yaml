@@ -243,3 +243,10 @@ state:
   event_retention_days: 21
   # 新文章标题与已推送标题的相似度达到此值即视为同一事件(0-1，越高越保守)
   history_title_threshold: 0.8
+
+# 扩展网页发现：复用当前板块关键词，候选继续走时间过滤、去重和研究评分。
+agent_reach:
+  enabled: true
+  max_queries: 8
+  max_per_query: 5
+  timeout_seconds: 20

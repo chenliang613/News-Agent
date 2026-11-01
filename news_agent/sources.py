@@ -539,13 +539,12 @@ def filter_by_age(
     一并丢弃——用于"只要近 N 小时内发布"的严格场景(如微信公众号流程)。
     None 或 <=0 时不过滤。
     """
-    if not max_age_hours or max_age_hours <= 0:
-        return list(articles)
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
+              if max_age_hours and max_age_hours > 0 else None)
     kept: list[Article] = []
     dropped_by_source: dict[str, int] = {}
     for a in articles:
-        too_old = a.published_at is not None and a.published_at < cutoff
+        too_old = cutoff is not None and a.published_at is not None and a.published_at < cutoff
         undated = a.published_at is None and drop_undated
         if too_old or undated:
             dropped_by_source[a.source] = dropped_by_source.get(a.source, 0) + 1

@@ -9,7 +9,7 @@ from news_agent import main as main_mod
 from news_agent.main import already_pushed_today
 
 TODAY = datetime(2026, 10, 12, 16, 30, 0)
-BRIEFING_NAME = "AI治理+2026-10-12_141240.md"
+BRIEFING_NAME = "AI治理+2026-10-12_141240.sent"
 
 
 class AlreadyPushedTodayTests(unittest.TestCase):
@@ -18,6 +18,12 @@ class AlreadyPushedTodayTests(unittest.TestCase):
             out = Path(tmp)
             (out / BRIEFING_NAME).write_text("# x", encoding="utf-8")
             self.assertTrue(already_pushed_today("governance", output_dir=out, now=TODAY))
+
+    def test_generated_markdown_is_not_delivery(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            (out / BRIEFING_NAME).with_suffix(".md").write_text("draft")
+            self.assertFalse(already_pushed_today("governance", output_dir=out, now=TODAY))
 
     def test_ignores_other_category(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -51,7 +57,7 @@ class SkipIfRanTodayTests(unittest.TestCase):
     @staticmethod
     def briefing_name() -> str:
         # override_weekday=0 → governance → AI治理
-        return f"AI治理+{datetime.now():%Y-%m-%d}_000000.md"
+        return f"AI治理+{datetime.now():%Y-%m-%d}_000000.sent"
 
     def test_skips_silently_when_today_briefing_exists(self):
         with tempfile.TemporaryDirectory() as tmp:

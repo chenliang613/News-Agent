@@ -160,16 +160,15 @@ def already_pushed_today(
     output_dir: Path | None = None,
     now: datetime | None = None,
 ) -> bool:
-    """当日该板块是否已产出过简报（output/ 里有今天的落盘文件）。
+    """当日该板块是否已获 PushPlus 成功响应（.sent 回执）。
 
-    每次成功推送都会无条件落盘 `{中文板块名}+{日期}_{时间}.md` 并由 CI 提交回仓库，
-    兜底定时运行据此判断主梯队是否已经推过，保证补跑一天最多推一次。
+    PushPlus 接受推送后才写入 .sent 回执；Markdown 草稿不代表发送成功。
     """
     now = now or datetime.now()
     output_dir = output_dir or OUTPUT_DIR
     file_category = FILE_CATEGORY_NAMES.get(category, category)
     # glob() 返回生成器，必须用 any() 判存在，bool(生成器) 恒为 True。
-    return any(output_dir.glob(f"{file_category}+{now:%Y-%m-%d}_*.md"))
+    return any(output_dir.glob(f"{file_category}+{now:%Y-%m-%d}_*.sent"))
 
 
 def notify_no_results(category_label: str, reason: str, token: str | None, dry_run: bool) -> None:
@@ -211,8 +210,8 @@ def run(
         )
         return 1
 
-    # 兜底定时运行的守卫：当日该板块已有落盘产物说明主梯队已成功推送，
-    # 直接静默跳过（不发通知），避免补跑造成一天双推。手动 --category 不走此守卫。
+    # 自动运行仅检查成功回执，避免草稿或失败推送阻止重试。
+    # 手动 --category 可显式重跑。
     if skip_if_ran_today and not override_category and already_pushed_today(category):
         log.info("%s already has today's briefing; skip fallback run", category)
         return 0
@@ -298,6 +297,8 @@ def run(
             today_queries,
             max_per_query=(config.get("google_news") or {}).get("max_per_query"),
         ))
+        from . import reach
+        raw.extend(reach.fetch(today_queries, config.get("agent_reach") or {}))
         raw.extend(sources.fetch_rsshub(
             config["rsshub"]["instance"],
             config["rsshub"].get("routes", []),
@@ -519,6 +520,9 @@ def run(
         if not ok:
             log.error("push failed; not marking state so we can retry next run")
             return 2
+
+    if not dry_run:
+        out_path.with_suffix(".sent").write_text("PushPlus accepted\n", encoding="utf-8")
 
     # 9. 标记已处理(打分板块标记全部打过分的;公众号只标记推过的)
     for s in to_mark:
