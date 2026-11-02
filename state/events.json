@@ -1048,5 +1048,145 @@
     "title": "AI改写制造业研发时钟",
     "event_key": "cambridge-new-whittle-lab-ai-hardware-2026",
     "ts": "2026-10-30T10:47:58.862919+00:00"
+  },
+  {
+    "title": "First Harmonised Technical Standard Published Under the EU AI Act",
+    "event_key": "eu-ai-act-en-18286-harmonised-standard-2026",
+    "ts": "2026-11-01T09:13:45.310785+00:00"
+  },
+  {
+    "title": "EU AI Act: The AI Office sends its first requests for information to leading AI providers",
+    "event_key": "eu-ai-office-first-rfi-gpai-providers-2026",
+    "ts": "2026-11-01T09:13:45.310790+00:00"
+  },
+  {
+    "title": "Italy's AI Act framework takes shape: What Legislative Decree No. 179/2026 means for organizations",
+    "event_key": "italy-legislative-decree-179-ai-act-2026",
+    "ts": "2026-11-01T09:13:45.310794+00:00"
+  },
+  {
+    "title": "Singapore proposes incident reporting initiative to boost AI safety",
+    "event_key": "singapore-ai-incident-reporting-pilot-2026",
+    "ts": "2026-11-01T09:13:45.310797+00:00"
+  },
+  {
+    "title": "PM Wong proposes international AI incident-reporting pilot to strengthen frontier AI safety, Singapore News",
+    "event_key": "singapore-ai-incident-reporting-pilot-2026",
+    "ts": "2026-11-01T09:13:45.310801+00:00"
+  },
+  {
+    "title": "The biggest names in AI are backing a new way to opt out of scraping",
+    "event_key": "ietf-ai-scraping-policy-token-standard-2026",
+    "ts": "2026-11-01T09:13:45.310805+00:00"
+  },
+  {
+    "title": "Making it easier for websites to express AI training preferences",
+    "event_key": "ietf-ai-scraping-policy-token-standard-2026",
+    "ts": "2026-11-01T09:13:45.310809+00:00"
+  },
+  {
+    "title": "Google, Microsoft, OpenAI and Anthropic back one AI training opt-out",
+    "event_key": "ietf-ai-scraping-policy-token-standard-2026",
+    "ts": "2026-11-01T09:13:45.310813+00:00"
+  },
+  {
+    "title": "Google Adopts New AI Training Control",
+    "event_key": "ietf-ai-scraping-policy-token-standard-2026",
+    "ts": "2026-11-01T09:13:45.310817+00:00"
+  },
+  {
+    "title": "Google Plans Support for Shared Robots.txt AI Training Control",
+    "event_key": "ietf-ai-scraping-policy-token-standard-2026",
+    "ts": "2026-11-01T09:13:45.310820+00:00"
+  },
+  {
+    "title": "TRAI Proposes Draft AI Guidelines For India's Telecom Sector",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310824+00:00"
+  },
+  {
+    "title": "TRAI Moves To Hold Telecom Operators Accountable For AI Failures Under New Draft Rules",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310828+00:00"
+  },
+  {
+    "title": "TRAI’s new AI rules: Telecom companies may be held accountable when AI systems fail",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310831+00:00"
+  },
+  {
+    "title": "TRAI proposes draft AI rules for telecom operators, sets November 27 deadline",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310835+00:00"
+  },
+  {
+    "title": "TRAI Proposes AI Governance Rules for Telecom Networks; Stakeholders Can Submit Comments Until November 27",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310838+00:00"
+  },
+  {
+    "title": "TRAI proposes board-approved AI policies, risk classification and mandatory incident reporting for telecom",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310842+00:00"
+  },
+  {
+    "title": "Trai proposes AI governance framework, accountability rules for telcos",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310846+00:00"
+  },
+  {
+    "title": "TRAI releases draft guidelines on responsible AI use in telecom networks, services",
+    "event_key": "trai-ai-telecom-draft-guidelines-2026",
+    "ts": "2026-11-01T09:13:45.310850+00:00"
+  },
+  {
+    "title": "SpaceX AI Will Watermark Grok Text by Default for EU AI Act",
+    "event_key": "spacexsi-grok-text-watermark-eu-ai-act-2026",
+    "ts": "2026-11-01T09:13:45.310853+00:00"
+  },
+  {
+    "title": "Delaware’s AI-Run Company Proposal Draws the Eye of Congress (2)",
+    "event_key": "delaware-agent-managed-company-congress-scrutiny-2026",
+    "ts": "2026-11-01T09:13:45.310857+00:00"
+  },
+  {
+    "title": "Anthropic Asks Newsom to Let Courts Suspend Risky AI Models",
+    "event_key": "anthropic-newsom-court-suspend-ai-models-2026",
+    "ts": "2026-11-01T09:13:45.310861+00:00"
+  },
+  {
+    "title": "View / Britain’s AI testing agency outguns US",
+    "event_key": "uk-aisi-120m-funding-budget-2026",
+    "ts": "2026-11-01T09:13:45.310865+00:00"
+  },
+  {
+    "title": "人工智能科技伦理审查，企业准备好了吗？",
+    "event_key": "china-ai-ethics-review-enterprise-compliance-2026",
+    "ts": "2026-11-01T09:13:45.310869+00:00"
+  },
+  {
+    "title": "How Black-Box Distillation Works",
+    "event_key": "cset-black-box-distillation-explainer-2026",
+    "ts": "2026-11-01T09:13:45.310875+00:00"
+  },
+  {
+    "title": "Managing Biological Risks from General-Purpose AI Models under the EU AI Act",
+    "event_key": "eu-ai-act-gpai-biological-risk-report-2026",
+    "ts": "2026-11-01T09:13:45.310879+00:00"
+  },
+  {
+    "title": "Configure the ChatGPT desktop app with Amazon Bedrock in AWS GovCloud (US)",
+    "event_key": "chatgpt-desktop-bedrock-govcloud-deployment-2026",
+    "ts": "2026-11-01T09:13:45.310883+00:00"
+  },
+  {
+    "title": "《中国的人工智能治理：理念、实践和意义》专题研究报告发布",
+    "event_key": "china-ai-governance-report-caas-caict-2026",
+    "ts": "2026-11-01T09:13:45.310887+00:00"
+  },
+  {
+    "title": "2026年我国人工智能国家标准建设明显提速！",
+    "event_key": "china-ai-national-standards-2026-progress",
+    "ts": "2026-11-01T09:13:45.310891+00:00"
   }
 ]
