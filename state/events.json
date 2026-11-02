@@ -1050,6 +1050,7 @@
     "ts": "2026-10-30T10:47:58.862919+00:00"
   },
   {
+<<<<<<< HEAD
     "title": "First Harmonised Technical Standard Published Under the EU AI Act",
     "event_key": "eu-ai-act-en-18286-harmonised-standard-2026",
     "ts": "2026-11-01T09:13:45.310785+00:00"
@@ -1188,5 +1189,255 @@
     "title": "2026年我国人工智能国家标准建设明显提速！",
     "event_key": "china-ai-national-standards-2026-progress",
     "ts": "2026-11-01T09:13:45.310891+00:00"
+=======
+    "title": "刚刚，国行 Apple 智能官宣，但满血 SiriAI 还得等",
+    "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
+    "ts": "2026-11-01T11:27:40.764463+00:00"
+  },
+  {
+    "title": "Apple Intelligence is finally coming to China with iOS 27.3",
+    "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
+    "ts": "2026-11-01T11:27:40.764467+00:00"
+  },
+  {
+    "title": "早报｜iPhone国行AI官宣！千问接入Siri/DeepSeek千亿融资曝光/于东来建议支持「消费入座」",
+    "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
+    "ts": "2026-11-01T11:27:40.764469+00:00"
+  },
+  {
+    "title": "苹果官宣：Apple智能接入阿里千问，11月4日开放测试",
+    "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
+    "ts": "2026-11-01T11:27:40.764471+00:00"
+  },
+  {
+    "title": "Apple to launch iPhone AI features in China in December via Alibaba partnership",
+    "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
+    "ts": "2026-11-01T11:27:40.764473+00:00"
+  },
+  {
+    "title": "Apple Brings First Apple Intelligence Features to China in iOS 27.3",
+    "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
+    "ts": "2026-11-01T11:27:40.764475+00:00"
+  },
+  {
+    "title": "世界模型首次指导设计芯片！超大核NPU700TOPS，99%算力可用",
+    "event_key": "xheart-x7-ultra-npu-700tops-launch-2026",
+    "ts": "2026-11-01T11:27:40.764477+00:00"
+  },
+  {
+    "title": "IDC首发AI座舱市场跟踪：从被动应答到主动服务，交互规则正在重写",
+    "event_key": "idc-ai-cockpit-market-track-h1-2026",
+    "ts": "2026-11-01T11:27:40.764479+00:00"
+  },
+  {
+    "title": "“超能模式”重磅登场！联想天禧AI 4.5全端升级，三大场景打造“职场超能搭档”",
+    "event_key": "lenovo-tianxi-ai-4-5-aipc-launch-2026",
+    "ts": "2026-11-01T11:27:40.764482+00:00"
+  },
+  {
+    "title": "Amazon Unveils Four New Echo Devices: Echo Dot Debuts Custom AZ3 AI Chip and Matter Hub Capabilities",
+    "event_key": "amazon-echo-az3-chip-lineup-launch-2026",
+    "ts": "2026-11-01T11:27:40.764484+00:00"
+  },
+  {
+    "title": "2026年全球智能眼镜市场出货量将超1300万台,同比增长44%",
+    "event_key": "runto-2026-smart-glasses-13m-forecast",
+    "ts": "2026-11-01T11:27:40.764486+00:00"
+  },
+  {
+    "title": "联想集团新一代AI PC切入Agent基建 有望推动IDG毛利率提高0.8至1.1个百分点",
+    "event_key": "lenovo-yoga-pro-rtx-spark-agent-pc-2026",
+    "ts": "2026-11-01T11:27:40.764488+00:00"
+  },
+  {
+    "title": "座舱域控渗透率跨过50%：供应商份额排名出炉，部分Tier1增收不增利",
+    "event_key": "cockpit-domain-controller-penetration-50pct-2026",
+    "ts": "2026-11-01T11:27:40.764490+00:00"
+  },
+  {
+    "title": "Apple just dropped the AI-oriented M6 chip into the iMac and the 14-inch MacBook Pro",
+    "event_key": "apple-m6-macbook-pro-imac-launch-2026",
+    "ts": "2026-11-01T11:27:40.764492+00:00"
+  },
+  {
+    "title": "Apple launches MacBook Pro and iMac with M6 chip, updates Creator Studio",
+    "event_key": "apple-m6-macbook-pro-imac-launch-2026",
+    "ts": "2026-11-01T11:27:40.764494+00:00"
+  },
+  {
+    "title": "Apple's M6 chip brings serious on-device AI power to the entry-level MacBook Pro and the colorful iMac",
+    "event_key": "apple-m6-macbook-pro-imac-launch-2026",
+    "ts": "2026-11-01T11:27:40.764496+00:00"
+  },
+  {
+    "title": "Apple introduces the new 14-inch MacBook Pro with M6",
+    "event_key": "apple-m6-macbook-pro-imac-launch-2026",
+    "ts": "2026-11-01T11:27:40.764498+00:00"
+  },
+  {
+    "title": "Apple unveils new iMac with M6, delivering a major boost in performance and AI capabilities",
+    "event_key": "apple-m6-macbook-pro-imac-launch-2026",
+    "ts": "2026-11-01T11:27:40.764499+00:00"
+  },
+  {
+    "title": "车载端侧大模型量产落地，但闯关才刚刚开始!",
+    "event_key": "banma-autoomni-2-23b-a3b-mass-production-2026",
+    "ts": "2026-11-01T11:27:40.764501+00:00"
+  },
+  {
+    "title": "深度解读高通下一代骁龙旗舰芯：CPU、GPU、NPU终极AI进化，黑科技拉满|端侧AI|芯片|Agent|缓存|内存_手机新浪网",
+    "event_key": "qualcomm-next-snapdragon-agentic-ai-2026",
+    "ts": "2026-11-01T11:27:40.764503+00:00"
+  },
+  {
+    "title": "深兰科技联合华为，发布全球首款大模型智能体工作手机 Wowoker",
+    "event_key": "shenlan-wowoker-agent-phone-launch-2026",
+    "ts": "2026-11-01T11:27:40.764505+00:00"
+  },
+  {
+    "title": "集微咨询发布《AI产业系列报告之AI手机》：渗透率跨过临界点，AI手机成终端“默认形态”",
+    "event_key": "jiwei-ai-phone-report-2026",
+    "ts": "2026-11-01T11:27:40.764507+00:00"
+  },
+  {
+    "title": "2026年Q3中国手机市场量跌价升：出货量降15.2%跌破6000万台，高端机型逆势扩张",
+    "event_key": "idc-china-smartphone-q3-2026-shipment-drop",
+    "ts": "2026-11-01T11:27:40.764509+00:00"
+  },
+  {
+    "title": "Samsung to Launch First AI Glasses 'Intelligent Eyewear' in South Korea, US in Mid-December",
+    "event_key": "samsung-intelligent-eyewear-launch-2026",
+    "ts": "2026-11-01T11:27:40.764512+00:00"
+  },
+  {
+    "title": "豆包二代手机上市一个月即降价，努比亚AI手机转向老年市场面临生态与定价挑战",
+    "event_key": "doubao-phone-gen2-price-cut-nubia-2026",
+    "ts": "2026-11-01T11:27:40.764514+00:00"
+  },
+  {
+    "title": "XREAL AURA: The First Wired XR Glasses Powered by Android",
+    "event_key": "xreal-aura-android-xr-launch-2026",
+    "ts": "2026-11-01T11:27:40.764516+00:00"
+  },
+  {
+    "title": "AI Box 量产上车深蓝 L06：面壁智能携手梧桐科技、英特尔开启座舱主动智能时代",
+    "event_key": "mianbi-ai-box-deepal-l06-2026",
+    "ts": "2026-11-01T11:27:40.764519+00:00"
+  },
+  {
+    "title": "EU AI Act: The AI Office sends its first requests for information to leading AI providers",
+    "event_key": "eu-ai-office-first-rfi-gpai-providers-2026",
+    "ts": "2026-11-02T11:44:42.147261+00:00"
+  },
+  {
+    "title": "First Harmonised Technical Standard Published Under the EU AI Act",
+    "event_key": "eu-ai-act-en-18286-first-harmonised-standard-2026",
+    "ts": "2026-11-02T11:44:42.147264+00:00"
+  },
+  {
+    "title": "Italy's AI Act framework takes shape: What Legislative Decree No. 179/2026 means for organizations",
+    "event_key": "italy-legislative-decree-179-2026-ai-act-framework",
+    "ts": "2026-11-02T11:44:42.147266+00:00"
+  },
+  {
+    "title": "Italy’s Decree 179/2026 assigns AI Act enforcement roles",
+    "event_key": "italy-legislative-decree-179-2026-ai-act-framework",
+    "ts": "2026-11-02T11:44:42.147269+00:00"
+  },
+  {
+    "title": "TRAI Proposes AI Governance Rules for Telecom Networks; Stakeholders Can Submit Comments Until November 27",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147271+00:00"
+  },
+  {
+    "title": "TRAI Moves To Hold Telecom Operators Accountable For AI Failures Under New Draft Rules",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147273+00:00"
+  },
+  {
+    "title": "TRAI Proposes AI Governance Rules for Telecom Operators, Raises Vendor Liability Concerns",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147275+00:00"
+  },
+  {
+    "title": "Human Oversight, Incident Reporting Mandatory: TRAI Proposes Strict AI Rules For Telecom Companies",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147277+00:00"
+  },
+  {
+    "title": "TRAI proposes board-approved AI policies, mandatory reporting of serious incidents by telcos",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147280+00:00"
+  },
+  {
+    "title": "Breaking: TRAI releases draft guidelines for responsible use of AI in telecom networks and services, invites public comments",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147282+00:00"
+  },
+  {
+    "title": "Trai proposes AI governance framework, accountability rules for telcos",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147284+00:00"
+  },
+  {
+    "title": "AI Act Enforcement Tracker: supervision, decisions and fines per member state | Praxikon",
+    "event_key": "eu-ai-act-member-state-enforcement-tracker-2026",
+    "ts": "2026-11-02T11:44:42.147286+00:00"
+  },
+  {
+    "title": "网络安全标准实践指南",
+    "event_key": "tc260-genai-security-emergency-response-guide-2026",
+    "ts": "2026-11-02T11:44:42.147288+00:00"
+  },
+  {
+    "title": "AI RMF Profile on Trustworthy AI in Critical Infrastructure",
+    "event_key": "nist-ai-rmf-critical-infrastructure-profile-2026",
+    "ts": "2026-11-02T11:44:42.147290+00:00"
+  },
+  {
+    "title": "New York enacts ban on 'unsafe' chatbot behavior with kids as states push AI regulation boundaries",
+    "event_key": "new-york-chatbot-minor-safety-law-2026",
+    "ts": "2026-11-02T11:44:42.147292+00:00"
+  },
+  {
+    "title": "Delaware’s AI-Run Company Proposal Draws the Eye of Congress (2)",
+    "event_key": "delaware-agent-managed-company-congress-scrutiny-2026",
+    "ts": "2026-11-02T11:44:42.147294+00:00"
+  },
+  {
+    "title": "Deep fakes on screen: what the EU's new AI labelling rules mean for sport, media and entertainment",
+    "event_key": "eu-ai-act-deepfake-labelling-guidelines-2026",
+    "ts": "2026-11-02T11:44:42.147296+00:00"
+  },
+  {
+    "title": "Interested parties, countries can come together to launch AI incident reporting pilot: PM Wong",
+    "event_key": "singapore-pm-wong-ai-incident-reporting-pilot-2026",
+    "ts": "2026-11-02T11:44:42.147298+00:00"
+  },
+  {
+    "title": "生态环境部信息中心",
+    "event_key": "china-ai-application-security-grading-standard-2026",
+    "ts": "2026-11-02T11:44:42.147300+00:00"
+  },
+  {
+    "title": "View / Britain’s AI testing agency outguns US",
+    "event_key": "uk-aisi-120m-funding-boost-2026",
+    "ts": "2026-11-02T11:44:42.147302+00:00"
+  },
+  {
+    "title": "Anthropic Claude Watermark: Silent Bypass on Opus 4.6 and Sonnet 4.6 Production Calls",
+    "event_key": "anthropic-claude-watermark-sampling-bypass-2026",
+    "ts": "2026-11-02T11:44:42.147304+00:00"
+  },
+  {
+    "title": "上合AI中心、人大高瓴人工智能学院发布《中国人工智能国际应用与治理合作白皮书》，携手全球南方共答\"时代之问\"",
+    "event_key": "china-ai-international-governance-white-paper-2026",
+    "ts": "2026-11-02T11:44:42.147306+00:00"
+  },
+  {
+    "title": "From Shutdown Resistance to AI Deception: Critical Safety Checks Still Lack Auditable Evidence",
+    "event_key": "machine-checkable-compliance-agi-governance-study-2026",
+    "ts": "2026-11-02T11:44:42.147308+00:00"
+>>>>>>> 13dc10cea00bc4fb6b6f9c7f657634ef2464ed82
   }
 ]
