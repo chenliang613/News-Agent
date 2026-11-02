@@ -1183,5 +1183,120 @@
     "title": "AI Box 量产上车深蓝 L06：面壁智能携手梧桐科技、英特尔开启座舱主动智能时代",
     "event_key": "mianbi-ai-box-deepal-l06-2026",
     "ts": "2026-11-01T11:27:40.764519+00:00"
+  },
+  {
+    "title": "EU AI Act: The AI Office sends its first requests for information to leading AI providers",
+    "event_key": "eu-ai-office-first-rfi-gpai-providers-2026",
+    "ts": "2026-11-02T11:44:42.147261+00:00"
+  },
+  {
+    "title": "First Harmonised Technical Standard Published Under the EU AI Act",
+    "event_key": "eu-ai-act-en-18286-first-harmonised-standard-2026",
+    "ts": "2026-11-02T11:44:42.147264+00:00"
+  },
+  {
+    "title": "Italy's AI Act framework takes shape: What Legislative Decree No. 179/2026 means for organizations",
+    "event_key": "italy-legislative-decree-179-2026-ai-act-framework",
+    "ts": "2026-11-02T11:44:42.147266+00:00"
+  },
+  {
+    "title": "Italy’s Decree 179/2026 assigns AI Act enforcement roles",
+    "event_key": "italy-legislative-decree-179-2026-ai-act-framework",
+    "ts": "2026-11-02T11:44:42.147269+00:00"
+  },
+  {
+    "title": "TRAI Proposes AI Governance Rules for Telecom Networks; Stakeholders Can Submit Comments Until November 27",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147271+00:00"
+  },
+  {
+    "title": "TRAI Moves To Hold Telecom Operators Accountable For AI Failures Under New Draft Rules",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147273+00:00"
+  },
+  {
+    "title": "TRAI Proposes AI Governance Rules for Telecom Operators, Raises Vendor Liability Concerns",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147275+00:00"
+  },
+  {
+    "title": "Human Oversight, Incident Reporting Mandatory: TRAI Proposes Strict AI Rules For Telecom Companies",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147277+00:00"
+  },
+  {
+    "title": "TRAI proposes board-approved AI policies, mandatory reporting of serious incidents by telcos",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147280+00:00"
+  },
+  {
+    "title": "Breaking: TRAI releases draft guidelines for responsible use of AI in telecom networks and services, invites public comments",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147282+00:00"
+  },
+  {
+    "title": "Trai proposes AI governance framework, accountability rules for telcos",
+    "event_key": "india-trai-draft-ai-governance-telecom-2026",
+    "ts": "2026-11-02T11:44:42.147284+00:00"
+  },
+  {
+    "title": "AI Act Enforcement Tracker: supervision, decisions and fines per member state | Praxikon",
+    "event_key": "eu-ai-act-member-state-enforcement-tracker-2026",
+    "ts": "2026-11-02T11:44:42.147286+00:00"
+  },
+  {
+    "title": "网络安全标准实践指南",
+    "event_key": "tc260-genai-security-emergency-response-guide-2026",
+    "ts": "2026-11-02T11:44:42.147288+00:00"
+  },
+  {
+    "title": "AI RMF Profile on Trustworthy AI in Critical Infrastructure",
+    "event_key": "nist-ai-rmf-critical-infrastructure-profile-2026",
+    "ts": "2026-11-02T11:44:42.147290+00:00"
+  },
+  {
+    "title": "New York enacts ban on 'unsafe' chatbot behavior with kids as states push AI regulation boundaries",
+    "event_key": "new-york-chatbot-minor-safety-law-2026",
+    "ts": "2026-11-02T11:44:42.147292+00:00"
+  },
+  {
+    "title": "Delaware’s AI-Run Company Proposal Draws the Eye of Congress (2)",
+    "event_key": "delaware-agent-managed-company-congress-scrutiny-2026",
+    "ts": "2026-11-02T11:44:42.147294+00:00"
+  },
+  {
+    "title": "Deep fakes on screen: what the EU's new AI labelling rules mean for sport, media and entertainment",
+    "event_key": "eu-ai-act-deepfake-labelling-guidelines-2026",
+    "ts": "2026-11-02T11:44:42.147296+00:00"
+  },
+  {
+    "title": "Interested parties, countries can come together to launch AI incident reporting pilot: PM Wong",
+    "event_key": "singapore-pm-wong-ai-incident-reporting-pilot-2026",
+    "ts": "2026-11-02T11:44:42.147298+00:00"
+  },
+  {
+    "title": "生态环境部信息中心",
+    "event_key": "china-ai-application-security-grading-standard-2026",
+    "ts": "2026-11-02T11:44:42.147300+00:00"
+  },
+  {
+    "title": "View / Britain’s AI testing agency outguns US",
+    "event_key": "uk-aisi-120m-funding-boost-2026",
+    "ts": "2026-11-02T11:44:42.147302+00:00"
+  },
+  {
+    "title": "Anthropic Claude Watermark: Silent Bypass on Opus 4.6 and Sonnet 4.6 Production Calls",
+    "event_key": "anthropic-claude-watermark-sampling-bypass-2026",
+    "ts": "2026-11-02T11:44:42.147304+00:00"
+  },
+  {
+    "title": "上合AI中心、人大高瓴人工智能学院发布《中国人工智能国际应用与治理合作白皮书》，携手全球南方共答\"时代之问\"",
+    "event_key": "china-ai-international-governance-white-paper-2026",
+    "ts": "2026-11-02T11:44:42.147306+00:00"
+  },
+  {
+    "title": "From Shutdown Resistance to AI Deception: Critical Safety Checks Still Lack Auditable Evidence",
+    "event_key": "machine-checkable-compliance-agi-governance-study-2026",
+    "ts": "2026-11-02T11:44:42.147308+00:00"
   }
 ]
