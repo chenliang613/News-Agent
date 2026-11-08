@@ -25,7 +25,7 @@ RSS / Google News / RSSHub
 | 周五 08:00 | AI 行业落地 | `industry` |
 | 周日 08:00 | AI 终端 | `terminal` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`。由 GitHub Actions schedule 云端定时触发，北京时间 08:00（UTC 00:00）启动任务，08:30、09:30、10:30、11:30 和 12:30 自动补跑；当日已有成功推送回执时跳过；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
+Python weekday 使用 `0=周一` 至 `6=周日`。由 GitHub Actions schedule 云端定时触发，北京时间 08:00（UTC 00:00）启动任务，08:17、08:37、08:57、09:17、09:37 自动补跑，12:30 最后兜底；当日已有成功推送回执时跳过；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述四个板块；历史的公众号/官网配置保留但未启用。
 
@@ -65,7 +65,7 @@ python -m news_agent.main --test-push
 
 ### 定时触发（GitHub Actions 云端）
 
-定时完全由 GitHub Actions schedule 托管（`.github/workflows/daily.yml`），本机无需开机、无需安装任何定时组件：北京时间 08:00（UTC 00:00）启动任务，08:30、09:30、10:30、11:30 和 12:30 自动补跑；当日已有成功推送回执时跳过。仅需在仓库 Secrets 中配置 `DEEPSEEK_API_KEY` 与 `PUSHPLUS_TOKEN`（见上节）。
+定时完全由 GitHub Actions schedule 托管（`.github/workflows/daily.yml`），本机无需开机、无需安装任何定时组件：北京时间 08:00（UTC 00:00）启动任务，08:17、08:37、08:57、09:17、09:37 自动补跑，12:30 最后兜底；当日已有成功推送回执时跳过。仅需在仓库 Secrets 中配置 `DEEPSEEK_API_KEY` 与 `PUSHPLUS_TOKEN`（见上节）。
 
 ## 配置指南
 
@@ -215,6 +215,8 @@ python -m unittest discover -s tests -v
 - Google News 与 RSSHub 是发现渠道，可能受限或暂时失败；RSS 抓取会重试 3 次，单个来源失败不会中断本次运行。
 - 正文抓取受站点反爬、付费墙和页面结构影响；抓取失败时系统退回 RSS 摘要，并在终评中限制证据分。
 - PushPlus 免费版存在每日配额，请按实际套餐使用。
+
+送达目标：北京时间 08:00 启动，争取 10:00 前送达；此目标不是准时保证，12:30 兜底可能在目标时间后送达。PushPlus 成功响应仅表示接受请求，不代表微信已实际送达。
 
 调度限制：GitHub schedule 可能延迟或丢弃，多次补跑只能降低漏跑风险。严格准点需要独立常驻调度服务。自动守卫使用 output/*.sent 成功回执，生成 Markdown 或 dry-run 不再阻止重试。升级当日若已推送，应避免再次手动启动自动档。
 
