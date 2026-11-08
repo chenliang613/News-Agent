@@ -1050,7 +1050,6 @@
     "ts": "2026-10-30T10:47:58.862919+00:00"
   },
   {
-<<<<<<< HEAD
     "title": "First Harmonised Technical Standard Published Under the EU AI Act",
     "event_key": "eu-ai-act-en-18286-harmonised-standard-2026",
     "ts": "2026-11-01T09:13:45.310785+00:00"
@@ -1189,7 +1188,8 @@
     "title": "2026年我国人工智能国家标准建设明显提速！",
     "event_key": "china-ai-national-standards-2026-progress",
     "ts": "2026-11-01T09:13:45.310891+00:00"
-=======
+  },
+  {
     "title": "刚刚，国行 Apple 智能官宣，但满血 SiriAI 还得等",
     "event_key": "apple-intelligence-china-ios-27-3-launch-2026",
     "ts": "2026-11-01T11:27:40.764463+00:00"
@@ -1438,6 +1438,5 @@
     "title": "From Shutdown Resistance to AI Deception: Critical Safety Checks Still Lack Auditable Evidence",
     "event_key": "machine-checkable-compliance-agi-governance-study-2026",
     "ts": "2026-11-02T11:44:42.147308+00:00"
->>>>>>> 13dc10cea00bc4fb6b6f9c7f657634ef2464ed82
   }
 ]

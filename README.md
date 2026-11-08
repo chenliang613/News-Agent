@@ -20,12 +20,12 @@ RSS / Google News / RSSHub
 
 | 北京时间 | 板块 | 配置 key |
 |---|---|---|
-| 周一 12:00 | AI 治理 | `governance` |
-| 周三 12:00 | AI 数据 | `data` |
-| 周五 12:00 | AI 行业落地 | `industry` |
-| 周日 12:00 | AI 终端 | `terminal` |
+| 周一 08:00 | AI 治理 | `governance` |
+| 周三 08:00 | AI 数据 | `data` |
+| 周五 08:00 | AI 行业落地 | `industry` |
+| 周日 08:00 | AI 终端 | `terminal` |
 
-Python weekday 使用 `0=周一` 至 `6=周日`。由 GitHub Actions schedule 云端定时触发，北京时间 11:47（UTC 03:47）提前准备，等待至 12:00 执行；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
+Python weekday 使用 `0=周一` 至 `6=周日`。由 GitHub Actions schedule 云端定时触发，北京时间 08:00（UTC 00:00）启动任务，08:30、09:30、10:30、11:30 和 12:30 自动补跑；当日已有成功推送回执时跳过；也可在 Actions 页面手动触发，或通过 Hermes / webhook 运行指定板块。
 
 当前默认配置、GitHub Actions 和 webhook 仅面向上述四个板块；历史的公众号/官网配置保留但未启用。
 
@@ -65,7 +65,7 @@ python -m news_agent.main --test-push
 
 ### 定时触发（GitHub Actions 云端）
 
-定时完全由 GitHub Actions schedule 托管（`.github/workflows/daily.yml`），本机无需开机、无需安装任何定时组件：北京时间 11:47（UTC 03:47）提前准备，等待至 12:00 执行。仅需在仓库 Secrets 中配置 `DEEPSEEK_API_KEY` 与 `PUSHPLUS_TOKEN`（见上节）。
+定时完全由 GitHub Actions schedule 托管（`.github/workflows/daily.yml`），本机无需开机、无需安装任何定时组件：北京时间 08:00（UTC 00:00）启动任务，08:30、09:30、10:30、11:30 和 12:30 自动补跑；当日已有成功推送回执时跳过。仅需在仓库 Secrets 中配置 `DEEPSEEK_API_KEY` 与 `PUSHPLUS_TOKEN`（见上节）。
 
 ## 配置指南
 
@@ -216,10 +216,12 @@ python -m unittest discover -s tests -v
 - 正文抓取受站点反爬、付费墙和页面结构影响；抓取失败时系统退回 RSS 摘要，并在终评中限制证据分。
 - PushPlus 免费版存在每日配额，请按实际套餐使用。
 
-调度限制：GitHub schedule 可能延迟或丢弃，提前准备只能降低风险。严格准点需要独立常驻调度服务。自动守卫使用 output/*.sent 成功回执，生成 Markdown 或 dry-run 不再阻止重试。升级当日若已推送，应避免再次手动启动自动档。
+调度限制：GitHub schedule 可能延迟或丢弃，多次补跑只能降低漏跑风险。严格准点需要独立常驻调度服务。自动守卫使用 output/*.sent 成功回执，生成 Markdown 或 dry-run 不再阻止重试。升级当日若已推送，应避免再次手动启动自动档。
 
 ### Agent Reach 扩展检索
 
 复用 `config.yaml` 中当前板块的 `google_news_queries`，通过 Agent Reach 网页搜索补充原有 RSS / Google News 未覆盖的官方页面和研究资料。`keywords.md` 仍用于研究方向和评分。配置 `agent_reach` 可关闭检索或调整查询数、结果数与超时；默认前 8 个不同查询，每个最多 5 条。新增候选统一进入时间过滤、去重、正文抓取与评分；搜索文本仅作为摘要，不视为已验证正文。无发布日期的结果由 `sources.require_published` 决定是否保留，不伪造日期。
 
 本地需先安装并初始化 Agent Reach（`agent-reach setup`）；Actions 仅安装 CLI，不执行包含无关渠道依赖的完整初始化。缺少工具、超时或渠道报错会记录日志并保留其他采集结果，不自动登录或重试受限渠道。当前仅接入网页搜索，未启用社交平台渠道。
+
+维护注意：合并 `state/sent.json` 与 `state/events.json` 时须保留双方去重记录并验证 JSON，不能提交冲突标记。工作流校验失败会在采集和推送前停止，所有补跑也会失败。
