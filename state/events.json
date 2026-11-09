@@ -1,250 +1,5 @@
 [
   {
-    "title": "Amazon’s Bee launches two new personal AI devices, starting at $75",
-    "event_key": "amazon-bee-frontier-eclipse-launch-2026",
-    "ts": "2026-10-17T10:53:55.490585+00:00"
-  },
-  {
-    "title": "A week with RTX Spark: everything we’ve learned using Nvidia’s new laptops",
-    "event_key": "nvidia-rtx-spark-n1x-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490593+00:00"
-  },
-  {
-    "title": "How Windows is being optimized for Nvidia’s RTX Spark laptops",
-    "event_key": "nvidia-rtx-spark-n1x-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490597+00:00"
-  },
-  {
-    "title": "Surface Laptop Ultra 首发体验：是最强 Windows 笔记本，也是 AI 时代的全能本",
-    "event_key": "nvidia-rtx-spark-n1x-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490600+00:00"
-  },
-  {
-    "title": "苹果 HomeView 上手汇总：「果家」首秀小惊艳，SiriAI 很聪明",
-    "event_key": "apple-homeview-launch-2026",
-    "ts": "2026-10-17T10:53:55.490603+00:00"
-  },
-  {
-    "title": "Meet Apple HomeView, a new way to enjoy entertainment, stay connected, and manage the home",
-    "event_key": "apple-homeview-launch-2026",
-    "ts": "2026-10-17T10:53:55.490606+00:00"
-  },
-  {
-    "title": "Apple Debuts $299 USD HomeView Smart Display Powered by Apple Intelligence",
-    "event_key": "apple-homeview-launch-2026",
-    "ts": "2026-10-17T10:53:55.490610+00:00"
-  },
-  {
-    "title": "英伟达RTX Spark笔记本首发实测，我实现了WorkBuddy额度自由",
-    "event_key": "nvidia-rtx-spark-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490614+00:00"
-  },
-  {
-    "title": "Personal AI Supercomputer Era Nears as RTX Spark-Powered Laptops Roll Out - THE ELEC, Korea Electronics Industry Media",
-    "event_key": "nvidia-rtx-spark-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490617+00:00"
-  },
-  {
-    "title": "Nvidia Launches AI PC ‘RTX Spark’ in South Korea, Vows to Accelerate Agent AI Era",
-    "event_key": "nvidia-rtx-spark-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490621+00:00"
-  },
-  {
-    "title": "江波龙在骁龙8上跑通30B模型，存储的角色变了｜甲子光年",
-    "event_key": "longsys-qualcomm-30b-on-device-ufs-2026",
-    "ts": "2026-10-17T10:53:55.490624+00:00"
-  },
-  {
-    "title": "Meta and Apple team up to make Muse AI models run better on Macs",
-    "event_key": "meta-muse-spark-open-mac-mlx-2026",
-    "ts": "2026-10-17T10:53:55.490627+00:00"
-  },
-  {
-    "title": "155款应用“战略缓冲”拒接豆包手机助手 腾讯阿里系占近六成 AI入口之争如何解局？",
-    "event_key": "doubao-phone-assistant-155-apps-reject-2026",
-    "ts": "2026-10-17T10:53:55.490630+00:00"
-  },
-  {
-    "title": "AI硬件周报：华为被曝筹备手机子品牌“星芒”；OPPO手机接入Manus智能体；安克与飞书推出AI会议耳机；拓竹官宣首款3D扫描仪S1…_科技_i黑马",
-    "event_key": "doubao-phone-assistant-155-apps-reject-2026",
-    "ts": "2026-10-17T10:53:55.490633+00:00"
-  },
-  {
-    "title": "麒麟下一代芯片如期演进：韬定律引路，华为发出共建半导体生态邀约",
-    "event_key": "huawei-kirin-9050-tau-law-2026",
-    "ts": "2026-10-17T10:53:55.490636+00:00"
-  },
-  {
-    "title": "华为麒麟9050系列：逻辑折叠首次产品化，晶体管密度提升53.5%",
-    "event_key": "huawei-kirin-9050-tau-law-2026",
-    "ts": "2026-10-17T10:53:55.490639+00:00"
-  },
-  {
-    "title": "Samsung Smart Glasses Unveiled, and They’re Superlight",
-    "event_key": "samsung-galaxy-glasses-launch-2026",
-    "ts": "2026-10-17T10:53:55.490642+00:00"
-  },
-  {
-    "title": "Alibaba smart glasses add eye tracking and iris payments in N1 Pro",
-    "event_key": "alibaba-qwen-glasses-n1-pro-launch-2026",
-    "ts": "2026-10-17T10:53:55.490645+00:00"
-  },
-  {
-    "title": "拍照和翻译救不了 AI 眼镜？千问 2218 元起推新硬件，要抢现实世界里的上下文 - InfoQ-CN",
-    "event_key": "alibaba-qwen-glasses-n1-pro-launch-2026",
-    "ts": "2026-10-17T10:53:55.490648+00:00"
-  },
-  {
-    "title": "Alibaba unveils US$450 AI glasses in expanding push into gadgets",
-    "event_key": "alibaba-qwen-glasses-n1-pro-launch-2026",
-    "ts": "2026-10-17T10:53:55.490651+00:00"
-  },
-  {
-    "title": "盯着看、点头即可付款……中国科技巨头竞逐44万韩元AI眼镜",
-    "event_key": "alibaba-qwen-glasses-n1-pro-launch-2026",
-    "ts": "2026-10-17T10:53:55.490654+00:00"
-  },
-  {
-    "title": "Apple, Amazon, Microsoft roll out AI devices ahead of year-end shopping season",
-    "event_key": "apple-amazon-microsoft-ai-devices-q4-2026",
-    "ts": "2026-10-17T10:53:55.490657+00:00"
-  },
-  {
-    "title": "AI眼镜和耳机密集上新，“主动服务”成竞争新焦点｜经济周刊",
-    "event_key": "ai-glasses-earbuds-active-service-wave-2026",
-    "ts": "2026-10-17T10:53:55.490660+00:00"
-  },
-  {
-    "title": "QCOM CEO Cristiano Amon Says AI Companies Want Phones That Can Run 100B Parameter Models By 2028 — 'There's Going To Be A Battle Of The Agents'",
-    "event_key": "qualcomm-amon-100b-phone-model-2028",
-    "ts": "2026-10-17T10:53:55.490663+00:00"
-  },
-  {
-    "title": "Qualcomm's CEO says AI firms want phones running 100-billion-parameter models by 2028",
-    "event_key": "qualcomm-amon-100b-phone-model-2028",
-    "ts": "2026-10-17T10:53:55.490666+00:00"
-  },
-  {
-    "title": "高通称AI公司希望手机在2028年前运行1000亿参数模型",
-    "event_key": "qualcomm-amon-100b-phone-model-2028",
-    "ts": "2026-10-17T10:53:55.490669+00:00"
-  },
-  {
-    "title": "Googlebook review: Android on a laptop is still Android",
-    "event_key": "googlebook-android-laptop-launch-2026",
-    "ts": "2026-10-17T10:53:55.490672+00:00"
-  },
-  {
-    "title": "华为MoLA架构集中上车，它能否成为高阶智能座舱的核心标杆？",
-    "event_key": "huawei-mola-cockpit-architecture-rollout-2026",
-    "ts": "2026-10-17T10:53:55.490675+00:00"
-  },
-  {
-    "title": "华为ADS 5.0发布：896线激光雷达上车，智驾感知进入新维度",
-    "event_key": "huawei-ads-5-896-line-lidar-launch-2026",
-    "ts": "2026-10-18T08:43:02.744715+00:00"
-  },
-  {
-    "title": "MediaTek showcases Dimensity 9600 series in Malaysia, powering upcoming Vivo and Oppo flagship smartphones",
-    "event_key": "mediatek-dimensity-9600-launch-2026",
-    "ts": "2026-10-18T08:43:02.744719+00:00"
-  },
-  {
-    "title": "独占超六成L3认证，联想在AI终端淘汰赛中已领先一个身位",
-    "event_key": "lenovo-l3-ai-terminal-certification-lead-2026",
-    "ts": "2026-10-18T08:43:02.744721+00:00"
-  },
-  {
-    "title": "Apple Reportedly Shifts Focus To AI And Smart Glasses With Job Cuts In Siri And Vision Pro Teams",
-    "event_key": "apple-siri-visionpro-layoffs-smart-glasses-pivot-2026",
-    "ts": "2026-10-18T08:43:02.744723+00:00"
-  },
-  {
-    "title": "全球手机市场Q3出货量创14年新低，存储成本推高售价",
-    "event_key": "q3-2026-global-smartphone-shipment-decline-memory-cost",
-    "ts": "2026-10-18T08:43:02.744725+00:00"
-  },
-  {
-    "title": "全球智能手机，出货量遭遇史诗级暴跌",
-    "event_key": "q3-2026-global-smartphone-shipment-decline-memory-cost",
-    "ts": "2026-10-18T08:43:02.744727+00:00"
-  },
-  {
-    "title": "十四年来新低！全球手机市场迎来至暗时刻",
-    "event_key": "q3-2026-global-smartphone-shipment-decline-memory-cost",
-    "ts": "2026-10-18T08:43:02.744729+00:00"
-  },
-  {
-    "title": "出货量暴跌20%创14年同期新低，全球手机市场“入冬”",
-    "event_key": "q3-2026-global-smartphone-shipment-decline-memory-cost",
-    "ts": "2026-10-18T08:43:02.744732+00:00"
-  },
-  {
-    "title": "AI眼镜进入有屏竞争阶段，瑞声科技迎来新增长变量",
-    "event_key": "aac-ai-glasses-optical-acoustic-supply-2026",
-    "ts": "2026-10-18T08:43:02.744734+00:00"
-  },
-  {
-    "title": "比亚迪第三代唐首搭全新巨幕UI交互系统，AI萌宠桌面与天神之眼B智驾同步上车",
-    "event_key": "byd-tang-gen3-cockpit-ui-launch-2026",
-    "ts": "2026-10-18T08:43:02.744736+00:00"
-  },
-  {
-    "title": "Tether launches offline AI speech model for smart glasses and robots",
-    "event_key": "tether-qvac-transcribepsy-offline-asr-2026",
-    "ts": "2026-10-18T08:43:02.744738+00:00"
-  },
-  {
-    "title": "电脑卖不动，但联想们更赚钱了",
-    "event_key": "q3-2026-pc-shipment-decline-ai-memory-squeeze",
-    "ts": "2026-10-18T08:43:02.744741+00:00"
-  },
-  {
-    "title": "IDC：Q3全球PC出货量同比下滑20.1%，惠普降30.9%、联想降22.6%",
-    "event_key": "q3-2026-pc-shipment-decline-ai-memory-squeeze",
-    "ts": "2026-10-18T08:43:02.744743+00:00"
-  },
-  {
-    "title": "智能眼镜新品密集发布，12股前三季度业绩预喜",
-    "event_key": "ai-glasses-launch-wave-q4-2026",
-    "ts": "2026-10-18T08:43:02.744745+00:00"
-  },
-  {
-    "title": "大唐EV首次大版本OTA推送：迪迪虾上车，智能座舱越开越懂你",
-    "event_key": "datang-ev-didixia-ota-2026",
-    "ts": "2026-10-18T08:43:02.744747+00:00"
-  },
-  {
-    "title": "Apple decides to skip M6 Pro and Max chips and go straight to M7: Here is why! - آي-فون إسلام",
-    "event_key": "apple-m6-skip-m7-ai-chip-roadmap-2026",
-    "ts": "2026-10-18T08:43:02.744749+00:00"
-  },
-  {
-    "title": "华为nova 12 / 13系列手机开启鸿蒙HarmonyOS 7花粉Beta尝鲜升级",
-    "event_key": "harmonyos-7-nova-beta-rollout-2026",
-    "ts": "2026-10-18T08:43:02.744751+00:00"
-  },
-  {
-    "title": "从“极客玩具”到大众消费品，AI眼镜距离实用还有多远？",
-    "event_key": "ai-glasses-consumer-adoption-2026",
-    "ts": "2026-10-18T08:43:02.744753+00:00"
-  },
-  {
-    "title": "13年以来同期最低！Q3国内手机出货量5930万台：大跌12%",
-    "event_key": "q3-2026-china-smartphone-shipment-drop-omdia",
-    "ts": "2026-10-18T08:43:02.744755+00:00"
-  },
-  {
-    "title": "Memory Chip Shortage 2026: PC Prices Up 17%, Gartner Says",
-    "event_key": "memory-shortage-pc-price-rise-gartner-2026",
-    "ts": "2026-10-18T08:43:02.744757+00:00"
-  },
-  {
-    "title": "AI glasses raise cheating fears ahead of CSAT, putting teachers under pressure",
-    "event_key": "korea-csat-ai-glasses-cheating-2026",
-    "ts": "2026-10-18T08:43:02.744759+00:00"
-  },
-  {
     "title": "EU Announces First AI Act Enforcement Actions After AI Agent Incidents",
     "event_key": "eu-ai-act-first-enforcement-actions-2026",
     "ts": "2026-10-19T09:43:55.996012+00:00"
@@ -1438,5 +1193,110 @@
     "title": "From Shutdown Resistance to AI Deception: Critical Safety Checks Still Lack Auditable Evidence",
     "event_key": "machine-checkable-compliance-agi-governance-study-2026",
     "ts": "2026-11-02T11:44:42.147308+00:00"
+  },
+  {
+    "title": "Hong Kong Becomes First Banking Regulator to Require Identity Credentials for AI Agents",
+    "event_key": "hkma-project-sage-agentic-finance-kya-2026",
+    "ts": "2026-11-09T03:54:32.149391+00:00"
+  },
+  {
+    "title": "智能体终端进网管理新规落地，OTA现网升级须经专家评估后推送",
+    "event_key": "miit-agent-terminal-network-access-notice-2026",
+    "ts": "2026-11-09T03:54:32.149393+00:00"
+  },
+  {
+    "title": "给AI手机、平板等“立规矩”！工信部发布智能体终端重磅新规",
+    "event_key": "miit-agent-terminal-network-access-notice-2026",
+    "ts": "2026-11-09T03:54:32.149394+00:00"
+  },
+  {
+    "title": "Government developing common oversight system to track AI agents and manage risks",
+    "event_key": "singapore-govharness-agentic-ai-oversight-2026",
+    "ts": "2026-11-09T03:54:32.149395+00:00"
+  },
+  {
+    "title": "'Who answers for AI agents?' Singapore working on safeguards as adoption grows, says Jasmin Lau",
+    "event_key": "singapore-govharness-agentic-ai-oversight-2026",
+    "ts": "2026-11-09T03:54:32.149396+00:00"
+  },
+  {
+    "title": "Why a new report on Anthropic automating AI development is alarming researchers",
+    "event_key": "metr-anthropic-ai-rd-acceleration-report-2026",
+    "ts": "2026-11-09T03:54:32.149397+00:00"
+  },
+  {
+    "title": "Europe, Japan, and South Korea Propose Global AI Standards Body Modeled on 5G, Without US or China",
+    "event_key": "etsi-ttc-tta-aipp-global-ai-standards-body-2026",
+    "ts": "2026-11-09T03:54:32.149398+00:00"
+  },
+  {
+    "title": "US AI safety center staff now report informally to the White House, AP says",
+    "event_key": "us-caissi-staff-report-white-house-2026",
+    "ts": "2026-11-09T03:54:32.149400+00:00"
+  },
+  {
+    "title": "NIST发布超级智能安全事件管理报告，提出完善人工智能安全响应机制",
+    "event_key": "nist-si-incident-management-workshop-report-ir8621-2026",
+    "ts": "2026-11-09T03:54:32.149401+00:00"
+  },
+  {
+    "title": "The US let Nvidia sell chips to an empty office in China",
+    "event_key": "nvidia-h200-china-export-approval-empty-office-2026",
+    "ts": "2026-11-09T03:54:32.149402+00:00"
+  },
+  {
+    "title": "AI Text Watermarking May Not Be Able to Meet the E.U.’s New Rules",
+    "event_key": "openai-textgrain-watermark-eu-ai-act-2026",
+    "ts": "2026-11-09T03:54:32.149403+00:00"
+  },
+  {
+    "title": "Cabinet sets out AI plan, seeks partners beyond US and China",
+    "event_key": "netherlands-ai-vision-letter-2026",
+    "ts": "2026-11-09T03:54:32.149404+00:00"
+  },
+  {
+    "title": "Germany ties AI safety institute to Canada as Merz urges speed",
+    "event_key": "netherlands-ai-vision-letter-2026",
+    "ts": "2026-11-09T03:54:32.149405+00:00"
+  },
+  {
+    "title": "AI电商合规治理与消费环境共建行动在浙江启动",
+    "event_key": "china-ai-ecommerce-compliance-standards-zhejiang-2026",
+    "ts": "2026-11-09T03:54:32.149406+00:00"
+  },
+  {
+    "title": "Singapore is considering tightening regulations on high-risk AI.",
+    "event_key": "singapore-high-risk-ai-regulation-tightening-2026",
+    "ts": "2026-11-09T03:54:32.149407+00:00"
+  },
+  {
+    "title": "IT (Intermediary Guidelines) Amendment Rules, 2026: Deepfake Labelling and Synthetic Content Regulation - IMPRI Impact and Policy Research Institute",
+    "event_key": "india-it-intermediary-amendment-deepfake-2026",
+    "ts": "2026-11-09T03:54:32.149408+00:00"
+  },
+  {
+    "title": "What the New AI Training Opt-Out Really Means",
+    "event_key": "ietf-aipref-policy-token-draft-2026",
+    "ts": "2026-11-09T03:54:32.149409+00:00"
+  },
+  {
+    "title": "FDA’s AI in Early Phase Clinical Trials RFI: An Opportunity to Help Set the Rules of the Road",
+    "event_key": "fda-ai-early-phase-clinical-trials-rfi-2026",
+    "ts": "2026-11-09T03:54:32.149410+00:00"
+  },
+  {
+    "title": "Centre’s AI regulation consultation paper nearly ready, say sources",
+    "event_key": "india-ai-regulation-consultation-paper-2026",
+    "ts": "2026-11-09T03:54:32.149411+00:00"
+  },
+  {
+    "title": "AI governance gap widens for Hong Kong insurance market",
+    "event_key": "hong-kong-ia-ai-governance-framework-2026",
+    "ts": "2026-11-09T03:54:32.149412+00:00"
+  },
+  {
+    "title": "OpenAI restricts weapons information for teens",
+    "event_key": "openai-teen-weapons-restriction-safety-report-2026",
+    "ts": "2026-11-09T03:54:32.149413+00:00"
   }
 ]
