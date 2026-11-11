@@ -1,110 +1,5 @@
 [
   {
-    "title": "EU Announces First AI Act Enforcement Actions After AI Agent Incidents",
-    "event_key": "eu-ai-act-first-enforcement-actions-2026",
-    "ts": "2026-10-19T09:43:55.996012+00:00"
-  },
-  {
-    "title": "EU draft lets AI Office restart 5-year fining clock on Google and Meta AI",
-    "event_key": "eu-ai-act-articles-75c-75d-implementing-regulation-consultation-2026",
-    "ts": "2026-10-19T09:43:55.996016+00:00"
-  },
-  {
-    "title": "字节跳动成立大模型安全与对齐部门，聚焦智能体安全与CBRN风险防控",
-    "event_key": "bytedance-seed-alignment-preparedness-department-2026",
-    "ts": "2026-10-19T09:43:55.996018+00:00"
-  },
-  {
-    "title": "Singapore launches new toolkit to help firms test AI agents for safety and reliability",
-    "event_key": "singapore-imda-agentic-ai-testing-starter-kit-2026",
-    "ts": "2026-10-19T09:43:55.996020+00:00"
-  },
-  {
-    "title": "Singapore Steps Up AI Safety With New Testing Guidelines, Taskforce",
-    "event_key": "singapore-imda-agentic-ai-testing-starter-kit-2026",
-    "ts": "2026-10-19T09:43:55.996023+00:00"
-  },
-  {
-    "title": "India’s CERT-In Issues First Incident-Driven Advisory Categorizing AI Agents as an Active Attack Surface",
-    "event_key": "cert-in-ciad-2026-0049-ai-agents-attack-surface",
-    "ts": "2026-10-19T09:43:55.996025+00:00"
-  },
-  {
-    "title": "Five Jurisdictions, One Week, No Statute: Agent Liability Is Being Written by Subpoenas, Rulemakings, and Corporate Decisions",
-    "event_key": "cert-in-ciad-2026-0049-ai-agents-attack-surface",
-    "ts": "2026-10-19T09:43:55.996028+00:00"
-  },
-  {
-    "title": "Anthropic proposes AI models can be blocked only if they risk $1 billion damage or 50 deaths",
-    "event_key": "anthropic-us-ai-safety-draft-bill-thresholds-2026",
-    "ts": "2026-10-19T09:43:55.996030+00:00"
-  },
-  {
-    "title": "Anthropic circulates draft AI bill to us lawmakers to regulate frontier models",
-    "event_key": "anthropic-us-ai-safety-draft-bill-thresholds-2026",
-    "ts": "2026-10-19T09:43:55.996033+00:00"
-  },
-  {
-    "title": "EU Security Agencies Secretly Test Chinese AI: Open-Weight Models Face Scrutiny",
-    "event_key": "eu-enisa-jrc-chinese-open-weight-model-evaluation-2026",
-    "ts": "2026-10-19T09:43:55.996035+00:00"
-  },
-  {
-    "title": "首个政务大模型国家标准发布，WPS参编",
-    "event_key": "china-gov-llm-national-standard-gb-t-48324-2026",
-    "ts": "2026-10-19T09:43:55.996037+00:00"
-  },
-  {
-    "title": "瞭望 | AI立法地方探路",
-    "event_key": "china-local-ai-legislation-wave-2026",
-    "ts": "2026-10-19T09:43:55.996040+00:00"
-  },
-  {
-    "title": "The Digital Omnibus: Recalibrating Compliance for Agentic AI",
-    "event_key": "eu-digital-omnibus-ai-act-delay-2026",
-    "ts": "2026-10-19T09:43:55.996042+00:00"
-  },
-  {
-    "title": "Australia Mandates AI Safety Proof After OpenAI Agent Breached Government Health Databases",
-    "event_key": "australia-systems-regulation-frontier-ai-2026",
-    "ts": "2026-10-19T09:43:55.996044+00:00"
-  },
-  {
-    "title": "UK AISI Tests 55+ AI Models, Warns of Breach Risk [2026]",
-    "event_key": "uk-aisi-prerelease-testing-gemini-4-argon-2026",
-    "ts": "2026-10-19T09:43:55.996046+00:00"
-  },
-  {
-    "title": "美中都表示要监管“超级智能”，但道路不同",
-    "event_key": "us-china-superintelligence-regulation-paths-2026",
-    "ts": "2026-10-19T09:43:55.996047+00:00"
-  },
-  {
-    "title": "OpenAI says it backs Singapore’s call for AI incident transparency",
-    "event_key": "openai-singapore-ai-incident-transparency-2026",
-    "ts": "2026-10-19T09:43:55.996050+00:00"
-  },
-  {
-    "title": "Singapore office and government MOU",
-    "event_key": "anthropic-singapore-office-mou-2026",
-    "ts": "2026-10-19T09:43:55.996052+00:00"
-  },
-  {
-    "title": "Anthropic signs Singapore AI skills and safety agreement as it opens new office",
-    "event_key": "anthropic-singapore-office-mou-2026",
-    "ts": "2026-10-19T09:43:55.996054+00:00"
-  },
-  {
-    "title": "EC-Council Releases ADG 2.0 and Offers Its AI Governance",
-    "event_key": "ec-council-adg-2-0-launch-2026",
-    "ts": "2026-10-19T09:43:55.996056+00:00"
-  },
-  {
-    "title": "粤东首个！粤港澳大湾区生成式人工智能安全发展联合实验室汕头服务中心正式授牌",
-    "event_key": "gd-gba-genai-safety-lab-shantou-center-2026",
-    "ts": "2026-10-19T09:43:55.996058+00:00"
-  },
-  {
     "title": "国家数据集团有限公司正式在雄安揭牌成立：三大运营商+南网国网主导，主业定位数据要素服务国家队、数据基础设施互联互通引领者、国家数据科技创新战略力量– 智慧城市行业分析",
     "event_key": "china-national-data-group-establishment-2026",
     "ts": "2026-10-21T09:14:28.159841+00:00"
@@ -1298,5 +1193,110 @@
     "title": "OpenAI restricts weapons information for teens",
     "event_key": "openai-teen-weapons-restriction-safety-report-2026",
     "ts": "2026-11-09T03:54:32.149413+00:00"
+  },
+  {
+    "title": "算力造“数据”：思朗科技与国家新材料大数据中心再度携手，推动数据成果转化",
+    "event_key": "sinan-materials-big-data-center-electrolyte-dataset-2026",
+    "ts": "2026-11-11T04:00:02.395223+00:00"
+  },
+  {
+    "title": "Nemotron-Personas-Finance-Japan: A Synthetic Dataset Capturing Japan's Demographics and Financial Context",
+    "event_key": "nvidia-nemotron-personas-finance-japan-2026",
+    "ts": "2026-11-11T04:00:02.395227+00:00"
+  },
+  {
+    "title": "Copyright and Artificial Intelligence, Part 3: Generative AI Training Pre-Publication Version",
+    "event_key": "us-copyright-office-genai-training-report-part3-2026",
+    "ts": "2026-11-11T04:00:02.395229+00:00"
+  },
+  {
+    "title": "福州数联网第三批典型应用场景集中发布_社会纵横",
+    "event_key": "fuzhou-data-network-third-batch-scenarios-2026",
+    "ts": "2026-11-11T04:00:02.395231+00:00"
+  },
+  {
+    "title": "陈荣辉履新后首次亮相乌镇，透露国家数据集团的数据治理方向",
+    "event_key": "china-national-data-group-chen-ronghui-wuzhen-2026",
+    "ts": "2026-11-11T04:00:02.395233+00:00"
+  },
+  {
+    "title": "COPYRIGHT NEWS—European Advocate General: AI training can fall within copyright exception",
+    "event_key": "eu-cjeu-ag-opinion-ai-training-copyright-c250-25-2026",
+    "ts": "2026-11-11T04:00:02.395235+00:00"
+  },
+  {
+    "title": "Norway’s 26,000 MW Queue: 75% Data Centers [2026]",
+    "event_key": "norway-statnett-data-center-grid-queue-suspension-2026",
+    "ts": "2026-11-11T04:00:02.395237+00:00"
+  },
+  {
+    "title": "Authorities tighten restrictions on data centres amid AI boom",
+    "event_key": "norway-statnett-data-center-grid-queue-suspension-2026",
+    "ts": "2026-11-11T04:00:02.395241+00:00"
+  },
+  {
+    "title": "Implementation Plan for the Initiative to Promote the Construction of High-Quality Industrial Datasets",
+    "event_key": "china-high-quality-industrial-datasets-plan-2026",
+    "ts": "2026-11-11T04:00:02.395243+00:00"
+  },
+  {
+    "title": "数据要素“十五五”开局：栾婕讲了五方面，哪件才是“十五五”数据要素的真正重头戏？",
+    "event_key": "china-ndb-15th-five-year-data-elements-five-tasks-2026",
+    "ts": "2026-11-11T04:00:02.395246+00:00"
+  },
+  {
+    "title": "AI 데이터센터 확장에 제동 거는 각국…한국은 규제 완화로 투자 촉진",
+    "event_key": "global-ai-datacenter-regulation-korea-2026",
+    "ts": "2026-11-11T04:00:02.395248+00:00"
+  },
+  {
+    "title": "코트라, AI 데이터센터 해외투자 유치 나선다…전력·인허가 지원",
+    "event_key": "global-ai-datacenter-regulation-korea-2026",
+    "ts": "2026-11-11T04:00:02.395250+00:00"
+  },
+  {
+    "title": "米国の主要データセンター市場にみるAI時代の総合インフラ競争",
+    "event_key": "us-datacenter-infrastructure-competition-jetro-2026",
+    "ts": "2026-11-11T04:00:02.395252+00:00"
+  },
+  {
+    "title": "Publicly accessible personal data under the DPDP Act: AI training and other public-source data uses",
+    "event_key": "india-dpdp-public-data-ai-training-nasscom-2026",
+    "ts": "2026-11-11T04:00:02.395254+00:00"
+  },
+  {
+    "title": "What a training data license grants: full report | Rillor",
+    "event_key": "training-data-license-grant-report-rillor-2026",
+    "ts": "2026-11-11T04:00:02.395256+00:00"
+  },
+  {
+    "title": "US law professors urge court to reject blanket fair-use exemption for AI training",
+    "event_key": "us-law-professors-openai-fair-use-brief-2026",
+    "ts": "2026-11-11T04:00:02.395258+00:00"
+  },
+  {
+    "title": "达卯科技与浦东环保能源战略合作，黎明智算中心算电协同平台启动",
+    "event_key": "damao-pudong-liming-aidc-power-compute-platform-2026",
+    "ts": "2026-11-11T04:00:02.395260+00:00"
+  },
+  {
+    "title": "Anthropic's $1.5b copyright lawsuit settlement approved",
+    "event_key": "anthropic-1-5b-authors-settlement-approval-2026",
+    "ts": "2026-11-11T04:00:02.395262+00:00"
+  },
+  {
+    "title": "Digital Rulebook: Simplification of EU data protection and cyber rules",
+    "event_key": "eu-digital-omnibus-council-gdpr-simplification-2026",
+    "ts": "2026-11-11T04:00:02.395264+00:00"
+  },
+  {
+    "title": "Blue blowout: What’s next for AI, data centers after Democrats’ big wins - apg-wi.com",
+    "event_key": "us-midterms-data-center-moratorium-impact-2026",
+    "ts": "2026-11-11T04:00:02.395266+00:00"
+  },
+  {
+    "title": "Democratic victories cloud outlook for AI data center rollout",
+    "event_key": "us-midterms-data-center-moratorium-impact-2026",
+    "ts": "2026-11-11T04:00:02.395268+00:00"
   }
 ]
