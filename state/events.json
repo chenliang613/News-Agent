@@ -1,115 +1,5 @@
 [
   {
-    "title": "How Rescale built an AI triage agent with Strands Agents and AI-DLC",
-    "event_key": "rescale-ai-triage-agent-strands-ai-dlc-2026",
-    "ts": "2026-10-23T09:14:23.944989+00:00"
-  },
-  {
-    "title": "Microsoft says its AI tool is better than doctors at diagnosing conditions",
-    "event_key": "microsoft-diagnostic-orchestrator-sdbench-2026",
-    "ts": "2026-10-23T09:14:23.944992+00:00"
-  },
-  {
-    "title": "Microsoft’s Mustafa Suleyman says its AI outperforms doctors on hard cases as he chases ‘medical superintelligence’",
-    "event_key": "microsoft-diagnostic-orchestrator-sdbench-2026",
-    "ts": "2026-10-23T09:14:23.944994+00:00"
-  },
-  {
-    "title": "微亿智造招股：从理解世界到改造世界，加速工业物理AI商业化",
-    "event_key": "micro-intelligence-eiir-hk-ipo-2026",
-    "ts": "2026-10-23T09:14:23.944996+00:00"
-  },
-  {
-    "title": "广州纺织服装探路“智造”，一家企业接入70万台织机，开机率从55%提升至70%",
-    "event_key": "guangzhou-textile-ai-700k-looms-2026",
-    "ts": "2026-10-23T09:14:23.944999+00:00"
-  },
-  {
-    "title": "国家人工智能应用中试基地（医疗领域）形成84个垂类模型矩阵",
-    "event_key": "national-medical-ai-pilot-base-guangzhou-84-models-2026",
-    "ts": "2026-10-23T09:14:23.945001+00:00"
-  },
-  {
-    "title": "国家医疗AI中试基地广东发布成果，大模型加速赋能基层",
-    "event_key": "national-medical-ai-pilot-base-guangzhou-84-models-2026",
-    "ts": "2026-10-23T09:14:23.945003+00:00"
-  },
-  {
-    "title": "While Amazon blocks AI agents, Walmart rolls out the welcome mat",
-    "event_key": "walmart-agent-gateway-agentic-commerce-2026",
-    "ts": "2026-10-23T09:14:23.945006+00:00"
-  },
-  {
-    "title": "Synthflow AI'S Voice Technology Goes Live on Zoom Phone and Zoom Contact Center, Powering Conversational CX at Scale",
-    "event_key": "synthflow-zoom-voice-agent-batteries-plus-2026",
-    "ts": "2026-10-23T09:14:23.945008+00:00"
-  },
-  {
-    "title": "陈国汪：银行业金融机构人工智能应用调研报告",
-    "event_key": "china-banking-ai-application-survey-report-2026",
-    "ts": "2026-10-23T09:14:23.945011+00:00"
-  },
-  {
-    "title": "How IskayPet unified corporate knowledge with Amazon Bedrock Managed Knowledge Bases",
-    "event_key": "iskaypet-bedrock-managed-knowledge-bases-2026",
-    "ts": "2026-10-23T09:14:23.945013+00:00"
-  },
-  {
-    "title": "智荟月刊 | 政务智能体上岗：从“盆景”走向连片“风景”",
-    "event_key": "china-government-agent-rollout-2026",
-    "ts": "2026-10-23T09:14:23.945016+00:00"
-  },
-  {
-    "title": "Oracle AI Agent Studio for Industry Applications Helps Accelerate Business Outcomes",
-    "event_key": "oracle-ai-agent-studio-industry-applications-2026",
-    "ts": "2026-10-23T09:14:23.945019+00:00"
-  },
-  {
-    "title": "已沉淀2万小时多模态数据，天奇股份加速补齐工业具身智能短板",
-    "event_key": "tianqi-industrial-embodied-data-20000-hours-2026",
-    "ts": "2026-10-23T09:14:23.945021+00:00"
-  },
-  {
-    "title": "多智能体协同重构医疗AI！清华AIR孵化：医生AI分身“坐诊”医院",
-    "event_key": "zijing-ai-hospital-multi-agent-2026",
-    "ts": "2026-10-23T09:14:23.945023+00:00"
-  },
-  {
-    "title": "Google launches Gemini for government services in preview with human approval gates",
-    "event_key": "google-gemini-government-services-preview-2026",
-    "ts": "2026-10-23T09:14:23.945025+00:00"
-  },
-  {
-    "title": "Motive brings agentic AI to physical operations with agents that act before problems escalate",
-    "event_key": "motive-agents-physical-operations-launch-2026",
-    "ts": "2026-10-23T09:14:23.945027+00:00"
-  },
-  {
-    "title": "Enterprise AI Agent Integration in 2026: How Salesforce, SAP, Oracle, Google and Microsoft Connect AI to ERP and CRM",
-    "event_key": "enterprise-ai-agent-erp-crm-integration-2026",
-    "ts": "2026-10-23T09:14:23.945029+00:00"
-  },
-  {
-    "title": "Cognizant puts 18,000 staff behind Google’s Gemini in AI agent push",
-    "event_key": "cognizant-google-gemini-frontier-capability-group-2026",
-    "ts": "2026-10-23T09:14:23.945031+00:00"
-  },
-  {
-    "title": "Uber puts all 30,000 employees on ChatGPT Work",
-    "event_key": "uber-chatgpt-work-30000-employees-2026",
-    "ts": "2026-10-23T09:14:23.945034+00:00"
-  },
-  {
-    "title": "Uber brings ChatGPT Work to all employees with OpenAI",
-    "event_key": "uber-chatgpt-work-30000-employees-2026",
-    "ts": "2026-10-23T09:14:23.945036+00:00"
-  },
-  {
-    "title": "智元灵犀X2落地北京大学人民医院，日均交互约707次",
-    "event_key": "zhiyuan-lingxi-x2-peking-university-hospital-2026",
-    "ts": "2026-10-23T09:14:23.945038+00:00"
-  },
-  {
     "title": "Unifying Edge AI: How Coral NPU’s open standard brings portable, energy-viable intelligence from model to silicon",
     "event_key": "google-coral-npu-32bit-architecture-compiler-v1-2026",
     "ts": "2026-10-25T09:03:26.125161+00:00"
@@ -1258,5 +1148,145 @@
     "title": "AI出海下一站，从技术输出走向经营落地",
     "event_key": "tencent-cloud-ai-overseas-enterprise-2026",
     "ts": "2026-11-13T04:24:36.055717+00:00"
+  },
+  {
+    "title": "豆包座舱风卷车圈，合作车型+1，首次触及芯片",
+    "event_key": "shenlong-volcengine-doubao-cockpit-soc-2026",
+    "ts": "2026-11-15T04:04:42.988288+00:00"
+  },
+  {
+    "title": "科大讯飞发布星火智慧座舱3.0及两款AI Box，已搭载奇瑞、长城魏牌、东风日产",
+    "event_key": "iflytek-spark-cockpit-3-ai-box-2026",
+    "ts": "2026-11-15T04:04:42.988291+00:00"
+  },
+  {
+    "title": "共建联合创新中心！北汽 × 新紫光发力先进舱驾控一体芯片",
+    "event_key": "baic-unisoc-cockpit-driving-soc-joint-center-2026",
+    "ts": "2026-11-15T04:04:42.988292+00:00"
+  },
+  {
+    "title": "Huawei Unveils Osta, a New AI Phone Brand for Young Buyers, With First Model Due November 20",
+    "event_key": "huawei-osta-xingmang-ai-phone-brand-launch-2026",
+    "ts": "2026-11-15T04:04:42.988296+00:00"
+  },
+  {
+    "title": "Huawei Launches AI Phone Brand to Challenge ByteDance",
+    "event_key": "huawei-osta-xingmang-ai-phone-brand-launch-2026",
+    "ts": "2026-11-15T04:04:42.988298+00:00"
+  },
+  {
+    "title": "Rokid Glasses 2 Ships in China With On-Device AI: National Intelligence Law Still Applies",
+    "event_key": "rokid-glasses-2-ship-china-2026",
+    "ts": "2026-11-15T04:04:42.988300+00:00"
+  },
+  {
+    "title": "World's First Compute-in-Memory AI Chip for Headphones Lands in Japan With Soundcore Space 2 Pro",
+    "event_key": "soundcore-space-2-pro-cim-ai-chip-japan-2026",
+    "ts": "2026-11-15T04:04:42.988302+00:00"
+  },
+  {
+    "title": "Preorders for smart glasses built by Samsung, Google to begin on Thu.",
+    "event_key": "samsung-google-intelligent-eyewear-preorder-2026",
+    "ts": "2026-11-15T04:04:42.988304+00:00"
+  },
+  {
+    "title": "Nearly two years after announcing Android XR, Google and Samsung unveil AI glasses with Warby Parker and",
+    "event_key": "samsung-google-intelligent-eyewear-preorder-2026",
+    "ts": "2026-11-15T04:04:42.988306+00:00"
+  },
+  {
+    "title": "Google and Samsung to Release AI Smart Glasses in December",
+    "event_key": "samsung-google-intelligent-eyewear-preorder-2026",
+    "ts": "2026-11-15T04:04:42.988308+00:00"
+  },
+  {
+    "title": "Samsung, Google to Open Preorders for AI Smart Glasses This Week",
+    "event_key": "samsung-google-intelligent-eyewear-preorder-2026",
+    "ts": "2026-11-15T04:04:42.988310+00:00"
+  },
+  {
+    "title": "百度地图开放AI座舱能力底座：“百舱”计划助车企自主打造品牌智能体",
+    "event_key": "baidu-map-baicang-ai-cockpit-plan-2026",
+    "ts": "2026-11-15T04:04:42.988312+00:00"
+  },
+  {
+    "title": "元宝上车，座舱AI竞争开始拼“手脚”",
+    "event_key": "tencent-tai-agent-yuanbao-cockpit-2026",
+    "ts": "2026-11-15T04:04:42.988314+00:00"
+  },
+  {
+    "title": "华为麒麟9050系列官宣搭载新一代达芬奇架构NPU：支持30B大模型端侧运行",
+    "event_key": "huawei-kirin-9050-on-device-30b-llm-2026",
+    "ts": "2026-11-15T04:04:42.988315+00:00"
+  },
+  {
+    "title": "华为详解麒麟9050如何在手机上离线运行300亿参数大模型 - 动点科技",
+    "event_key": "huawei-kirin-9050-on-device-30b-llm-2026",
+    "ts": "2026-11-15T04:04:42.988317+00:00"
+  },
+  {
+    "title": "CINNO • XResearch：三季度国内消费级AI/AR设备市场整体销量24.0万台 同比增长10%",
+    "event_key": "cinno-q3-2026-ai-ar-glasses-240k-2026",
+    "ts": "2026-11-15T04:04:42.988345+00:00"
+  },
+  {
+    "title": "Q3’26国内消费级AI/AR市场同比增10%，其一体式AR眼镜同比增116%、雷鸟一骑绝尘",
+    "event_key": "cinno-q3-2026-ai-ar-glasses-240k-2026",
+    "ts": "2026-11-15T04:04:42.988359+00:00"
+  },
+  {
+    "title": "Apple Intelligence completes regulatory registration for iPad and Mac in China",
+    "event_key": "apple-intelligence-china-ipad-mac-registration-2026",
+    "ts": "2026-11-15T04:04:42.988361+00:00"
+  },
+  {
+    "title": "Apple Intelligence just cleared another major roadblock in China, and Macs are next",
+    "event_key": "apple-intelligence-china-ipad-mac-registration-2026",
+    "ts": "2026-11-15T04:04:42.988363+00:00"
+  },
+  {
+    "title": "Apple Intelligence registered in China for use on iPads and Macs",
+    "event_key": "apple-intelligence-china-ipad-mac-registration-2026",
+    "ts": "2026-11-15T04:04:42.988365+00:00"
+  },
+  {
+    "title": "从语音第一到全栈领跑，科大讯飞抢滩AI座舱下半场",
+    "event_key": "iflytek-spark-cockpit-3-launch-2026",
+    "ts": "2026-11-15T04:04:42.988367+00:00"
+  },
+  {
+    "title": "Samsung testing a $4.99 per month Galaxy AI Premium subscription plan",
+    "event_key": "samsung-galaxy-ai-premium-subscription-2026",
+    "ts": "2026-11-15T04:04:42.988368+00:00"
+  },
+  {
+    "title": "Samsung mulls Galaxy AI usage limits and subscription tiers – what we know",
+    "event_key": "samsung-galaxy-ai-premium-subscription-2026",
+    "ts": "2026-11-15T04:04:42.988370+00:00"
+  },
+  {
+    "title": "Samsung is reportedly testing a paid version of Galaxy AI — but it promised these 19 features would stay free forever",
+    "event_key": "samsung-galaxy-ai-premium-subscription-2026",
+    "ts": "2026-11-15T04:04:42.988372+00:00"
+  },
+  {
+    "title": "家越07首周交付5000台，豆包座舱落地",
+    "event_key": "rongwei-jiayue07-doubao-cockpit-delivery-2026",
+    "ts": "2026-11-15T04:04:42.988374+00:00"
+  },
+  {
+    "title": "“边缘AI芯片第一股” 让宁波“芯”单片可跑百亿级大模型-新闻中心",
+    "event_key": "axera-ax8860-edge-ai-chip-launch-2026",
+    "ts": "2026-11-15T04:04:42.988375+00:00"
+  },
+  {
+    "title": "Omdia：企业AI支出持续增长 预测到2027年AI PC将占PC总出货量的60%",
+    "event_key": "omdia-ai-pc-60pct-2027-forecast-2026",
+    "ts": "2026-11-15T04:04:42.988377+00:00"
+  },
+  {
+    "title": "Apple TV 4K (4th Gen) Goes on Sale November 13 for $299: A19 Chip, AV1 Hardware Decode, and Why Apple Waited Four Years for Siri AI",
+    "event_key": "apple-tv-4k-4th-gen-a19-siri-ai-launch-2026",
+    "ts": "2026-11-15T04:04:42.988379+00:00"
   }
 ]
