@@ -1,120 +1,5 @@
 [
   {
-    "title": "Unifying Edge AI: How Coral NPU’s open standard brings portable, energy-viable intelligence from model to silicon",
-    "event_key": "google-coral-npu-32bit-architecture-compiler-v1-2026",
-    "ts": "2026-10-25T09:03:26.125161+00:00"
-  },
-  {
-    "title": "Synaptics® Coralboard™ Edge AI Development Board, Powered by Coral NPU technology from Google Research, Now Available Exclusively from DigiKey",
-    "event_key": "google-coral-npu-32bit-architecture-compiler-v1-2026",
-    "ts": "2026-10-25T09:03:26.125164+00:00"
-  },
-  {
-    "title": "工信部：上半年各类智能终端出货量超1亿台，将推动脑机接口、具身智能等智能终端攻关迭代｜快讯",
-    "event_key": "miit-ai-terminal-shipment-100m-h1-2026",
-    "ts": "2026-10-25T09:03:26.125166+00:00"
-  },
-  {
-    "title": "手机端侧模型迈入30B时代：MoE推动参数扩张，硬件与成本挑战待解",
-    "event_key": "on-device-30b-moe-phone-model-wave-2026",
-    "ts": "2026-10-25T09:03:26.125168+00:00"
-  },
-  {
-    "title": "端侧大模型加速上车！IDC首份AI座舱报告：2026上半年市场规模7.1亿元，火山引擎份额第一",
-    "event_key": "idc-china-ai-cockpit-market-h1-2026",
-    "ts": "2026-10-25T09:03:26.125170+00:00"
-  },
-  {
-    "title": "Surface Refresh Hits 80 TOPS NPU, Starts at $1,149 [2026]",
-    "event_key": "surface-snapdragon-x2-plus-80-tops-refresh-2026",
-    "ts": "2026-10-25T09:03:26.125172+00:00"
-  },
-  {
-    "title": "科大讯飞发布星火智慧座舱 3.0 全模态类人交互赋能座舱进化",
-    "event_key": "iflytek-sparkauto-space-3-launch-2026",
-    "ts": "2026-10-25T09:03:26.125174+00:00"
-  },
-  {
-    "title": "模型上车进入深水区：从分布式交互走向整车级AI智能体",
-    "event_key": "iflytek-sparkauto-space-3-launch-2026",
-    "ts": "2026-10-25T09:03:26.125176+00:00"
-  },
-  {
-    "title": "实现全模态类人交互，科大讯飞星火智慧座舱3.0发布即量产",
-    "event_key": "iflytek-sparkauto-space-3-launch-2026",
-    "ts": "2026-10-25T09:03:26.125179+00:00"
-  },
-  {
-    "title": "携手LG发布智能门锁、摄像头，苹果要做“果家”？",
-    "event_key": "apple-homeview-lg-home-collection-launch-2026",
-    "ts": "2026-10-25T09:03:26.125181+00:00"
-  },
-  {
-    "title": "苹果周二将举行智能家居发布会！要和亚马逊、谷歌正面抢客厅？-市场参考",
-    "event_key": "apple-homeview-lg-home-collection-launch-2026",
-    "ts": "2026-10-25T09:03:26.125184+00:00"
-  },
-  {
-    "title": "拉上英伟达硬刚苹果，微软的高端AI PC赌局",
-    "event_key": "surface-laptop-ultra-rtx-spark-launch-2026",
-    "ts": "2026-10-25T09:03:26.125186+00:00"
-  },
-  {
-    "title": "Mobilint Tapped to Lead Korea’s $606M On-Device AI Chip Program for Humanoid Robots",
-    "event_key": "mobilint-korea-on-device-ai-chip-humanoid-2026",
-    "ts": "2026-10-25T09:03:26.125188+00:00"
-  },
-  {
-    "title": "AIPC 尚未完全普及，智能体电脑已开始重新定义PC的竞争标准",
-    "event_key": "idc-agentic-computer-china-forecast-2026",
-    "ts": "2026-10-25T09:03:26.125190+00:00"
-  },
-  {
-    "title": "蓝牙、Wi-Fi之外，星闪不想只做“配角”，打开华为生态之外的市场才是关键",
-    "event_key": "sparklink-nearlink-ecosystem-expansion-2026",
-    "ts": "2026-10-25T09:03:26.125192+00:00"
-  },
-  {
-    "title": "Google Gemini in Android Auto can now use your Gmail and Photos to answer personal queries",
-    "event_key": "google-gemini-android-auto-personal-intelligence-2026",
-    "ts": "2026-10-25T09:03:26.125194+00:00"
-  },
-  {
-    "title": "四川长虹与华为签署开源鸿蒙战略合作，全系家电加入鸿图计划",
-    "event_key": "changhong-harmonyos-hongtu-plan-2026",
-    "ts": "2026-10-25T09:03:26.125195+00:00"
-  },
-  {
-    "title": "上海海思基于四大生态 携手行业伙伴重构百亿轻智能终端",
-    "event_key": "hisi-ceic-light-smart-terminal-ecosystem-2026",
-    "ts": "2026-10-25T09:03:26.125197+00:00"
-  },
-  {
-    "title": "Block’s new voice model sounds eerily human",
-    "event_key": "block-dessa-voice-model-launch-2026",
-    "ts": "2026-10-25T09:03:26.125199+00:00"
-  },
-  {
-    "title": "量产已至！AI眼镜产业链的开局与等待_公司新闻_财经",
-    "event_key": "ai-glasses-mass-production-supply-chain-2026",
-    "ts": "2026-10-25T09:03:26.125201+00:00"
-  },
-  {
-    "title": "华为WATCH D3亮相长城心脏病学大会 智能穿戴加速融入院外血压管理",
-    "event_key": "huawei-watch-d3-cardiology-conference-2026",
-    "ts": "2026-10-25T09:03:26.125203+00:00"
-  },
-  {
-    "title": "2200万颗光学摄像头，由这五家AI眼镜品牌牵头放量",
-    "event_key": "ai-glasses-optical-camera-supply-2026",
-    "ts": "2026-10-25T09:03:26.125205+00:00"
-  },
-  {
-    "title": "iPhone Duo 2 提前曝光：FaceID、操作按钮和长焦都要回来了？",
-    "event_key": "iphone-duo-2-leak-faceid-2026",
-    "ts": "2026-10-25T09:03:26.125207+00:00"
-  },
-  {
     "title": "India To Get AI Law, Union Minister Ashwini Vaishnaw Says Centre Will Issue Consultation Paper Soon",
     "event_key": "india-ai-law-consultation-paper-2026",
     "ts": "2026-10-26T09:54:50.734134+00:00"
@@ -1288,5 +1173,75 @@
     "title": "Apple TV 4K (4th Gen) Goes on Sale November 13 for $299: A19 Chip, AV1 Hardware Decode, and Why Apple Waited Four Years for Siri AI",
     "event_key": "apple-tv-4k-4th-gen-a19-siri-ai-launch-2026",
     "ts": "2026-11-15T04:04:42.988379+00:00"
+  },
+  {
+    "title": "Congress wants to tighten export rules on AI chips after Nvidia spy scandal",
+    "event_key": "us-congress-ai-chip-export-tightening-nvidia-spy-2026",
+    "ts": "2026-11-16T04:03:56.137298+00:00"
+  },
+  {
+    "title": "Australia to establish AI safety regulator, mandate rapid incident reporting (OPENAI:Private)",
+    "event_key": "australia-ai-safety-regulator-incident-reporting-2026",
+    "ts": "2026-11-16T04:03:56.137301+00:00"
+  },
+  {
+    "title": "Australia moves to tighten AI safety laws after review of OpenAI incident",
+    "event_key": "australia-ai-safety-regulator-incident-reporting-2026",
+    "ts": "2026-11-16T04:03:56.137302+00:00"
+  },
+  {
+    "title": "Australia Plans AI Safety Regulator for Frontier Models",
+    "event_key": "australia-ai-safety-regulator-incident-reporting-2026",
+    "ts": "2026-11-16T04:03:56.137303+00:00"
+  },
+  {
+    "title": "U.S. Commerce Department Moves to Block Remote Access to AI Chips in 7 Countries; Nvidia Lobbying Backfires",
+    "event_key": "us-commerce-remote-access-ai-chip-7-countries-2026",
+    "ts": "2026-11-16T04:03:56.137305+00:00"
+  },
+  {
+    "title": "国家标准计划 - 全国标准信息公共服务平台",
+    "event_key": "china-gb-t-46351-ai-multi-algorithm-management-2025",
+    "ts": "2026-11-16T04:03:56.137307+00:00"
+  },
+  {
+    "title": "EU AI Act: what applies from 2 December 2026 (AI-content marking for older systems, two new bans)",
+    "event_key": "eu-ai-act-2026-12-02-application-milestone",
+    "ts": "2026-11-16T04:03:56.137309+00:00"
+  },
+  {
+    "title": "EU Issues Article 50 AI Guidelines on Labelling Synthetic Content",
+    "event_key": "eu-ai-act-article-50-synthetic-content-labelling-guidelines-2026",
+    "ts": "2026-11-16T04:03:56.137311+00:00"
+  },
+  {
+    "title": "Google Faces Lawsuit: EU Court of Justice Issues First Landmark Ruling Clarifying AI Input Legality vs Potential AI Output Copyright Infringement",
+    "event_key": "eu-cjeu-ai-input-output-copyright-ruling-2026",
+    "ts": "2026-11-16T04:03:56.137313+00:00"
+  },
+  {
+    "title": "Singapore explores internet domain system to identify and track AI agents",
+    "event_key": "singapore-ai-agent-domain-identity-system-2026",
+    "ts": "2026-11-16T04:03:56.137315+00:00"
+  },
+  {
+    "title": "Safety testing and AI: timeline of developments and rules",
+    "event_key": "global-ai-safety-testing-timeline-2026",
+    "ts": "2026-11-16T04:03:56.137317+00:00"
+  },
+  {
+    "title": "Singapore updates AI strategy with aim to contribute globally valuable breakthroughs - Singapore Economic Development Board (EDB)",
+    "event_key": "singapore-ai-strategy-update-2026",
+    "ts": "2026-11-16T04:03:56.137318+00:00"
+  },
+  {
+    "title": "Capgemini to lead EU consortium assessing advanced AI risks",
+    "event_key": "capgemini-eu-consortium-advanced-ai-risk-assessment-2026",
+    "ts": "2026-11-16T04:03:56.137320+00:00"
+  },
+  {
+    "title": "Marcos EO sets up national council on AI development",
+    "event_key": "philippines-marcos-eo-national-ai-council-2026",
+    "ts": "2026-11-16T04:03:56.137321+00:00"
   }
 ]
