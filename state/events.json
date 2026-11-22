@@ -1,105 +1,5 @@
 [
   {
-    "title": "腾讯WorkBuddy覆盖50%中国企业500强，完成90亿次任务请求",
-    "event_key": "tencent-workbuddy-enterprise-500-2026",
-    "ts": "2026-10-30T10:47:58.862877+00:00"
-  },
-  {
-    "title": "讯飞星火医疗大模型V3.7升级，AI患者管理3.0发布并启动行业标准共建",
-    "event_key": "iflytek-medical-v3-7-patient-management-3-2026",
-    "ts": "2026-10-30T10:47:58.862880+00:00"
-  },
-  {
-    "title": "讯飞医疗发布AI患者管理平台3.0 已落地全国300余家医院",
-    "event_key": "iflytek-medical-v3-7-patient-management-3-2026",
-    "ts": "2026-10-30T10:47:58.862882+00:00"
-  },
-  {
-    "title": "卓驭发布商用车智能辅助驾驶解决方案「磐行」，一年可以让重卡省下 2-3 万元油钱",
-    "event_key": "zhuoyu-panxing-commercial-vehicle-ad-2026",
-    "ts": "2026-10-30T10:47:58.862884+00:00"
-  },
-  {
-    "title": "上半年中国大模型营收破百亿，火山引擎45%份额中国第一",
-    "event_key": "idc-china-maas-h1-2026-volcengine-45-share",
-    "ts": "2026-10-30T10:47:58.862886+00:00"
-  },
-  {
-    "title": "中国MaaS市场TOP2，商汤大装置再度蝉联",
-    "event_key": "idc-china-maas-h1-2026-volcengine-45-share",
-    "ts": "2026-10-30T10:47:58.862889+00:00"
-  },
-  {
-    "title": "从广东政务系统到国家级智库，腾讯云加速政务智能体落地",
-    "event_key": "tencent-cloud-government-agent-workbuddy-2026",
-    "ts": "2026-10-30T10:47:58.862890+00:00"
-  },
-  {
-    "title": "AI赋能基层医疗中国移动重庆公司助力秀山“边城智医”平台落地",
-    "event_key": "xiushan-biancheng-zhiyi-medical-llm-2026",
-    "ts": "2026-10-30T10:47:58.862893+00:00"
-  },
-  {
-    "title": "Building intent-driven UI testing with Amazon Nova Act",
-    "event_key": "epsilon-nova-act-ui-testing-agentcore-2026",
-    "ts": "2026-10-30T10:47:58.862896+00:00"
-  },
-  {
-    "title": "How MoEngage turned over 400 APIs into agent tools with AgentCore Gateway",
-    "event_key": "moengage-agentcore-gateway-400-apis-2026",
-    "ts": "2026-10-30T10:47:58.862898+00:00"
-  },
-  {
-    "title": "AI进厂上岗，智用开物闯关规模化",
-    "event_key": "zhiyong-kaiwu-industrial-ai-agent-scaleup-2026",
-    "ts": "2026-10-30T10:47:58.862900+00:00"
-  },
-  {
-    "title": "Alibaba Cloud’s Qoder Passes $100 Million in Recurring Revenue as Product Lines Split",
-    "event_key": "alibaba-qoder-100m-arr-product-split-2026",
-    "ts": "2026-10-30T10:47:58.862903+00:00"
-  },
-  {
-    "title": "民营银行加码智能体建设，AI能否成为第二增长曲线？",
-    "event_key": "china-private-banks-ai-agent-buildout-2026",
-    "ts": "2026-10-30T10:47:58.862905+00:00"
-  },
-  {
-    "title": "FDE进厂：AI原生新岗位重写产线的制造业实验",
-    "event_key": "fde-manufacturing-ai-native-role-2026",
-    "ts": "2026-10-30T10:47:58.862907+00:00"
-  },
-  {
-    "title": "AI购物智能体加速落地：Wizard接入Best Buy，沃尔玛开放通道，亚马逊拦截Meta Muse",
-    "event_key": "ai-shopping-agent-walmart-gateway-2026",
-    "ts": "2026-10-30T10:47:58.862909+00:00"
-  },
-  {
-    "title": "Enterprise AI Enters an ROI Reckoning: More Use, Uneven Value, Reveals Deloitte Survey",
-    "event_key": "deloitte-state-of-ai-enterprise-2026-survey",
-    "ts": "2026-10-30T10:47:58.862911+00:00"
-  },
-  {
-    "title": "Dun & Bradstreet Survey of 10,000 Businesses Finds AI Returns Stable for Most, but Data-Ready Companies Pull Ahead on ROI",
-    "event_key": "dnb-ai-momentum-survey-q4-2026",
-    "ts": "2026-10-30T10:47:58.862913+00:00"
-  },
-  {
-    "title": "Emro to Build AI Procurement Automation Agent for GS Caltex - THE ELEC, Korea Electronics Industry Media",
-    "event_key": "emro-gs-caltex-procurement-agent-2026",
-    "ts": "2026-10-30T10:47:58.862915+00:00"
-  },
-  {
-    "title": "市场监管巡检，百度智能云加速产业智能体深入华中业务一线",
-    "event_key": "baidu-agent-wuhan-community-governance-2026",
-    "ts": "2026-10-30T10:47:58.862917+00:00"
-  },
-  {
-    "title": "AI改写制造业研发时钟",
-    "event_key": "cambridge-new-whittle-lab-ai-hardware-2026",
-    "ts": "2026-10-30T10:47:58.862919+00:00"
-  },
-  {
     "title": "First Harmonised Technical Standard Published Under the EU AI Act",
     "event_key": "eu-ai-act-en-18286-harmonised-standard-2026",
     "ts": "2026-11-01T09:13:45.310785+00:00"
@@ -1198,5 +1098,110 @@
     "title": "Siemens Integrates Agentic AI Into Additive Manufacturing To Enable Adaptive Production",
     "event_key": "siemens-agentic-ai-additive-manufacturing-2026",
     "ts": "2026-11-20T05:05:57.728481+00:00"
+  },
+  {
+    "title": "理想造了一颗登上台积电讲台的芯片，却希望你在开车时彻底忘掉它",
+    "event_key": "lixiang-mach-m100-chip-tsmc-oip-2026",
+    "ts": "2026-11-22T04:22:25.149610+00:00"
+  },
+  {
+    "title": "苹果智能家居“回家”：HomeView发布，补课中国生态但坚守隐私与高端内核",
+    "event_key": "apple-homeview-smart-home-launch-2026",
+    "ts": "2026-11-22T04:22:25.149613+00:00"
+  },
+  {
+    "title": "又一AI眼镜总部基地落子黄埔：未来三年产值可超百亿元",
+    "event_key": "yiwen-smart-glasses-huangpu-hq-groundbreaking-2026",
+    "ts": "2026-11-22T04:22:25.149615+00:00"
+  },
+  {
+    "title": "天玑9600 Pro亮相半导体博览会，全大核+双NPU重构旗舰体验",
+    "event_key": "mediatek-dimensity-9600-pro-launch-2026",
+    "ts": "2026-11-22T04:22:25.149617+00:00"
+  },
+  {
+    "title": "手机、汽车、电视全覆盖，联发科展示多元AI芯片布局",
+    "event_key": "mediatek-dimensity-9600-pro-launch-2026",
+    "ts": "2026-11-22T04:22:25.149619+00:00"
+  },
+  {
+    "title": "Nvidia Brings RTX Spark AI PCs To India, With Laptops Starting At Rs 2.99 Lakh",
+    "event_key": "nvidia-rtx-spark-ai-pc-india-launch-2026",
+    "ts": "2026-11-22T04:22:25.149621+00:00"
+  },
+  {
+    "title": "奔驰加大智能化“反攻”！量产车位到车位，专为中国打造智舱",
+    "event_key": "mercedes-momenta-r7-cockpit-china-2026",
+    "ts": "2026-11-22T04:22:25.149623+00:00"
+  },
+  {
+    "title": "晚点独家丨地平线敲定征程7目标算力，舱驾一体产品命名“星空”",
+    "event_key": "horizon-journey7-starry-sky-cockpit-chip-2026",
+    "ts": "2026-11-22T04:22:25.149625+00:00"
+  },
+  {
+    "title": "Samsung prepares Galaxy AI on Snapdragon X Elite for its upcoming Android laptops",
+    "event_key": "samsung-galaxy-ai-snapdragon-x-elite-android-laptop-2026",
+    "ts": "2026-11-22T04:22:25.149627+00:00"
+  },
+  {
+    "title": "Apple expands Apple Intelligence beta testing in China to iPads and Macs",
+    "event_key": "apple-intelligence-china-ipad-mac-beta-2026",
+    "ts": "2026-11-22T04:22:25.149629+00:00"
+  },
+  {
+    "title": "AI Glasses Boom Draws Samsung, Apple as Privacy Risks Mount",
+    "event_key": "ai-glasses-boom-samsung-apple-privacy-2026",
+    "ts": "2026-11-22T04:22:25.149631+00:00"
+  },
+  {
+    "title": "全球Meta一家独大，中国AI眼镜为何还在混战？-36氪",
+    "event_key": "ai-glasses-boom-samsung-apple-privacy-2026",
+    "ts": "2026-11-22T04:22:25.149633+00:00"
+  },
+  {
+    "title": "全球AI眼镜上半年出货量同比增长263% 智能眼镜渗透率有望迎向上拐点_新浪财经_新浪网",
+    "event_key": "ai-glasses-boom-samsung-apple-privacy-2026",
+    "ts": "2026-11-22T04:22:25.149634+00:00"
+  },
+  {
+    "title": "Signal is blocking Gemini and Siri AI from reading your screen",
+    "event_key": "signal-blocks-os-ai-agents-screenshot-2026",
+    "ts": "2026-11-22T04:22:25.149637+00:00"
+  },
+  {
+    "title": "ST25DA-C：首款完全符合 Matter 1.6 标准的器件，已成为众多行业巨头实现 NFC 配网的核心器件",
+    "event_key": "st25da-c-matter-1-6-nfc-commissioning-2026",
+    "ts": "2026-11-22T04:22:25.149639+00:00"
+  },
+  {
+    "title": "全球首款星闪音箱因科美SL10通过OpenHarmony兼容性测评",
+    "event_key": "eacome-sl10-nearlink-speaker-openharmony-2026",
+    "ts": "2026-11-22T04:22:25.149641+00:00"
+  },
+  {
+    "title": "华为的AI手机来了！",
+    "event_key": "huawei-osta-xingmang-o1-pro-ai-phone-launch-2026",
+    "ts": "2026-11-22T04:22:25.149643+00:00"
+  },
+  {
+    "title": "京东双11 AI眼镜成交额翻倍增长，AR眼镜出货量首破百万台",
+    "event_key": "jd-double11-2026-ai-ar-glasses-sales",
+    "ts": "2026-11-22T04:22:25.149644+00:00"
+  },
+  {
+    "title": "Watchdog says AI smart glasses may violate your privacy",
+    "event_key": "dutch-ap-smart-glasses-privacy-warning-2026",
+    "ts": "2026-11-22T04:22:25.149646+00:00"
+  },
+  {
+    "title": "Dutch privacy watchdog warns consumers against purchasing smart glasses: Here’s why",
+    "event_key": "dutch-ap-smart-glasses-privacy-warning-2026",
+    "ts": "2026-11-22T04:22:25.149648+00:00"
+  },
+  {
+    "title": "量额齐超苹果联，想的PC和平板靠AI赢下一局，然后呢？",
+    "event_key": "idc-q3-2026-pcd-lenovo-ai-pc-share",
+    "ts": "2026-11-22T04:22:25.149650+00:00"
   }
 ]
