@@ -1,120 +1,5 @@
 [
   {
-    "title": "EU AI Act: The AI Office sends its first requests for information to leading AI providers",
-    "event_key": "eu-ai-office-first-rfi-gpai-providers-2026",
-    "ts": "2026-11-02T11:44:42.147261+00:00"
-  },
-  {
-    "title": "First Harmonised Technical Standard Published Under the EU AI Act",
-    "event_key": "eu-ai-act-en-18286-first-harmonised-standard-2026",
-    "ts": "2026-11-02T11:44:42.147264+00:00"
-  },
-  {
-    "title": "Italy's AI Act framework takes shape: What Legislative Decree No. 179/2026 means for organizations",
-    "event_key": "italy-legislative-decree-179-2026-ai-act-framework",
-    "ts": "2026-11-02T11:44:42.147266+00:00"
-  },
-  {
-    "title": "Italy’s Decree 179/2026 assigns AI Act enforcement roles",
-    "event_key": "italy-legislative-decree-179-2026-ai-act-framework",
-    "ts": "2026-11-02T11:44:42.147269+00:00"
-  },
-  {
-    "title": "TRAI Proposes AI Governance Rules for Telecom Networks; Stakeholders Can Submit Comments Until November 27",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147271+00:00"
-  },
-  {
-    "title": "TRAI Moves To Hold Telecom Operators Accountable For AI Failures Under New Draft Rules",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147273+00:00"
-  },
-  {
-    "title": "TRAI Proposes AI Governance Rules for Telecom Operators, Raises Vendor Liability Concerns",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147275+00:00"
-  },
-  {
-    "title": "Human Oversight, Incident Reporting Mandatory: TRAI Proposes Strict AI Rules For Telecom Companies",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147277+00:00"
-  },
-  {
-    "title": "TRAI proposes board-approved AI policies, mandatory reporting of serious incidents by telcos",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147280+00:00"
-  },
-  {
-    "title": "Breaking: TRAI releases draft guidelines for responsible use of AI in telecom networks and services, invites public comments",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147282+00:00"
-  },
-  {
-    "title": "Trai proposes AI governance framework, accountability rules for telcos",
-    "event_key": "india-trai-draft-ai-governance-telecom-2026",
-    "ts": "2026-11-02T11:44:42.147284+00:00"
-  },
-  {
-    "title": "AI Act Enforcement Tracker: supervision, decisions and fines per member state | Praxikon",
-    "event_key": "eu-ai-act-member-state-enforcement-tracker-2026",
-    "ts": "2026-11-02T11:44:42.147286+00:00"
-  },
-  {
-    "title": "网络安全标准实践指南",
-    "event_key": "tc260-genai-security-emergency-response-guide-2026",
-    "ts": "2026-11-02T11:44:42.147288+00:00"
-  },
-  {
-    "title": "AI RMF Profile on Trustworthy AI in Critical Infrastructure",
-    "event_key": "nist-ai-rmf-critical-infrastructure-profile-2026",
-    "ts": "2026-11-02T11:44:42.147290+00:00"
-  },
-  {
-    "title": "New York enacts ban on 'unsafe' chatbot behavior with kids as states push AI regulation boundaries",
-    "event_key": "new-york-chatbot-minor-safety-law-2026",
-    "ts": "2026-11-02T11:44:42.147292+00:00"
-  },
-  {
-    "title": "Delaware’s AI-Run Company Proposal Draws the Eye of Congress (2)",
-    "event_key": "delaware-agent-managed-company-congress-scrutiny-2026",
-    "ts": "2026-11-02T11:44:42.147294+00:00"
-  },
-  {
-    "title": "Deep fakes on screen: what the EU's new AI labelling rules mean for sport, media and entertainment",
-    "event_key": "eu-ai-act-deepfake-labelling-guidelines-2026",
-    "ts": "2026-11-02T11:44:42.147296+00:00"
-  },
-  {
-    "title": "Interested parties, countries can come together to launch AI incident reporting pilot: PM Wong",
-    "event_key": "singapore-pm-wong-ai-incident-reporting-pilot-2026",
-    "ts": "2026-11-02T11:44:42.147298+00:00"
-  },
-  {
-    "title": "生态环境部信息中心",
-    "event_key": "china-ai-application-security-grading-standard-2026",
-    "ts": "2026-11-02T11:44:42.147300+00:00"
-  },
-  {
-    "title": "View / Britain’s AI testing agency outguns US",
-    "event_key": "uk-aisi-120m-funding-boost-2026",
-    "ts": "2026-11-02T11:44:42.147302+00:00"
-  },
-  {
-    "title": "Anthropic Claude Watermark: Silent Bypass on Opus 4.6 and Sonnet 4.6 Production Calls",
-    "event_key": "anthropic-claude-watermark-sampling-bypass-2026",
-    "ts": "2026-11-02T11:44:42.147304+00:00"
-  },
-  {
-    "title": "上合AI中心、人大高瓴人工智能学院发布《中国人工智能国际应用与治理合作白皮书》，携手全球南方共答\"时代之问\"",
-    "event_key": "china-ai-international-governance-white-paper-2026",
-    "ts": "2026-11-02T11:44:42.147306+00:00"
-  },
-  {
-    "title": "From Shutdown Resistance to AI Deception: Critical Safety Checks Still Lack Auditable Evidence",
-    "event_key": "machine-checkable-compliance-agi-governance-study-2026",
-    "ts": "2026-11-02T11:44:42.147308+00:00"
-  },
-  {
     "title": "Hong Kong Becomes First Banking Regulator to Require Identity Credentials for AI Agents",
     "event_key": "hkma-project-sage-agentic-finance-kya-2026",
     "ts": "2026-11-09T03:54:32.149391+00:00"
@@ -1043,5 +928,115 @@
     "title": "OpenAI’s chief scientist has thoughts on how to limit AI development",
     "event_key": "openai-pachocki-perplexity-ai-speed-limit-2026",
     "ts": "2026-11-23T04:59:29.229378+00:00"
+  },
+  {
+    "title": "国家数据局第二批可信数据空间创新发展试点：推进企业、行业、城市三类可信数据空间试点，7大任务，15个领域方向，2026年12月4日前完成申报（附申报指南、重点场景、价值评价体系指引） – 智慧城市行业分析",
+    "event_key": "china-nda-trustworthy-data-space-pilot-batch2-2026",
+    "ts": "2026-11-25T06:21:05.891582+00:00"
+  },
+  {
+    "title": "蚂蚁OceanBase发布湖库一体AI数据平台OceanLake，核心引擎向全球开源",
+    "event_key": "ant-oceanbase-oceanlake-ai-data-platform-launch-2026",
+    "ts": "2026-11-25T06:21:05.891585+00:00"
+  },
+  {
+    "title": "Introducing the Amazon Bedrock Trusted Access API, with Enterprise Frontier Safeguards and Enterprise Data Controls for Claude models",
+    "event_key": "aws-bedrock-trusted-access-api-efs-edc-2026",
+    "ts": "2026-11-25T06:21:05.891587+00:00"
+  },
+  {
+    "title": "인공지능 데이터센터 신속 구축 위한 '인공지능 데이터센터 특별법' 하위법령 제정안 입법예고",
+    "event_key": "korea-aidc-special-law-subordinate-legislation-2026",
+    "ts": "2026-11-25T06:21:05.891588+00:00"
+  },
+  {
+    "title": "AI 데이터센터 구축 빨라진다…인허가 일괄처리·평가 특례 마련",
+    "event_key": "korea-aidc-special-law-subordinate-legislation-2026",
+    "ts": "2026-11-25T06:21:05.891590+00:00"
+  },
+  {
+    "title": "과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진",
+    "event_key": "korea-aidc-special-law-subordinate-legislation-2026",
+    "ts": "2026-11-25T06:21:05.891591+00:00"
+  },
+  {
+    "title": "什么是可信数据空间？新数据基础设施正在为生活提供便利→",
+    "event_key": "china-trusted-data-space-pilot-progress-2026",
+    "ts": "2026-11-25T06:21:05.891593+00:00"
+  },
+  {
+    "title": "数字广东建设“十五五”规划：到2030年，成为全国领先的智能创新高地和应用典范，数字广东升级跃迁为“数智广东”",
+    "event_key": "guangdong-digital-15th-five-year-plan-2026",
+    "ts": "2026-11-25T06:21:05.891595+00:00"
+  },
+  {
+    "title": "AICA, 광주 AI데이터안심존 본격 가동…“미개방 데이터도 안전하게 활용”",
+    "event_key": "korea-gwangju-ai-data-safe-zone-launch-2026",
+    "ts": "2026-11-25T06:21:05.891597+00:00"
+  },
+  {
+    "title": "광주에 ‘AI데이터안심존’ 개소…미개방 데이터 활용 문턱 낮춘다",
+    "event_key": "korea-gwangju-ai-data-safe-zone-launch-2026",
+    "ts": "2026-11-25T06:21:05.891599+00:00"
+  },
+  {
+    "title": "Labor wins Coalition support for AI copyright change despite backlash - ABC News & Headlines – Australian Broadcasting Corporation",
+    "event_key": "australia-ai-inquiry-copyright-payment-2026",
+    "ts": "2026-11-25T06:21:05.891600+00:00"
+  },
+  {
+    "title": "China details 78 international AI standards projects",
+    "event_key": "china-samr-78-ai-international-standards-2026",
+    "ts": "2026-11-25T06:21:05.891602+00:00"
+  },
+  {
+    "title": "China leads push for global generative AI governance standards",
+    "event_key": "china-samr-78-ai-international-standards-2026",
+    "ts": "2026-11-25T06:21:05.891604+00:00"
+  },
+  {
+    "title": "Polish parliament adopts legislation to implement EU Data Act",
+    "event_key": "poland-parliament-eu-data-act-implementation-2026",
+    "ts": "2026-11-25T06:21:05.891605+00:00"
+  },
+  {
+    "title": "《数字大连建设“十五五”行动计划》正式印发：8方面重点任务，建成东北亚数字经济高地和全国重要的数据流通节点",
+    "event_key": "dalian-digital-15th-five-year-action-plan-2026",
+    "ts": "2026-11-25T06:21:05.891607+00:00"
+  },
+  {
+    "title": "China plans digital-economy law, infrastructure for cross-border data flows | MLex | Specialist news and analysis on legal risk and regulation",
+    "event_key": "china-nda-digital-economy-law-cross-border-data-plan-2026",
+    "ts": "2026-11-25T06:21:05.891609+00:00"
+  },
+  {
+    "title": "China standardizes AI token measurement to bring order to its industry",
+    "event_key": "china-nda-ai-token-measurement-standards-2026",
+    "ts": "2026-11-25T06:21:05.891611+00:00"
+  },
+  {
+    "title": "China Plans to Strengthen AI Token Standards as Part of Computing Technology Development",
+    "event_key": "china-nda-ai-token-measurement-standards-2026",
+    "ts": "2026-11-25T06:21:05.891612+00:00"
+  },
+  {
+    "title": "AI developers can license more than 3.5 million hours of video from CuriosityStream",
+    "event_key": "curiositystream-ai-training-data-licensing-2026",
+    "ts": "2026-11-25T06:21:05.891614+00:00"
+  },
+  {
+    "title": "世界のAIデータセンター確定案件、必要量の3分の1…SKテレコム「韓国がアジア拠点を担うゴールデンタイム」",
+    "event_key": "sk-telecom-ai-datacenter-korea-hub-2026",
+    "ts": "2026-11-25T06:21:05.891615+00:00"
+  },
+  {
+    "title": "【데일리 ESG 정책 브리핑】대기업 내부거래 841조원·AI 데이터센터 50MW 이하 전력평가 면제 추진",
+    "event_key": "korea-aidc-special-law-enforcement-decree-2026",
+    "ts": "2026-11-25T06:21:05.891617+00:00"
+  },
+  {
+    "title": "AI data centers throw another wrench into chaotic UN climate talks",
+    "event_key": "cop31-ai-datacenter-electricity-pledge-2026",
+    "ts": "2026-11-25T06:21:05.891618+00:00"
   }
 ]
